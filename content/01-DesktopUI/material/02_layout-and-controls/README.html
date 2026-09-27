@@ -1,0 +1,1165 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.18">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>2&nbsp; Layouts and Controls – Desktop UI with Avalonia</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../../">
+<link href="../../../../content/01-DesktopUI/material/03_styles/README.html" rel="next">
+<link href="../../../../content/01-DesktopUI/material/01_avalonia-basics/README.html" rel="prev">
+<script src="../../../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../../site_libs/bootstrap/bootstrap-fa39313ee0ae67082205aa4c05164dde.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<style>html{ scroll-behavior: smooth; }</style>
+
+
+<link rel="stylesheet" href="../../../../styles.css">
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../../../content/01-DesktopUI/material/01_avalonia-basics/README.html">Desktop UI</a></li><li class="breadcrumb-item"><a href="../../../../content/01-DesktopUI/material/02_layout-and-controls/README.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Layouts and Controls</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../../../../">Desktop UI with Avalonia</a> 
+        <div class="sidebar-tools-main">
+    <a href="../../../../POSE5-Avalonia.pdf" title="Download PDF" class="quarto-navigation-tool px-1" aria-label="Download PDF"><i class="bi bi-file-pdf"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Introduction</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Desktop UI</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../../content/01-DesktopUI/material/01_avalonia-basics/README.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Avalonia Basics</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../../content/01-DesktopUI/material/02_layout-and-controls/README.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Layouts and Controls</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../../content/01-DesktopUI/material/03_styles/README.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Styles</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../../content/01-DesktopUI/material/04_databinding/README.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Data Binding and MVVM</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#layout-basics" id="toc-layout-basics" class="nav-link active" data-scroll-target="#layout-basics"><span class="header-section-number">2.1</span> Layout basics</a></li>
+  <li><a href="#grid" id="toc-grid" class="nav-link" data-scroll-target="#grid"><span class="header-section-number">2.2</span> Grid</a>
+  <ul class="collapse">
+  <li><a href="#sizing-rows-and-columns" id="toc-sizing-rows-and-columns" class="nav-link" data-scroll-target="#sizing-rows-and-columns"><span class="header-section-number">2.2.1</span> Sizing rows and columns</a></li>
+  <li><a href="#spanning-cells" id="toc-spanning-cells" class="nav-link" data-scroll-target="#spanning-cells"><span class="header-section-number">2.2.2</span> Spanning cells</a></li>
+  </ul></li>
+  <li><a href="#stackpanel" id="toc-stackpanel" class="nav-link" data-scroll-target="#stackpanel"><span class="header-section-number">2.3</span> StackPanel</a></li>
+  <li><a href="#dockpanel" id="toc-dockpanel" class="nav-link" data-scroll-target="#dockpanel"><span class="header-section-number">2.4</span> DockPanel</a></li>
+  <li><a href="#wrappanel" id="toc-wrappanel" class="nav-link" data-scroll-target="#wrappanel"><span class="header-section-number">2.5</span> WrapPanel</a></li>
+  <li><a href="#canvas" id="toc-canvas" class="nav-link" data-scroll-target="#canvas"><span class="header-section-number">2.6</span> Canvas</a></li>
+  <li><a href="#uniformgrid" id="toc-uniformgrid" class="nav-link" data-scroll-target="#uniformgrid"><span class="header-section-number">2.7</span> UniformGrid</a></li>
+  <li><a href="#gridsplitter" id="toc-gridsplitter" class="nav-link" data-scroll-target="#gridsplitter"><span class="header-section-number">2.8</span> GridSplitter</a></li>
+  <li><a href="#scrollviewer" id="toc-scrollviewer" class="nav-link" data-scroll-target="#scrollviewer"><span class="header-section-number">2.9</span> ScrollViewer</a></li>
+  <li><a href="#building-a-ui-in-code" id="toc-building-a-ui-in-code" class="nav-link" data-scroll-target="#building-a-ui-in-code"><span class="header-section-number">2.10</span> Building a UI in code</a></li>
+  <li><a href="#try-it-yourself" id="toc-try-it-yourself" class="nav-link" data-scroll-target="#try-it-yourself"><span class="header-section-number">2.11</span> Try it yourself</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../../../content/01-DesktopUI/material/01_avalonia-basics/README.html">Desktop UI</a></li><li class="breadcrumb-item"><a href="../../../../content/01-DesktopUI/material/02_layout-and-controls/README.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Layouts and Controls</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Layouts and Controls</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>A window can hold only one child. Everything else is arranged by <strong>panels</strong>: containers that decide where their children go and how big they are. This chapter introduces the panels you will use all the time, plus a few helpers around them.</p>
+<p>In the labs you build <strong>LayoutDemo</strong>: a launcher window with one button per panel, each opening a small window where you try that panel out.</p>
+<section id="layout-basics" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="layout-basics"><span class="header-section-number">2.1</span> Layout basics</h2>
+<ul>
+<li>Panels (classes derived from <code>Panel</code>) hold any number of children. All other controls hold at most one child, usually in their <code>Content</code> property.</li>
+<li>Panels can be nested: a <code>Grid</code> cell can contain a <code>StackPanel</code>, which contains another <code>Grid</code>, and so on. Real layouts are almost always nested.</li>
+<li>Avoid fixed sizes. Let the panels size the controls, so the layout adapts when the window is resized or the text changes.</li>
+<li>Layout runs in two passes: in the <strong>measure</strong> pass every element reports how much space it would like; in the <strong>arrange</strong> pass the panel assigns each child its final position and size.</li>
+</ul>
+<p>Every control also has a few properties that tell its panel how to place it:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Property</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>HorizontalAlignment</code>, <code>VerticalAlignment</code></td>
+<td><code>Stretch</code> (fill the available space), <code>Left</code>/<code>Top</code>, <code>Center</code>, <code>Right</code>/<code>Bottom</code></td>
+</tr>
+<tr class="even">
+<td><code>Margin</code></td>
+<td>Space <strong>around</strong> the control: <code>"10"</code> on all sides, <code>"10,5"</code> left/right and top/bottom, <code>"10,5,10,0"</code> left, top, right, bottom</td>
+</tr>
+<tr class="odd">
+<td><code>Padding</code></td>
+<td>Space <strong>inside</strong> the control, between its border and its content</td>
+</tr>
+<tr class="even">
+<td><code>Width</code>, <code>Height</code>, <code>MinWidth</code>, <code>MaxWidth</code>, …</td>
+<td>Fixed or limited sizes; use sparingly</td>
+</tr>
+</tbody>
+</table>
+<div class="lab callout callout-style-default callout-tip no-icon callout-titled" title="Lab 2.1: The launcher">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Lab 2.1: The launcher
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><span class="emoji" data-emoji="dart">🎯</span> <strong>Goal.</strong> A launcher window with a <em>Grid</em> button that opens a second window.</p>
+<ol type="1">
+<li><p>Create the project as in Lab 1.1, but named <code>LayoutDemo</code>, including the solution file and <code>TreatWarningsAsErrors</code>.</p></li>
+<li><p>In <code>MainWindow.axaml</code>, set <code>Title="Layout Demo" Width="360" Height="560"</code> and replace the text <code>Welcome to Avalonia!</code> with:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode xml code-with-copy"><code class="sourceCode xml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">StackPanel</span> <span class="ot">Margin=</span><span class="st">"24"</span> <span class="ot">Spacing=</span><span class="st">"10"</span>&gt;</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">TextBlock</span> <span class="ot">Text=</span><span class="st">"Layouts and Controls"</span> <span class="ot">FontSize=</span><span class="st">"22"</span> <span class="ot">FontWeight=</span><span class="st">"SemiBold"</span>/&gt;</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">Button</span> <span class="ot">Content=</span><span class="st">"Grid"</span> <span class="ot">HorizontalAlignment=</span><span class="st">"Stretch"</span> <span class="ot">Click=</span><span class="st">"OnOpenGridClicked"</span>/&gt;</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>&lt;/<span class="kw">StackPanel</span>&gt;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
+<li><p>Create a second window. In the project folder, run:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">dotnet</span> new avalonia.window <span class="at">-n</span> GridWindow</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>This creates <code>GridWindow.axaml</code> and <code>GridWindow.axaml.cs</code>. In <code>GridWindow.axaml</code>, set <code>Title="Grid" Width="620" Height="560"</code>.</p></li>
+<li><p>In <code>MainWindow.axaml.cs</code>, add <code>using Avalonia.Interactivity;</code> and this handler:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode csharp code-with-copy"><code class="sourceCode cs"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">private</span> <span class="dt">void</span> <span class="fu">OnOpenGridClicked</span><span class="op">(</span><span class="dt">object</span><span class="op">?</span> sender<span class="op">,</span> RoutedEventArgs e<span class="op">)</span> <span class="op">=&gt;</span> <span class="kw">new</span> <span class="fu">GridWindow</span><span class="op">().</span><span class="fu">Show</span><span class="op">();</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><code>Show()</code> opens the window next to the launcher; you can open it several times. (Its sibling <code>ShowDialog(this)</code> would block the launcher until the new window is closed.)</p></li>
+</ol>
+<p><span class="emoji" data-emoji="white_check_mark">✅</span> <strong>Check.</strong> The launcher shows a heading and a full-width <em>Grid</em> button. Each click opens a window <em>Grid</em> with the text <em>Welcome to Avalonia!</em>.</p>
+<p>All further labs of this chapter follow the same pattern: create a window with <code>dotnet new avalonia.window</code>, give it a title and a size, and add a launcher button with a handler.</p>
+</div>
+</div>
+</section>
+<section id="grid" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="grid"><span class="header-section-number">2.2</span> Grid</h2>
+<p>A <code>Grid</code> arranges its children in rows and columns. Each child picks its cell with the attached properties <code>Grid.Row</code> and <code>Grid.Column</code> (both start at 0, which is also the default). Several children may share a cell; the one declared later is drawn on top.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode xml code-with-copy"><code class="sourceCode xml"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">Grid</span> <span class="ot">ShowGridLines=</span><span class="st">"True"</span>&gt;</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">Grid.RowDefinitions</span>&gt;</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>        &lt;<span class="kw">RowDefinition</span>/&gt;</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>        &lt;<span class="kw">RowDefinition</span>/&gt;</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    &lt;/<span class="kw">Grid.RowDefinitions</span>&gt;</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">Grid.ColumnDefinitions</span>&gt;</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>        &lt;<span class="kw">ColumnDefinition</span>/&gt;</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>        &lt;<span class="kw">ColumnDefinition</span>/&gt;</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>        &lt;<span class="kw">ColumnDefinition</span>/&gt;</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    &lt;/<span class="kw">Grid.ColumnDefinitions</span>&gt;</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">Button</span> <span class="ot">Grid.Row=</span><span class="st">"0"</span> <span class="ot">Grid.Column=</span><span class="st">"1"</span> <span class="ot">HorizontalAlignment=</span><span class="st">"Center"</span>&gt;Button 1&lt;/<span class="kw">Button</span>&gt;</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">Ellipse</span> <span class="ot">Grid.Row=</span><span class="st">"1"</span> <span class="ot">Grid.Column=</span><span class="st">"2"</span> <span class="ot">Fill=</span><span class="st">"Beige"</span>/&gt;</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">Button</span> <span class="ot">Grid.Row=</span><span class="st">"1"</span> <span class="ot">Grid.Column=</span><span class="st">"2"</span> <span class="ot">HorizontalAlignment=</span><span class="st">"Center"</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>            <span class="ot">Background=</span><span class="st">"Transparent"</span>&gt;Button 2&lt;/<span class="kw">Button</span>&gt;</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>&lt;/<span class="kw">Grid</span>&gt;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>This grid has two rows and three columns. <em>Button 2</em> sits on top of the beige ellipse in the same cell. <code>ShowGridLines</code> draws the cell borders; it is a debugging aid, remove it when the layout is done.</p>
+<p>The row and column definitions can also be written as a compact attribute:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode xml code-with-copy"><code class="sourceCode xml"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">Grid</span> <span class="ot">RowDefinitions=</span><span class="st">"*,*"</span> <span class="ot">ColumnDefinitions=</span><span class="st">"*,*,*"</span>&gt;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<section id="sizing-rows-and-columns" class="level3" data-number="2.2.1">
+<h3 data-number="2.2.1" class="anchored" data-anchor-id="sizing-rows-and-columns"><span class="header-section-number">2.2.1</span> Sizing rows and columns</h3>
+<p>Every row height and column width is one of three kinds:</p>
+<ul>
+<li>a <strong>fixed</strong> size in pixels: <code>Width="100"</code>,</li>
+<li><strong><code>Auto</code></strong>: as big as the content needs,</li>
+<li><strong>star</strong> (<code>*</code>): a share of the remaining space. <code>*</code> and <code>2*</code> split it 1 : 2. A definition without a size counts as <code>*</code>.</li>
+</ul>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode xml code-with-copy"><code class="sourceCode xml"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">Grid</span> <span class="ot">ColumnDefinitions=</span><span class="st">"100,Auto,*,2*"</span>&gt;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The first column is always 100 pixels wide, the second fits its content, and the third and fourth share the rest in the ratio 1 : 2, growing and shrinking with the window.</p>
+</section>
+<section id="spanning-cells" class="level3" data-number="2.2.2">
+<h3 data-number="2.2.2" class="anchored" data-anchor-id="spanning-cells"><span class="header-section-number">2.2.2</span> Spanning cells</h3>
+<p><code>Grid.RowSpan</code> and <code>Grid.ColumnSpan</code> let a child cover several rows or columns, like <code>rowspan</code>/<code>colspan</code> in an HTML table:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode xml code-with-copy"><code class="sourceCode xml"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">Label</span> <span class="ot">Grid.Row=</span><span class="st">"4"</span> <span class="ot">Grid.ColumnSpan=</span><span class="st">"2"</span> <span class="ot">Content=</span><span class="st">"Rectangles showing column width"</span>/&gt;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="lab callout callout-style-default callout-tip no-icon callout-titled" title="Lab 2.2: Grid basics">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Lab 2.2: Grid basics
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><span class="emoji" data-emoji="dart">🎯</span> <strong>Goal.</strong> The grid example from above, in the first tab of the <em>Grid</em> window.</p>
+<ol type="1">
+<li><p>In <code>GridWindow.axaml</code>, replace the text <code>Welcome to Avalonia!</code> with a <code>TabControl</code> with one tab:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode xml code-with-copy"><code class="sourceCode xml"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">TabControl</span>&gt;</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">TabItem</span> <span class="ot">Header=</span><span class="st">"Basics"</span>&gt;</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    &lt;/<span class="kw">TabItem</span>&gt;</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>&lt;/<span class="kw">TabControl</span>&gt;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>A <code>TabControl</code> shows one <code>TabItem</code> at a time; the headers switch between them.</p></li>
+<li><p>Put the grid example from the section <em>Grid</em> into the tab, and give the grid a <code>Margin="16"</code>.</p></li>
+</ol>
+<p><span class="emoji" data-emoji="white_check_mark">✅</span> <strong>Check.</strong> The <em>Basics</em> tab shows the dotted grid lines, <em>Button 1</em> in the middle of the top row, and <em>Button 2</em> over the beige ellipse at the bottom right.</p>
+<p><img src="pics/lab-2-2-grid-basics.png" class="img-fluid" style="width:60.0%" alt="The Basics tab: a 2 x 3 grid with Button 1 top center and Button 2 over a beige ellipse bottom right"></p>
+<p><span class="emoji" data-emoji="bulb">💡</span> <strong>Try it.</strong> Replace the two definition blocks by the compact attributes. Then remove <code>HorizontalAlignment="Center"</code> from <em>Button 1</em>.</p>
+</div>
+</div>
+<div class="lab callout callout-style-default callout-tip no-icon callout-titled" title="Lab 2.3: Sizing rows and columns">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Lab 2.3: Sizing rows and columns
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><span class="emoji" data-emoji="dart">🎯</span> <strong>Goal.</strong> A second tab that shows the three kinds of sizes side by side.</p>
+<ol type="1">
+<li><p>Add a second tab to the <code>TabControl</code> in <code>GridWindow.axaml</code>:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode xml code-with-copy"><code class="sourceCode xml"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">TabItem</span> <span class="ot">Header=</span><span class="st">"Sizing"</span>&gt;</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">Grid</span> <span class="ot">Margin=</span><span class="st">"16"</span> <span class="ot">RowDefinitions=</span><span class="st">"*,*,2*,2*,*,Auto"</span> <span class="ot">ColumnDefinitions=</span><span class="st">"Auto,*"</span>&gt;</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    &lt;/<span class="kw">Grid</span>&gt;</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>&lt;/<span class="kw">TabItem</span>&gt;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
+<li><p>Fill row 0 of the grid:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode xml code-with-copy"><code class="sourceCode xml"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">Rectangle</span> <span class="ot">Grid.Row=</span><span class="st">"0"</span> <span class="ot">Fill=</span><span class="st">"Red"</span>/&gt;</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">Label</span> <span class="ot">Grid.Row=</span><span class="st">"0"</span> <span class="ot">Content=</span><span class="st">"*"</span> <span class="ot">FontSize=</span><span class="st">"24"</span>/&gt;</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">Rectangle</span> <span class="ot">Grid.Row=</span><span class="st">"0"</span> <span class="ot">Grid.Column=</span><span class="st">"1"</span> <span class="ot">Fill=</span><span class="st">"Orange"</span>/&gt;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
+<li><p>Fill the other rows yourself, following this table. Where the label is on a dark color, give it <code>Foreground="Yellow"</code>.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Row</th>
+<th>Left column (<code>Auto</code>)</th>
+<th>Label</th>
+<th>Right column (<code>*</code>)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>Yellow</td>
+<td><code>*</code></td>
+<td>Green</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>Blue</td>
+<td><code>2*</code></td>
+<td>Indigo</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>Violet</td>
+<td><code>2*</code></td>
+<td>Black</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td>–</td>
+<td><em>Rectangles showing column width</em>, spanning both columns</td>
+<td>–</td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td>Wheat</td>
+<td><code>Auto</code></td>
+<td>Purple</td>
+</tr>
+</tbody>
+</table></li>
+</ol>
+<p><span class="emoji" data-emoji="white_check_mark">✅</span> <strong>Check.</strong> Rows 2 and 3 are twice as tall as rows 0, 1 and 4; row 5 is exactly as tall as its label. The left column is as wide as its widest label.</p>
+<p><img src="pics/lab-2-3-grid-sizing.png" class="img-fluid" style="width:60.0%" alt="The Sizing tab: colored rows, rows 2 and 3 twice as tall, the last row only as tall as its label"></p>
+<p><span class="emoji" data-emoji="bulb">💡</span> <strong>Try it.</strong> Make the window taller and shorter: which rows change their height, and which don’t?</p>
+</div>
+</div>
+</section>
+</section>
+<section id="stackpanel" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="stackpanel"><span class="header-section-number">2.3</span> StackPanel</h2>
+<p>A <code>StackPanel</code> puts its children one after another, vertically by default or horizontally with <code>Orientation="Horizontal"</code>. <code>Spacing</code> adds a gap between them.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode xml code-with-copy"><code class="sourceCode xml"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">StackPanel</span> <span class="ot">Background=</span><span class="st">"Aquamarine"</span>&gt;</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">TextBlock</span> <span class="ot">Text=</span><span class="st">"First name"</span>/&gt;</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">TextBox</span>/&gt;</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">TextBlock</span> <span class="ot">Text=</span><span class="st">"Last name"</span>/&gt;</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">TextBox</span> <span class="ot">Width=</span><span class="st">"100"</span> <span class="ot">HorizontalAlignment=</span><span class="st">"Left"</span>/&gt;</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>&lt;/<span class="kw">StackPanel</span>&gt;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>In a vertical <code>StackPanel</code> every child is as wide as the panel, unless it sets its own width and alignment like the second <code>TextBox</code>.</p>
+<div class="lab callout callout-style-default callout-tip no-icon callout-titled" title="Lab 2.4: StackPanel">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Lab 2.4: StackPanel
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><span class="emoji" data-emoji="dart">🎯</span> <strong>Goal.</strong> A <em>StackPanel</em> window with the example above.</p>
+<ol type="1">
+<li>Create <code>StackPanelWindow</code> (title <em>StackPanel</em>, 420 × 380) and its launcher button, as in Lab 2.1.</li>
+<li>Replace the window’s text with the <code>StackPanel</code> example, and give the panel a <code>Margin="16"</code>.</li>
+</ol>
+<p><span class="emoji" data-emoji="white_check_mark">✅</span> <strong>Check.</strong> A turquoise block with the two labels and input fields, the second field only 100 pixels wide.</p>
+<p><span class="emoji" data-emoji="bulb">💡</span> <strong>Try it.</strong> Set <code>Orientation="Horizontal"</code>. What happens to the first <code>TextBox</code>, which has no width of its own? Add <code>Spacing="8"</code>.</p>
+</div>
+</div>
+</section>
+<section id="dockpanel" class="level2" data-number="2.4">
+<h2 data-number="2.4" class="anchored" data-anchor-id="dockpanel"><span class="header-section-number">2.4</span> DockPanel</h2>
+<p>A <code>DockPanel</code> attaches each child to one of its edges with the attached property <code>DockPanel.Dock</code> (<code>Top</code>, <code>Bottom</code>, <code>Left</code>, <code>Right</code>). The <strong>order matters</strong>: each child is docked into the space the previous children left over. With <code>LastChildFill="True"</code> (the default), the last child fills whatever remains.</p>
+<p>In the direction it is docked, a child only gets the size it asks for. A button docked to the top is therefore only as tall as its text, even with <code>VerticalAlignment="Stretch"</code>; give it a <code>Height</code> to make it taller (a <code>Width</code> for <code>Left</code>/<code>Right</code>). Along the edge, <code>Stretch</code> fills the full length.</p>
+<div class="lab callout callout-style-default callout-tip no-icon callout-titled" title="Lab 2.5: DockPanel">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Lab 2.5: DockPanel
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><span class="emoji" data-emoji="dart">🎯</span> <strong>Goal.</strong> Five buttons docked to different edges.</p>
+<ol type="1">
+<li><p>Create <code>DockPanelWindow</code> (title <em>DockPanel</em>, 420 × 320) and its launcher button.</p></li>
+<li><p>Replace the window’s text with a <code>DockPanel</code> and its first two buttons:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode xml code-with-copy"><code class="sourceCode xml"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">DockPanel</span> <span class="ot">Margin=</span><span class="st">"16"</span>&gt;</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">Button</span> <span class="ot">DockPanel.Dock=</span><span class="st">"Top"</span> <span class="ot">Background=</span><span class="st">"LightBlue"</span> <span class="ot">Height=</span><span class="st">"50"</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>            <span class="ot">HorizontalAlignment=</span><span class="st">"Stretch"</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>            <span class="ot">HorizontalContentAlignment=</span><span class="st">"Center"</span> <span class="ot">VerticalContentAlignment=</span><span class="st">"Center"</span>&gt;Button1&lt;/<span class="kw">Button</span>&gt;</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">Button</span> <span class="ot">DockPanel.Dock=</span><span class="st">"Left"</span> <span class="ot">Background=</span><span class="st">"LightGreen"</span> <span class="ot">Width=</span><span class="st">"90"</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>            <span class="ot">VerticalAlignment=</span><span class="st">"Stretch"</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>            <span class="ot">HorizontalContentAlignment=</span><span class="st">"Center"</span> <span class="ot">VerticalContentAlignment=</span><span class="st">"Center"</span>&gt;Button2&lt;/<span class="kw">Button</span>&gt;</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>&lt;/<span class="kw">DockPanel</span>&gt;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><code>HorizontalContentAlignment</code>/<code>VerticalContentAlignment</code> center the text inside the larger button.</p></li>
+<li><p>Add three more buttons yourself:</p>
+<ul>
+<li><em>Button3</em>, docked <code>Right</code>, <code>LightCoral</code>, 90 wide,</li>
+<li><em>Button4</em>, docked <code>Top</code>, <code>LightYellow</code>, 50 tall,</li>
+<li><em>Button 5</em>, not docked, <code>LightGray</code>, stretched in both directions.</li>
+</ul></li>
+</ol>
+<p><span class="emoji" data-emoji="white_check_mark">✅</span> <strong>Check.</strong> <em>Button1</em> spans the full width at the top. <em>Button4</em> is also at the top, but only between <em>Button2</em> and <em>Button3</em>, because it came later. <em>Button 5</em> fills the middle.</p>
+<p><img src="pics/lab-2-5-dockpanel.png" class="img-fluid" style="width:60.0%" alt="The DockPanel window: Button1 on top, Button2 left, Button3 right, Button4 below Button1 between them, Button 5 in the middle"></p>
+<p><span class="emoji" data-emoji="bulb">💡</span> <strong>Try it.</strong> Move <em>Button1</em> below <em>Button2</em> in the XAML. Then set <code>LastChildFill="False"</code>.</p>
+</div>
+</div>
+</section>
+<section id="wrappanel" class="level2" data-number="2.5">
+<h2 data-number="2.5" class="anchored" data-anchor-id="wrappanel"><span class="header-section-number">2.5</span> WrapPanel</h2>
+<p>A <code>WrapPanel</code> works like a horizontal <code>StackPanel</code>, but starts a new line when the next child doesn’t fit any more. A <code>StackPanel</code> would simply let it run off the edge. With <code>Orientation="Vertical"</code> it fills columns instead of lines.</p>
+<div class="lab callout callout-style-default callout-tip no-icon callout-titled" title="Lab 2.6: WrapPanel">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Lab 2.6: WrapPanel
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><span class="emoji" data-emoji="dart">🎯</span> <strong>Goal.</strong> Nine buttons that wrap when the window gets narrow.</p>
+<ol type="1">
+<li>Create <code>WrapPanelWindow</code> (title <em>WrapPanel</em>, 380 × 360) and its launcher button.</li>
+<li>Replace the window’s text with a <code>&lt;WrapPanel Margin="16"&gt;</code> containing nine buttons, <em>Button1</em> to <em>Button9</em>.</li>
+</ol>
+<p><span class="emoji" data-emoji="white_check_mark">✅</span> <strong>Check.</strong> The buttons fill a line, then continue on the next one. Make the window narrower and wider: the lines re-flow.</p>
+<p><img src="pics/lab-2-6-wrappanel.png" class="img-fluid" style="width:60.0%" alt="The WrapPanel window: nine buttons wrapped into three lines"></p>
+<p><span class="emoji" data-emoji="bulb">💡</span> <strong>Try it.</strong> Set <code>Orientation="Vertical"</code> and resize the window again.</p>
+</div>
+</div>
+</section>
+<section id="canvas" class="level2" data-number="2.6">
+<h2 data-number="2.6" class="anchored" data-anchor-id="canvas"><span class="header-section-number">2.6</span> Canvas</h2>
+<p>A <code>Canvas</code> doesn’t arrange anything: you position every child yourself, with the attached properties <code>Canvas.Left</code>, <code>Canvas.Top</code>, <code>Canvas.Right</code> and <code>Canvas.Bottom</code>. It is the only panel that works with coordinates. That makes it right for drawings and diagrams, and wrong for forms: nothing adapts when the window or the text size changes.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode xml code-with-copy"><code class="sourceCode xml"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">Canvas</span>&gt;</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">TextBlock</span> <span class="ot">Canvas.Top=</span><span class="st">"10"</span> <span class="ot">Canvas.Left=</span><span class="st">"10"</span> <span class="ot">Text=</span><span class="st">"First name"</span>/&gt;</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">TextBox</span> <span class="ot">Canvas.Top=</span><span class="st">"30"</span> <span class="ot">Canvas.Left=</span><span class="st">"10"</span> <span class="ot">Width=</span><span class="st">"200"</span>/&gt;</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>&lt;/<span class="kw">Canvas</span>&gt;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="lab callout callout-style-default callout-tip no-icon callout-titled" title="Lab 2.7: Canvas">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Lab 2.7: Canvas
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><span class="emoji" data-emoji="dart">🎯</span> <strong>Goal.</strong> A small form, positioned by coordinates.</p>
+<ol type="1">
+<li>Create <code>CanvasWindow</code> (title <em>Canvas</em>, 360 × 300) and its launcher button.</li>
+<li>Replace the window’s text with the <code>Canvas</code> example above; add <code>Margin="16"</code> and <code>Background="AliceBlue"</code> to the canvas.</li>
+<li>Add a <em>Last name</em> label and input field yourself, 50 pixels below the first pair.</li>
+</ol>
+<p><span class="emoji" data-emoji="white_check_mark">✅</span> <strong>Check.</strong> Both pairs are shown on a light blue area, the input fields 200 pixels wide.</p>
+<p><span class="emoji" data-emoji="bulb">💡</span> <strong>Try it.</strong> Make the window very narrow: the input fields are cut off instead of getting smaller.</p>
+</div>
+</div>
+</section>
+<section id="uniformgrid" class="level2" data-number="2.7">
+<h2 data-number="2.7" class="anchored" data-anchor-id="uniformgrid"><span class="header-section-number">2.7</span> UniformGrid</h2>
+<p>A <code>UniformGrid</code> is a grid whose cells all have the same size. You don’t place the children; they fill the cells in order. <code>Rows</code> and <code>Columns</code> fix the number of rows or columns; the other number follows from the number of children.</p>
+<div class="lab callout callout-style-default callout-tip no-icon callout-titled" title="Lab 2.8: UniformGrid">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Lab 2.8: UniformGrid
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><span class="emoji" data-emoji="dart">🎯</span> <strong>Goal.</strong> Six buttons of equal size in two rows.</p>
+<ol type="1">
+<li><p>Create <code>UniformGridWindow</code> (title <em>UniformGrid</em>, 360 × 320) and its launcher button.</p></li>
+<li><p>Replace the window’s text with:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="sourceCode xml code-with-copy"><code class="sourceCode xml"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">UniformGrid</span> <span class="ot">Margin=</span><span class="st">"16"</span> <span class="ot">Rows=</span><span class="st">"2"</span>&gt;</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">Button</span> <span class="ot">HorizontalAlignment=</span><span class="st">"Stretch"</span> <span class="ot">VerticalAlignment=</span><span class="st">"Stretch"</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>            <span class="ot">HorizontalContentAlignment=</span><span class="st">"Center"</span> <span class="ot">VerticalContentAlignment=</span><span class="st">"Center"</span>&gt;Button1&lt;/<span class="kw">Button</span>&gt;</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>&lt;/<span class="kw">UniformGrid</span>&gt;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
+<li><p>Add <em>Button2</em> to <em>Button6</em> the same way.</p></li>
+</ol>
+<p><span class="emoji" data-emoji="white_check_mark">✅</span> <strong>Check.</strong> Two rows of three buttons, all of the same size, filling the window.</p>
+<p><span class="emoji" data-emoji="bulb">💡</span> <strong>Try it.</strong> Replace <code>Rows="2"</code> by <code>Columns="2"</code>, then remove one button.</p>
+</div>
+</div>
+</section>
+<section id="gridsplitter" class="level2" data-number="2.8">
+<h2 data-number="2.8" class="anchored" data-anchor-id="gridsplitter"><span class="header-section-number">2.8</span> GridSplitter</h2>
+<p>A <code>GridSplitter</code> is a bar in a <code>Grid</code> that the user can drag to change the width of columns (or the height of rows) at runtime. Two properties matter:</p>
+<ul>
+<li><strong><code>ResizeDirection</code></strong>: always set it explicitly, to <code>Columns</code> or <code>Rows</code>.</li>
+<li><strong><code>HorizontalAlignment</code></strong> (for columns) decides <em>which</em> columns change: <code>Left</code> changes the splitter’s column and the one before it, <code>Right</code> its column and the one after it, and <code>Stretch</code> (the default) the columns on both sides of it. A splitter in the first column therefore needs <code>HorizontalAlignment="Right"</code>; without it, it tries to resize a column before column 0, and dragging does nothing.</li>
+</ul>
+<p><code>MinWidth</code>/<code>MaxWidth</code> on a <code>ColumnDefinition</code> limit how far the user can drag.</p>
+<div class="lab callout callout-style-default callout-tip no-icon callout-titled" title="Lab 2.9: GridSplitter">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Lab 2.9: GridSplitter
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><span class="emoji" data-emoji="dart">🎯</span> <strong>Goal.</strong> A grid whose column width can be changed with the mouse.</p>
+<ol type="1">
+<li><p>Create <code>GridSplitterWindow</code> (title <em>GridSplitter</em>, 420 × 360) and its launcher button.</p></li>
+<li><p>Replace the window’s text with a <code>&lt;Grid Margin="16"&gt;</code> of two rows and two columns. Put <code>&lt;Button Content="Button 1" Margin="10"/&gt;</code> into the top-left cell and <em>Button 2</em> into the bottom-right cell.</p></li>
+<li><p>Add the splitter at the end of the grid:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="sourceCode xml code-with-copy"><code class="sourceCode xml"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">GridSplitter</span> <span class="ot">Grid.Column=</span><span class="st">"0"</span> <span class="ot">Grid.RowSpan=</span><span class="st">"2"</span> <span class="ot">Width=</span><span class="st">"9"</span> <span class="ot">Background=</span><span class="st">"Gray"</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>              <span class="ot">ResizeDirection=</span><span class="st">"Columns"</span> <span class="ot">HorizontalAlignment=</span><span class="st">"Right"</span>/&gt;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
+</ol>
+<p><span class="emoji" data-emoji="white_check_mark">✅</span> <strong>Check.</strong> A gray bar runs down the right edge of the left column. Dragging it makes the left column wider or narrower.</p>
+<p><span class="emoji" data-emoji="bulb">💡</span> <strong>Try it.</strong> Remove <code>HorizontalAlignment="Right"</code> and drag again. Then add <code>MinWidth="80"</code> to the first column definition (you need the long form of the definitions for that).</p>
+</div>
+</div>
+</section>
+<section id="scrollviewer" class="level2" data-number="2.9">
+<h2 data-number="2.9" class="anchored" data-anchor-id="scrollviewer"><span class="header-section-number">2.9</span> ScrollViewer</h2>
+<p>Panels never scroll. If the content can be larger than the space available, wrap it in a <code>ScrollViewer</code>. It shows a vertical scrollbar when needed; the horizontal one is off unless you set <code>HorizontalScrollBarVisibility</code> (<code>Auto</code> shows it when needed, <code>Visible</code> always).</p>
+<p>Two ways to break a line in a text:</p>
+<ul>
+<li>in an attribute value, the XML character reference <code>&amp;#10;</code>: <code>Text="a&amp;#10;b"</code>,</li>
+<li>inside a <code>TextBlock</code>’s content, the element <code>&lt;LineBreak/&gt;</code>.</li>
+</ul>
+<p>One more thing about panels: a panel only receives mouse events where it has a background. If a panel should react to clicks but not be colored, set <code>Background="Transparent"</code>.</p>
+<div class="lab callout callout-style-default callout-tip no-icon callout-titled" title="Lab 2.10: ScrollViewer">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Lab 2.10: ScrollViewer
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><span class="emoji" data-emoji="dart">🎯</span> <strong>Goal.</strong> Content that is wider than the window, with a scrollbar.</p>
+<ol type="1">
+<li><p>Create <code>ScrollViewerWindow</code> (title <em>ScrollViewer</em>, 420 × 340) and its launcher button.</p></li>
+<li><p>Replace the window’s text with:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="sourceCode xml code-with-copy"><code class="sourceCode xml"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">ScrollViewer</span> <span class="ot">Margin=</span><span class="st">"16"</span> <span class="ot">HorizontalScrollBarVisibility=</span><span class="st">"Visible"</span>&gt;</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">Grid</span> <span class="ot">MinWidth=</span><span class="st">"600"</span> <span class="ot">ColumnDefinitions=</span><span class="st">"*,*"</span>&gt;</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>    &lt;/<span class="kw">Grid</span>&gt;</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>&lt;/<span class="kw">ScrollViewer</span>&gt;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
+<li><p>In the grid’s first column, add a <code>TextBox</code> with <code>Margin="10"</code> and the text <em>a</em> and <em>b</em> on two lines. In the second column, add a <code>TextBlock</code> with <code>Margin="10"</code> whose content is <code>a b c d e f g</code>, a <code>&lt;LineBreak/&gt;</code>, and <code>h i</code>.</p></li>
+</ol>
+<p><span class="emoji" data-emoji="white_check_mark">✅</span> <strong>Check.</strong> A horizontal scrollbar is shown below the content. Scroll right to see the second column.</p>
+<p><span class="emoji" data-emoji="bulb">💡</span> <strong>Try it.</strong> Set <code>HorizontalScrollBarVisibility="Auto"</code> and make the window wider than 600 pixels.</p>
+</div>
+</div>
+</section>
+<section id="building-a-ui-in-code" class="level2" data-number="2.10">
+<h2 data-number="2.10" class="anchored" data-anchor-id="building-a-ui-in-code"><span class="header-section-number">2.10</span> Building a UI in code</h2>
+<p>Everything you write in XAML can also be written in C#: XAML elements are objects, attributes are properties. Attached properties are set with static methods such as <code>DockPanel.SetDock(button, Dock.Top)</code>.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="sourceCode csharp code-with-copy"><code class="sourceCode cs"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="dt">var</span> dPanel <span class="op">=</span> <span class="kw">new</span> <span class="fu">DockPanel</span><span class="op">();</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="dt">var</span> btnTop <span class="op">=</span> <span class="kw">new</span> <span class="fu">Button</span><span class="op">();</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="dt">var</span> btnLeft <span class="op">=</span> <span class="kw">new</span> <span class="fu">Button</span><span class="op">();</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>btnTop<span class="op">.</span><span class="fu">Content</span> <span class="op">=</span> <span class="st">"Top Button!"</span><span class="op">;</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>btnTop<span class="op">.</span><span class="fu">Height</span> <span class="op">=</span> <span class="dv">50</span><span class="op">;</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>btnTop<span class="op">.</span><span class="fu">HorizontalAlignment</span> <span class="op">=</span> HorizontalAlignment<span class="op">.</span><span class="fu">Stretch</span><span class="op">;</span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>btnTop<span class="op">.</span><span class="fu">HorizontalContentAlignment</span> <span class="op">=</span> HorizontalAlignment<span class="op">.</span><span class="fu">Center</span><span class="op">;</span></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>btnTop<span class="op">.</span><span class="fu">VerticalContentAlignment</span> <span class="op">=</span> VerticalAlignment<span class="op">.</span><span class="fu">Center</span><span class="op">;</span></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>btnLeft<span class="op">.</span><span class="fu">Content</span> <span class="op">=</span> <span class="st">"Left Button!"</span><span class="op">;</span></span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>btnLeft<span class="op">.</span><span class="fu">Width</span> <span class="op">=</span> <span class="dv">95</span><span class="op">;</span></span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>btnLeft<span class="op">.</span><span class="fu">VerticalAlignment</span> <span class="op">=</span> VerticalAlignment<span class="op">.</span><span class="fu">Stretch</span><span class="op">;</span></span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>btnLeft<span class="op">.</span><span class="fu">HorizontalContentAlignment</span> <span class="op">=</span> HorizontalAlignment<span class="op">.</span><span class="fu">Center</span><span class="op">;</span></span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>btnLeft<span class="op">.</span><span class="fu">VerticalContentAlignment</span> <span class="op">=</span> VerticalAlignment<span class="op">.</span><span class="fu">Center</span><span class="op">;</span></span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>DockPanel<span class="op">.</span><span class="fu">SetDock</span><span class="op">(</span>btnTop<span class="op">,</span> Dock<span class="op">.</span><span class="fu">Top</span><span class="op">);</span></span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a>DockPanel<span class="op">.</span><span class="fu">SetDock</span><span class="op">(</span>btnLeft<span class="op">,</span> Dock<span class="op">.</span><span class="fu">Left</span><span class="op">);</span></span>
+<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a>dPanel<span class="op">.</span><span class="fu">LastChildFill</span> <span class="op">=</span> <span class="kw">false</span><span class="op">;</span></span>
+<span id="cb17-21"><a href="#cb17-21" aria-hidden="true" tabindex="-1"></a>dPanel<span class="op">.</span><span class="fu">Children</span><span class="op">.</span><span class="fu">Add</span><span class="op">(</span>btnTop<span class="op">);</span></span>
+<span id="cb17-22"><a href="#cb17-22" aria-hidden="true" tabindex="-1"></a>dPanel<span class="op">.</span><span class="fu">Children</span><span class="op">.</span><span class="fu">Add</span><span class="op">(</span>btnLeft<span class="op">);</span></span>
+<span id="cb17-23"><a href="#cb17-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-24"><a href="#cb17-24" aria-hidden="true" tabindex="-1"></a>Content <span class="op">=</span> dPanel<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Keep this for the rare cases where the UI is only known at runtime, for example one button per entry of a list read from a file. For everything else XAML is shorter, easier to read and shows up in the previewer.</p>
+<div class="lab callout callout-style-default callout-tip no-icon callout-titled" title="Lab 2.11: A window built in code">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Lab 2.11: A window built in code
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><span class="emoji" data-emoji="dart">🎯</span> <strong>Goal.</strong> A window whose content is created in C# only.</p>
+<ol type="1">
+<li>Create <code>CodeBehindWindow</code> (title <em>Code-Behind</em>, 360 × 260) and its launcher button.</li>
+<li>In <code>CodeBehindWindow.axaml</code>, delete the text <code>Welcome to Avalonia!</code>, so the window has no content.</li>
+<li>In <code>CodeBehindWindow.axaml.cs</code>, add <code>using Avalonia.Layout;</code> (for the alignments), and add the code from the section above to the constructor, after <code>InitializeComponent()</code>.</li>
+</ol>
+<p><span class="emoji" data-emoji="white_check_mark">✅</span> <strong>Check.</strong> A button <em>Top Button!</em> across the top and <em>Left Button!</em> on the left; the rest of the window stays empty because <code>LastChildFill</code> is <code>false</code>.</p>
+<p><span class="emoji" data-emoji="bulb">💡</span> <strong>Try it.</strong> Add a third button in code, without a dock, and set <code>LastChildFill</code> to <code>true</code>.</p>
+</div>
+</div>
+</section>
+<section id="try-it-yourself" class="level2" data-number="2.11">
+<h2 data-number="2.11" class="anchored" data-anchor-id="try-it-yourself"><span class="header-section-number">2.11</span> Try it yourself</h2>
+<ol type="1">
+<li>Build a login form with a <code>Grid</code>: two rows with a label and an input field each, labels in an <code>Auto</code> column, fields in a <code>*</code> column, and a right-aligned <em>Login</em> button below.</li>
+<li>Rebuild the <em>DockPanel</em> window with a <code>Grid</code>. Which layout needs less XAML?</li>
+<li>The launcher of LayoutDemo is too long for a small window. Make it scroll.</li>
+</ol>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/bschroedhtl\.github\.io\/2627-pose-5-avalonia\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+            // target, if specified
+            link.setAttribute("target", "_blank");
+            if (link.getAttribute("rel") === null) {
+              link.setAttribute("rel", "noopener");
+            }
+            // default icon
+            link.classList.add("external");
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../../../../content/01-DesktopUI/material/01_avalonia-basics/README.html" class="pagination-link" aria-label="Avalonia Basics">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Avalonia Basics</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../../../../content/01-DesktopUI/material/03_styles/README.html" class="pagination-link" aria-label="Styles">
+        <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Styles</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>© 2026 — HTL Leonding</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">
+<p>Author: Birgit Schröder</p>
+</div>
+  </div>
+</footer>
+
+
+
+
+<script src="../../../../site_libs/quarto-html/zenscroll-min.js"></script>
+</body></html>

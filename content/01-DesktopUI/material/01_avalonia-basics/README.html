@@ -1,0 +1,1167 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.18">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>1&nbsp; Avalonia Basics – Desktop UI with Avalonia</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../../">
+<link href="../../../../content/01-DesktopUI/material/02_layout-and-controls/README.html" rel="next">
+<link href="../../../../index.html" rel="prev">
+<script src="../../../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../../site_libs/bootstrap/bootstrap-fa39313ee0ae67082205aa4c05164dde.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<style>html{ scroll-behavior: smooth; }</style>
+
+
+<link rel="stylesheet" href="../../../../styles.css">
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../../../content/01-DesktopUI/material/01_avalonia-basics/README.html">Desktop UI</a></li><li class="breadcrumb-item"><a href="../../../../content/01-DesktopUI/material/01_avalonia-basics/README.html"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Avalonia Basics</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../../../../">Desktop UI with Avalonia</a> 
+        <div class="sidebar-tools-main">
+    <a href="../../../../POSE5-Avalonia.pdf" title="Download PDF" class="quarto-navigation-tool px-1" aria-label="Download PDF"><i class="bi bi-file-pdf"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Introduction</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Desktop UI</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../../content/01-DesktopUI/material/01_avalonia-basics/README.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Avalonia Basics</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../../content/01-DesktopUI/material/02_layout-and-controls/README.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Layouts and Controls</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../../content/01-DesktopUI/material/03_styles/README.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Styles</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../../content/01-DesktopUI/material/04_databinding/README.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Data Binding and MVVM</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#why-avalonia" id="toc-why-avalonia" class="nav-link active" data-scroll-target="#why-avalonia"><span class="header-section-number">1.1</span> Why Avalonia?</a>
+  <ul class="collapse">
+  <li><a href="#the-landscape-in-2026" id="toc-the-landscape-in-2026" class="nav-link" data-scroll-target="#the-landscape-in-2026"><span class="header-section-number">1.1.1</span> The landscape in 2026</a></li>
+  <li><a href="#why-learn-it-after-three-years-of-web-development" id="toc-why-learn-it-after-three-years-of-web-development" class="nav-link" data-scroll-target="#why-learn-it-after-three-years-of-web-development"><span class="header-section-number">1.1.2</span> Why learn it after three years of web development?</a></li>
+  </ul></li>
+  <li><a href="#setting-up" id="toc-setting-up" class="nav-link" data-scroll-target="#setting-up"><span class="header-section-number">1.2</span> Setting up</a></li>
+  <li><a href="#the-project-files" id="toc-the-project-files" class="nav-link" data-scroll-target="#the-project-files"><span class="header-section-number">1.3</span> The project files</a>
+  <ul class="collapse">
+  <li><a href="#how-the-application-starts" id="toc-how-the-application-starts" class="nav-link" data-scroll-target="#how-the-application-starts"><span class="header-section-number">1.3.1</span> How the application starts</a></li>
+  <li><a href="#how-xaml-and-code-behind-are-connected" id="toc-how-xaml-and-code-behind-are-connected" class="nav-link" data-scroll-target="#how-xaml-and-code-behind-are-connected"><span class="header-section-number">1.3.2</span> How XAML and code-behind are connected</a></li>
+  </ul></li>
+  <li><a href="#xaml-basics" id="toc-xaml-basics" class="nav-link" data-scroll-target="#xaml-basics"><span class="header-section-number">1.4</span> XAML basics</a>
+  <ul class="collapse">
+  <li><a href="#namespaces" id="toc-namespaces" class="nav-link" data-scroll-target="#namespaces"><span class="header-section-number">1.4.1</span> Namespaces</a></li>
+  <li><a href="#property-element-syntax" id="toc-property-element-syntax" class="nav-link" data-scroll-target="#property-element-syntax"><span class="header-section-number">1.4.2</span> Property element syntax</a></li>
+  <li><a href="#naming-elements" id="toc-naming-elements" class="nav-link" data-scroll-target="#naming-elements"><span class="header-section-number">1.4.3</span> Naming elements</a></li>
+  <li><a href="#markup-extensions" id="toc-markup-extensions" class="nav-link" data-scroll-target="#markup-extensions"><span class="header-section-number">1.4.4</span> Markup extensions</a></li>
+  <li><a href="#styled-properties" id="toc-styled-properties" class="nav-link" data-scroll-target="#styled-properties"><span class="header-section-number">1.4.5</span> Styled properties</a></li>
+  <li><a href="#attached-properties" id="toc-attached-properties" class="nav-link" data-scroll-target="#attached-properties"><span class="header-section-number">1.4.6</span> Attached properties</a></li>
+  </ul></li>
+  <li><a href="#a-first-layout" id="toc-a-first-layout" class="nav-link" data-scroll-target="#a-first-layout"><span class="header-section-number">1.5</span> A first layout</a></li>
+  <li><a href="#events" id="toc-events" class="nav-link" data-scroll-target="#events"><span class="header-section-number">1.6</span> Events</a>
+  <ul class="collapse">
+  <li><a href="#routed-events" id="toc-routed-events" class="nav-link" data-scroll-target="#routed-events"><span class="header-section-number">1.6.1</span> Routed events</a></li>
+  <li><a href="#state-lives-in-the-code-behind" id="toc-state-lives-in-the-code-behind" class="nav-link" data-scroll-target="#state-lives-in-the-code-behind"><span class="header-section-number">1.6.2</span> State lives in the code-behind</a></li>
+  </ul></li>
+  <li><a href="#dialogs" id="toc-dialogs" class="nav-link" data-scroll-target="#dialogs"><span class="header-section-number">1.7</span> Dialogs</a></li>
+  <li><a href="#window-events" id="toc-window-events" class="nav-link" data-scroll-target="#window-events"><span class="header-section-number">1.8</span> Window events</a></li>
+  <li><a href="#the-previewer" id="toc-the-previewer" class="nav-link" data-scroll-target="#the-previewer"><span class="header-section-number">1.9</span> The previewer</a></li>
+  <li><a href="#try-it-yourself" id="toc-try-it-yourself" class="nav-link" data-scroll-target="#try-it-yourself"><span class="header-section-number">1.10</span> Try it yourself</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../../../content/01-DesktopUI/material/01_avalonia-basics/README.html">Desktop UI</a></li><li class="breadcrumb-item"><a href="../../../../content/01-DesktopUI/material/01_avalonia-basics/README.html"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Avalonia Basics</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Avalonia Basics</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>Avalonia is a cross-platform UI framework for .NET. You describe the user interface in <strong>XAML</strong>, an XML-based markup language, and write the logic in C#. The same app runs on Windows, macOS and Linux, and Avalonia can also target the browser and mobile devices.</p>
+<p>This chapter covers the foundations: how an Avalonia project is put together, how XAML works, and how a window reacts to clicks. Along the way you build your first app, <strong>HelloAvalonia</strong>, in four labs. Each lab starts from where the previous one stopped, so work through them in order.</p>
+<section id="why-avalonia" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="why-avalonia"><span class="header-section-number">1.1</span> Why Avalonia?</h2>
+<section id="the-landscape-in-2026" class="level3" data-number="1.1.1">
+<h3 data-number="1.1.1" class="anchored" data-anchor-id="the-landscape-in-2026"><span class="header-section-number">1.1.1</span> The landscape in 2026</h3>
+<p>There is no reliable market-share figure for desktop UI frameworks. Most desktop applications are internal tools that never show up in any statistic. The signals that do exist all point the same way:</p>
+<ul>
+<li><strong>Web frameworks</strong> such as React, Angular and Node.js are used by far more developers than any native desktop toolkit. Many “desktop” apps are web technology too: VS Code, Slack, Teams and Discord are built with Electron.</li>
+<li><strong>WPF</strong>, Microsoft’s Windows-only desktop framework, has the largest installed base in the .NET world. It is in maintenance mode, but countless enterprise, industrial, medical and finance applications run on it and still have to be maintained and extended.</li>
+<li><strong>Avalonia</strong> is the fastest-growing .NET desktop framework and the leading cross-platform one. Avalonia 12 was released in April 2026; JetBrains, Unity, Autodesk and NASA are among its users.</li>
+</ul>
+<p>As a rough order: web and Electron apps are far ahead, then WPF and WinForms (both legacy), then Avalonia (growing), about level with MAUI and Qt.</p>
+</section>
+<section id="why-learn-it-after-three-years-of-web-development" class="level3" data-number="1.1.2">
+<h3 data-number="1.1.2" class="anchored" data-anchor-id="why-learn-it-after-three-years-of-web-development"><span class="header-section-number">1.1.2</span> Why learn it after three years of web development?</h3>
+<ul>
+<li><strong>A different programming model.</strong> A desktop app is one long-running process that keeps its state, has a UI thread and binds the UI to data. A web app mostly answers stateless requests and re-renders a DOM. Desktop development makes you think about state and threading in ways web development rarely does.</li>
+<li><strong>WPF comes almost for free.</strong> Avalonia’s XAML, bindings, styles and the MVVM pattern map almost one to one onto WPF. Maintaining existing WPF code is where many junior .NET jobs are: machine control panels, test benches, in-house tools.</li>
+<li><strong>It runs everywhere</strong>, including on your own laptop, whatever operating system it has.</li>
+<li><strong>Some software doesn’t belong in a browser</strong>: anything that talks to hardware (serial ports, USB, fieldbuses), runs offline or in isolated networks, computes heavily on the local machine, or drives an embedded Linux touch panel.</li>
+<li><strong>Same stack as the backend.</strong> It is the same C#, the same tooling, the same dependency injection and the same unit tests you already know from ASP.NET Core.</li>
+<li><strong>The patterns transfer.</strong> Observable state, commands and composing a UI from components are close relatives of what React and Angular do.</li>
+</ul>
+<p>To be honest about it: most of you will build more web frontends than desktop UIs. Avalonia widens your skill set; it doesn’t replace your web skills.</p>
+</section>
+</section>
+<section id="setting-up" class="level2" data-number="1.2">
+<h2 data-number="1.2" class="anchored" data-anchor-id="setting-up"><span class="header-section-number">1.2</span> Setting up</h2>
+<p>You need:</p>
+<ul>
+<li><p>the <strong>.NET 10 SDK</strong>,</p></li>
+<li><p>an IDE: <strong>JetBrains Rider</strong> with the <em>AvaloniaRider</em> plugin, or <strong>Visual Studio Code</strong> with the <em>Avalonia for VS Code</em> extension,</p></li>
+<li><p>the Avalonia project templates. Install them once per machine:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">dotnet</span> new install Avalonia.Templates</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
+</ul>
+<div class="lab callout callout-style-default callout-tip no-icon callout-titled" title="Lab 1.1: Create and run the project">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Lab 1.1: Create and run the project
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><span class="emoji" data-emoji="dart">🎯</span> <strong>Goal.</strong> An empty Avalonia app that starts and shows a window.</p>
+<ol type="1">
+<li><p>Create the project and a solution file for it:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">dotnet</span> new avalonia.app <span class="at">-n</span> HelloAvalonia <span class="at">-o</span> HelloAvalonia</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> HelloAvalonia</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="ex">dotnet</span> new sln <span class="at">-n</span> HelloAvalonia</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="ex">dotnet</span> sln add HelloAvalonia.csproj</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The solution file (<code>HelloAvalonia.slnx</code>) is optional for a single project, but it lets Rider open the folder as a solution.</p></li>
+<li><p>Open <code>HelloAvalonia.csproj</code> and add one line to the first <code>&lt;PropertyGroup&gt;</code>:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode xml code-with-copy"><code class="sourceCode xml"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">TreatWarningsAsErrors</span>&gt;true&lt;/<span class="kw">TreatWarningsAsErrors</span>&gt;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>From now on every compiler warning stops the build. Warnings are almost always real problems (a possible <code>null</code>, an unused variable), and this way you can’t ignore them.</p></li>
+<li><p>Start the app:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">dotnet</span> run</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
+</ol>
+<p><span class="emoji" data-emoji="white_check_mark">✅</span> <strong>Check.</strong> A window titled <em>HelloAvalonia</em> opens and shows the text <em>Welcome to Avalonia!</em>. Close it before you continue.</p>
+</div>
+</div>
+</section>
+<section id="the-project-files" class="level2" data-number="1.3">
+<h2 data-number="1.3" class="anchored" data-anchor-id="the-project-files"><span class="header-section-number">1.3</span> The project files</h2>
+<p>An Avalonia application strictly separates <strong>what the UI looks like</strong> from <strong>what it does</strong>. The layout lives in a XAML file with the extension <code>.axaml</code>; the logic lives in a C# file of the same name with <code>.axaml.cs</code> appended, the <strong>code-behind</strong>. Your new project contains:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>File</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>Program.cs</code></td>
+<td>The <code>Main</code> entry point. Configures and starts the Avalonia application.</td>
+</tr>
+<tr class="even">
+<td><code>App.axaml</code> / <code>App.axaml.cs</code></td>
+<td>The application object: the global theme, and which window opens at startup.</td>
+</tr>
+<tr class="odd">
+<td><code>MainWindow.axaml</code></td>
+<td>The <strong>view</strong>: the layout and controls of the main window, in XAML.</td>
+</tr>
+<tr class="even">
+<td><code>MainWindow.axaml.cs</code></td>
+<td>The <strong>code-behind</strong>: the C# logic that belongs to <code>MainWindow.axaml</code>.</td>
+</tr>
+<tr class="odd">
+<td><code>HelloAvalonia.csproj</code></td>
+<td>The project file: target framework and NuGet packages.</td>
+</tr>
+<tr class="even">
+<td><code>app.manifest</code></td>
+<td>Windows-only settings. Leave it as it is.</td>
+</tr>
+</tbody>
+</table>
+<p>Rider shows each <code>.axaml</code> file with its <code>.axaml.cs</code> file nested underneath, because the two belong together.</p>
+<p>The extension is <code>.axaml</code>, not <code>.xaml</code>, although the language is XAML. The different extension only exists so that IDEs never confuse Avalonia files with those of Microsoft’s XAML frameworks, which use <code>.xaml</code>.</p>
+<section id="how-the-application-starts" class="level3" data-number="1.3.1">
+<h3 data-number="1.3.1" class="anchored" data-anchor-id="how-the-application-starts"><span class="header-section-number">1.3.1</span> How the application starts</h3>
+<p><code>Program.Main</code> builds the application from the <code>App</code> class and starts it. <code>App.axaml</code> defines the application-wide resources, most importantly the theme:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode xml code-with-copy"><code class="sourceCode xml"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">Application</span> <span class="ot">xmlns=</span><span class="st">"https://github.com/avaloniaui"</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>             <span class="ot">xmlns:x=</span><span class="st">"http://schemas.microsoft.com/winfx/2006/xaml"</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>             <span class="ot">x:Class=</span><span class="st">"HelloAvalonia.App"</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>             <span class="ot">RequestedThemeVariant=</span><span class="st">"Default"</span>&gt;</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">Application.Styles</span>&gt;</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>        &lt;<span class="kw">FluentTheme</span> /&gt;</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    &lt;/<span class="kw">Application.Styles</span>&gt;</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>&lt;/<span class="kw">Application</span>&gt;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><code>RequestedThemeVariant="Default"</code> follows the operating system’s light or dark mode. Which window opens first is decided in code, in <code>App.axaml.cs</code>:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode csharp code-with-copy"><code class="sourceCode cs"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span> <span class="kw">override</span> <span class="dt">void</span> <span class="fu">OnFrameworkInitializationCompleted</span><span class="op">()</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">if</span> <span class="op">(</span>ApplicationLifetime <span class="kw">is</span> IClassicDesktopStyleApplicationLifetime desktop<span class="op">)</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">{</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>        desktop<span class="op">.</span><span class="fu">MainWindow</span> <span class="op">=</span> <span class="kw">new</span> <span class="fu">MainWindow</span><span class="op">();</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    <span class="kw">base</span><span class="op">.</span><span class="fu">OnFrameworkInitializationCompleted</span><span class="op">();</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><code>Program.cs</code> also contains a call to <code>.WithDeveloperTools()</code>, surrounded by <code>#if DEBUG</code>. It connects debug builds to Avalonia’s developer tools; we don’t need them in this chapter, so leave the line as it is.</p>
+</section>
+<section id="how-xaml-and-code-behind-are-connected" class="level3" data-number="1.3.2">
+<h3 data-number="1.3.2" class="anchored" data-anchor-id="how-xaml-and-code-behind-are-connected"><span class="header-section-number">1.3.2</span> How XAML and code-behind are connected</h3>
+<p>Look at the top of <code>MainWindow.axaml</code>:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode xml code-with-copy"><code class="sourceCode xml"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">Window</span> <span class="er">...</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>        x:Class="HelloAvalonia.MainWindow"&gt;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><code>x:Class</code> tells the XAML compiler that this markup belongs to the C# class <code>HelloAvalonia.MainWindow</code> (namespace plus class name). In <code>MainWindow.axaml.cs</code> that class is declared <code>partial</code>:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode csharp code-with-copy"><code class="sourceCode cs"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span> <span class="kw">partial</span> <span class="kw">class</span> MainWindow <span class="op">:</span> Window</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">public</span> <span class="fu">MainWindow</span><span class="op">()</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">{</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>        <span class="fu">InitializeComponent</span><span class="op">();</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>At build time, Avalonia generates the <strong>second half</strong> of this partial class from the XAML file: a field for every named control, and the code that builds the controls. <code>InitializeComponent()</code>, called once in the constructor, runs that generated code. Without it the window would stay empty. Two files, one class.</p>
+<p>The XAML is compiled straight into the program; it is not parsed at runtime. A typo in a property name is therefore a <strong>build error</strong>, not a crash when the window opens.</p>
+</section>
+</section>
+<section id="xaml-basics" class="level2" data-number="1.4">
+<h2 data-number="1.4" class="anchored" data-anchor-id="xaml-basics"><span class="header-section-number">1.4</span> XAML basics</h2>
+<p>XAML uses XML syntax, so the usual XML rules apply:</p>
+<ul>
+<li>A file has exactly one <strong>root element</strong>, and all other elements are correctly nested inside it. For a window, the root is <code>&lt;Window&gt;</code>; for a reusable part of a UI, it is a <code>&lt;UserControl&gt;</code>.</li>
+<li>Element and attribute names are <strong>case-sensitive</strong>, and attribute values are always in double quotes.</li>
+<li>The nesting of elements forms a <strong>tree</strong>. Avalonia turns that tree into the UI.</li>
+</ul>
+<p>Every element stands for a class. When the window is created, <code>&lt;Button&gt;</code> creates a <code>Button</code> object through its parameterless constructor. Every attribute sets a public <strong>property</strong> of that object or subscribes to one of its <strong>events</strong>:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode xml code-with-copy"><code class="sourceCode xml"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">Button</span> <span class="ot">Background=</span><span class="st">"AliceBlue"</span> <span class="ot">Content=</span><span class="st">"Click me!"</span>/&gt;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The attribute values are strings. Behind the scenes, <strong>type converters</strong> turn them into the right type, for example <code>"AliceBlue"</code> into a brush.</p>
+<section id="namespaces" class="level3" data-number="1.4.1">
+<h3 data-number="1.4.1" class="anchored" data-anchor-id="namespaces"><span class="header-section-number">1.4.1</span> Namespaces</h3>
+<p>The root element of every XAML file declares at least two XML namespaces:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode xml code-with-copy"><code class="sourceCode xml"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>xmlns="https://github.com/avaloniaui"</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<ul>
+<li>The first is the <strong>default namespace</strong> (no prefix). It contains all Avalonia controls, so you can write <code>&lt;Button&gt;</code> directly.</li>
+<li>The second maps the XAML language namespace to the prefix <code>x</code>. Language features such as <code>x:Class</code> and <code>x:Name</code> come from there.</li>
+</ul>
+<p>To use your own classes in XAML, declare a namespace for them with a prefix of your choice:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode xml code-with-copy"><code class="sourceCode xml"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>xmlns:models="using:HelloAvalonia.Models"</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Then <code>&lt;models:Person/&gt;</code> creates a <code>HelloAvalonia.Models.Person</code>. For a class in a different assembly (another project or a NuGet package), the older form names the assembly as well: <code>xmlns:logic="clr-namespace:LogicNamespace;assembly=Logic"</code>.</p>
+</section>
+<section id="property-element-syntax" class="level3" data-number="1.4.2">
+<h3 data-number="1.4.2" class="anchored" data-anchor-id="property-element-syntax"><span class="header-section-number">1.4.2</span> Property element syntax</h3>
+<p>Some values are too complex for a string. Instead of an attribute, you can then write the property as a <strong>child element</strong> named <code>&lt;Type.Property&gt;</code>:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode xml code-with-copy"><code class="sourceCode xml"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">Button</span> <span class="ot">Background=</span><span class="st">"AliceBlue"</span>&gt;</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">Button.Content</span>&gt;</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>        &lt;<span class="kw">Ellipse</span> <span class="ot">Width=</span><span class="st">"120"</span> <span class="ot">Height=</span><span class="st">"90"</span> <span class="ot">Fill=</span><span class="st">"LightBlue"</span>/&gt;</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    &lt;/<span class="kw">Button.Content</span>&gt;</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>&lt;/<span class="kw">Button</span>&gt;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Here the button’s <code>Content</code> is no longer text but an <code>Ellipse</code>. <code>Content</code> is also the button’s <em>content property</em>, so you may leave out <code>&lt;Button.Content&gt;</code> and put the <code>Ellipse</code> directly between <code>&lt;Button&gt;</code> and <code>&lt;/Button&gt;</code>.</p>
+</section>
+<section id="naming-elements" class="level3" data-number="1.4.3">
+<h3 data-number="1.4.3" class="anchored" data-anchor-id="naming-elements"><span class="header-section-number">1.4.3</span> Naming elements</h3>
+<p>To access an element from code, give it a name:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode xml code-with-copy"><code class="sourceCode xml"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">TextBlock</span> <span class="ot">Name=</span><span class="st">"CounterText"</span> <span class="ot">Text=</span><span class="st">"Counter: 0"</span>/&gt;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The generated half of the partial class then contains a field <code>CounterText</code> of type <code>TextBlock</code>: the exact object the XAML created. <code>x:Name="CounterText"</code> does the same. <code>Name</code> is a property of the Avalonia controls, while <code>x:Name</code> is a XAML language feature that works on any element. For controls, use <code>Name</code>.</p>
+</section>
+<section id="markup-extensions" class="level3" data-number="1.4.4">
+<h3 data-number="1.4.4" class="anchored" data-anchor-id="markup-extensions"><span class="header-section-number">1.4.4</span> Markup extensions</h3>
+<p>Sometimes a property should not get a fixed value but one that comes from somewhere else. That is the job of <strong>markup extensions</strong>, written in curly braces. Here, the second button takes its background from the first:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="sourceCode xml code-with-copy"><code class="sourceCode xml"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">Button</span> <span class="ot">Name=</span><span class="st">"Btn1"</span> <span class="ot">Background=</span><span class="st">"LightYellow"</span>/&gt;</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">Button</span> <span class="ot">Background=</span><span class="st">"{Binding #Btn1.Background}"</span>/&gt;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><code>#Btn1</code> refers to the element named <code>Btn1</code>. The most important markup extensions are:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Extension</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>Binding</code></td>
+<td>Takes the value from a data source and keeps it up to date (chapter <em>Data Binding</em>).</td>
+</tr>
+<tr class="even">
+<td><code>StaticResource</code></td>
+<td>Takes the value from a resource, once, when the element is created.</td>
+</tr>
+<tr class="odd">
+<td><code>DynamicResource</code></td>
+<td>Takes the value from a resource and follows it when the resource changes.</td>
+</tr>
+<tr class="even">
+<td><code>TemplateBinding</code></td>
+<td>Used inside a control template (chapter <em>Styles</em>).</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="styled-properties" class="level3" data-number="1.4.5">
+<h3 data-number="1.4.5" class="anchored" data-anchor-id="styled-properties"><span class="header-section-number">1.4.5</span> Styled properties</h3>
+<p>Avalonia controls don’t use plain C# properties for most of their settings. They use <strong>styled properties</strong>, which are registered with Avalonia’s property system (<code>AvaloniaProperty.Register</code>). You set and read them like any other property, but they can do more:</p>
+<ul>
+<li>they have default values,</li>
+<li>they notify Avalonia whenever their value changes,</li>
+<li>they can validate new values and run a callback when the value changes.</li>
+</ul>
+<p>That is what makes data binding, styles and animations possible: all three only work with styled properties. Every property of a built-in control that you would want to style or bind already is one.</p>
+</section>
+<section id="attached-properties" class="level3" data-number="1.4.6">
+<h3 data-number="1.4.6" class="anchored" data-anchor-id="attached-properties"><span class="header-section-number">1.4.6</span> Attached properties</h3>
+<p>An <strong>attached property</strong> is set on one element but belongs to another, usually the layout container around it. In this example, each button says at which edge of the <code>DockPanel</code> it wants to be docked:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="sourceCode xml code-with-copy"><code class="sourceCode xml"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">DockPanel</span>&gt;</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">Button</span> <span class="ot">DockPanel.Dock=</span><span class="st">"Top"</span>&gt;Click me!&lt;/<span class="kw">Button</span>&gt;</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">Button</span> <span class="ot">DockPanel.Dock=</span><span class="st">"Bottom"</span>&gt;Click me too!&lt;/<span class="kw">Button</span>&gt;</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>&lt;/<span class="kw">DockPanel</span>&gt;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><code>DockPanel.Dock</code> only makes sense on a child of a <code>DockPanel</code>. Without attached properties, <code>Button</code> would need a <code>Dock</code> property, plus a property for every other container it could ever be placed in. The same mechanism places elements in the rows and columns of a grid, as you’ll see next.</p>
+</section>
+</section>
+<section id="a-first-layout" class="level2" data-number="1.5">
+<h2 data-number="1.5" class="anchored" data-anchor-id="a-first-layout"><span class="header-section-number">1.5</span> A first layout</h2>
+<p>A <code>Window</code> can only have <strong>one</strong> direct child. To show more than one element, that child is a <strong>layout container</strong> (a <em>panel</em>), and everything else goes inside it. The two most common panels are:</p>
+<ul>
+<li><strong><code>Grid</code></strong> divides the space into rows and columns. <code>RowDefinitions="*,Auto"</code> creates two rows: the second is exactly as tall as its content (<code>Auto</code>), and the first takes all the remaining space (<code>*</code>). Children choose their row with the attached property <code>Grid.Row</code>.</li>
+<li><strong><code>StackPanel</code></strong> arranges its children one after another, vertically by default or horizontally with <code>Orientation="Horizontal"</code>. <code>Spacing</code> adds a gap between the children.</li>
+</ul>
+<p>The chapter <em>Layouts and Controls</em> covers all panels in detail.</p>
+<div class="lab callout callout-style-default callout-tip no-icon callout-titled" title="Lab 1.2: The layout">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Lab 1.2: The layout
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><span class="emoji" data-emoji="dart">🎯</span> <strong>Goal.</strong> The window shows a greeting, a counter and four buttons. The buttons don’t do anything yet.</p>
+<p>All changes are in <code>MainWindow.axaml</code>.</p>
+<ol type="1">
+<li><p>In the <code>&lt;Window&gt;</code> start tag, change the title to <code>Title="Hello Avalonia"</code> and add after it:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="sourceCode xml code-with-copy"><code class="sourceCode xml"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>Width="480" Height="360" MinWidth="420" MinHeight="320"</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>WindowStartupLocation="CenterScreen"</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Also set <code>d:DesignWidth="480"</code> and <code>d:DesignHeight="360"</code>. The <code>d:</code> attributes only apply to the previewer in the IDE; <code>mc:Ignorable="d"</code> tells the compiler to skip them.</p></li>
+<li><p>Replace the text <code>Welcome to Avalonia!</code> with a grid of two rows:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="sourceCode xml code-with-copy"><code class="sourceCode xml"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">Grid</span> <span class="ot">RowDefinitions=</span><span class="st">"*,Auto"</span> <span class="ot">Margin=</span><span class="st">"32"</span>&gt;</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>&lt;/<span class="kw">Grid</span>&gt;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
+<li><p>Inside the grid, add the upper row, a <code>StackPanel</code> with the greeting:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18"><pre class="sourceCode xml code-with-copy"><code class="sourceCode xml"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">StackPanel</span> <span class="ot">Grid.Row=</span><span class="st">"0"</span> <span class="ot">Spacing=</span><span class="st">"20"</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>            <span class="ot">VerticalAlignment=</span><span class="st">"Center"</span> <span class="ot">HorizontalAlignment=</span><span class="st">"Center"</span>&gt;</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">TextBlock</span> <span class="ot">Text=</span><span class="st">"Hello, Avalonia!"</span> <span class="ot">FontSize=</span><span class="st">"36"</span> <span class="ot">FontWeight=</span><span class="st">"SemiBold"</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>               <span class="ot">HorizontalAlignment=</span><span class="st">"Center"</span>/&gt;</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>&lt;/<span class="kw">StackPanel</span>&gt;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
+<li><p>In that <code>StackPanel</code>, below the greeting, add a button and the counter:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb19"><pre class="sourceCode xml code-with-copy"><code class="sourceCode xml"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">Button</span> <span class="ot">Content=</span><span class="st">"Click me!"</span> <span class="ot">Classes=</span><span class="st">"accent"</span> <span class="ot">Padding=</span><span class="st">"24,10"</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>        <span class="ot">HorizontalAlignment=</span><span class="st">"Center"</span>/&gt;</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">TextBlock</span> <span class="ot">Text=</span><span class="st">"Counter: 0"</span> <span class="ot">FontSize=</span><span class="st">"16"</span> <span class="ot">Opacity=</span><span class="st">"0.7"</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>           <span class="ot">HorizontalAlignment=</span><span class="st">"Center"</span>/&gt;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><code>Classes="accent"</code> paints the button in the system’s accent color (chapter <em>Styles</em>).</p></li>
+<li><p>Below that <code>StackPanel</code>, still inside the grid, add the lower row:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20"><pre class="sourceCode xml code-with-copy"><code class="sourceCode xml"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">StackPanel</span> <span class="ot">Grid.Row=</span><span class="st">"1"</span> <span class="ot">Orientation=</span><span class="st">"Horizontal"</span> <span class="ot">Spacing=</span><span class="st">"12"</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>            <span class="ot">HorizontalAlignment=</span><span class="st">"Center"</span>&gt;</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">Button</span> <span class="ot">Content=</span><span class="st">"Increment counter"</span> <span class="ot">Padding=</span><span class="st">"16,8"</span>/&gt;</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>&lt;/<span class="kw">StackPanel</span>&gt;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Then add two more buttons to it yourself: <em>Popup message</em> and <em>Close</em>, with the same padding.</p></li>
+</ol>
+<p><span class="emoji" data-emoji="white_check_mark">✅</span> <strong>Check.</strong> <code>dotnet run</code>: the window is centered on the screen, the greeting and counter sit in the middle, and the three buttons are lined up along the bottom. Make the window narrower and wider: the layout adapts, but the window can’t get smaller than 420 × 320.</p>
+<p><img src="pics/lab-1-2-layout.png" class="img-fluid" style="width:60.0%" alt="The window after Lab 1.2: greeting, accent button, counter and three buttons at the bottom"></p>
+</div>
+</div>
+</section>
+<section id="events" class="level2" data-number="1.6">
+<h2 data-number="1.6" class="anchored" data-anchor-id="events"><span class="header-section-number">1.6</span> Events</h2>
+<p>To react to user input, you attach a <strong>handler method</strong> to an <strong>event</strong>. The method runs every time the event occurs. There are two ways to attach it.</p>
+<p><strong>In XAML</strong>, name the method in the event attribute. The method must exist in the code-behind:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb21"><pre class="sourceCode xml code-with-copy"><code class="sourceCode xml"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">Button</span> <span class="ot">Name=</span><span class="st">"DemoButton"</span> <span class="ot">Content=</span><span class="st">"Click me!"</span> <span class="ot">Click=</span><span class="st">"OnDemoButtonClicked"</span>/&gt;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb22"><pre class="sourceCode csharp code-with-copy"><code class="sourceCode cs"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="kw">private</span> <span class="dt">void</span> <span class="fu">OnDemoButtonClicked</span><span class="op">(</span><span class="dt">object</span><span class="op">?</span> sender<span class="op">,</span> RoutedEventArgs e<span class="op">)</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>    DemoButton<span class="op">.</span><span class="fu">Content</span> <span class="op">=</span> <span class="st">"Clicked!"</span><span class="op">;</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong>In code</strong>, subscribe to the event in the constructor, after <code>InitializeComponent()</code> has created the controls:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb23"><pre class="sourceCode csharp code-with-copy"><code class="sourceCode cs"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span> <span class="fu">MainWindow</span><span class="op">()</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">InitializeComponent</span><span class="op">();</span></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>    DemoButton<span class="op">.</span><span class="fu">Click</span> <span class="op">+=</span> OnDemoButtonClicked<span class="op">;</span></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Both do the same. The labs use the XAML form. Later, with MVVM, most event handlers are replaced by <em>commands</em>.</p>
+<p>A few conventions that the handlers in this book follow:</p>
+<ul>
+<li>Handlers are <strong><code>private</code></strong>: only the window itself needs them.</li>
+<li>The signature is <code>(object? sender, RoutedEventArgs e)</code>. <code>sender</code> is the control that raised the event.</li>
+<li>Names follow the pattern <code>On&lt;Control&gt;&lt;Event&gt;</code>, e.g.&nbsp;<code>OnCloseButtonClicked</code>, so you can quickly find the handler of a XAML attribute.</li>
+</ul>
+<section id="routed-events" class="level3" data-number="1.6.1">
+<h3 data-number="1.6.1" class="anchored" data-anchor-id="routed-events"><span class="header-section-number">1.6.1</span> Routed events</h3>
+<p><code>Click</code> is a <strong>routed event</strong>: it doesn’t stay at the button you clicked. It first fires on the button, then on the button’s parent, then on <em>its</em> parent, all the way up to the window. This is called <strong>bubbling</strong>. Because of it, one handler on a container can react to clicks on any button inside it.</p>
+<p>When two nested controls both handle the same event, the inner handler can stop it with <code>e.Handled = true</code>, and the outer control never sees it.</p>
+</section>
+<section id="state-lives-in-the-code-behind" class="level3" data-number="1.6.2">
+<h3 data-number="1.6.2" class="anchored" data-anchor-id="state-lives-in-the-code-behind"><span class="header-section-number">1.6.2</span> State lives in the code-behind</h3>
+<p>As long as there is no data binding, the state of the window is just a field in the <code>MainWindow</code> class. A handler changes the field and then updates the UI <strong>by hand</strong>:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb24"><pre class="sourceCode csharp code-with-copy"><code class="sourceCode cs"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="kw">private</span> <span class="dt">int</span> _counter<span class="op">;</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="kw">private</span> <span class="dt">void</span> <span class="fu">OnIncrementCounterButtonClicked</span><span class="op">(</span><span class="dt">object</span><span class="op">?</span> sender<span class="op">,</span> RoutedEventArgs e<span class="op">)</span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>    _counter<span class="op">++;</span></span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>    CounterText<span class="op">.</span><span class="fu">Text</span> <span class="op">=</span> <span class="st">"Counter: "</span> <span class="op">+</span> _counter<span class="op">;</span></span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Forgetting the second line is a classic bug: the state changes, the screen doesn’t. Data binding (chapter <em>Data Binding</em>) removes exactly this manual step.</p>
+<div class="lab callout callout-style-default callout-tip no-icon callout-titled" title="Lab 1.3: The counter">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Lab 1.3: The counter
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><span class="emoji" data-emoji="dart">🎯</span> <strong>Goal.</strong> <em>Increment counter</em> counts up, and <em>Close</em> closes the window.</p>
+<ol type="1">
+<li><p>In <code>MainWindow.axaml</code>, add <code>Name="CounterText"</code> to the counter’s <code>TextBlock</code>, and <code>Click="OnIncrementCounterButtonClicked"</code> to the <em>Increment counter</em> button.</p></li>
+<li><p>In <code>MainWindow.axaml.cs</code>, add <code>using Avalonia.Interactivity;</code> at the top (for <code>RoutedEventArgs</code>). Then add the field <code>_counter</code> and the method <code>OnIncrementCounterButtonClicked</code> from the section <em>State lives in the code-behind</em> to the class.</p></li>
+<li><p>Now the <em>Close</em> button, on your own: add <code>Click="OnCloseButtonClicked"</code> to it and write the handler. A window closes itself with <code>Close()</code>.</p></li>
+</ol>
+<p><span class="emoji" data-emoji="white_check_mark">✅</span> <strong>Check.</strong> Each click on <em>Increment counter</em> raises the number by one. <em>Close</em> ends the app.</p>
+<p><img src="pics/lab-1-3-counter.png" class="img-fluid" style="width:60.0%" alt="The window after three clicks on Increment counter: Counter: 3"></p>
+<p><span class="emoji" data-emoji="bulb">💡</span> <strong>Try it.</strong> Rename <code>OnCloseButtonClicked</code> in the C# file only and build. The XAML compiler checks that every handler named in XAML exists, but its message is not very clear: <em>AVLN3000: Unable to find suitable setter or adder for property Click</em>. It does point at the right line and column of <code>MainWindow.axaml</code>, though. Remember this message: it almost always means a misspelled handler name. Undo the rename afterwards.</p>
+</div>
+</div>
+</section>
+</section>
+<section id="dialogs" class="level2" data-number="1.7">
+<h2 data-number="1.7" class="anchored" data-anchor-id="dialogs"><span class="header-section-number">1.7</span> Dialogs</h2>
+<p>Avalonia itself has no ready-made message box. The NuGet package <strong>MessageBox.Avalonia</strong> provides one. It can show a dialog in two ways:</p>
+<ul>
+<li><strong><code>ShowAsync()</code></strong> opens it as a separate window.</li>
+<li><strong><code>ShowAsPopupAsync(this)</code></strong> shows it as an overlay inside <code>this</code> window.</li>
+</ul>
+<p>Both methods return a <code>Task</code>, so they are awaited, and the handlers that call them are marked <code>async</code>. A handler is then <code>async void</code>, which is normally a mistake in C#: nobody can await the method, and an exception thrown in it can’t be caught by the caller. <strong>Event handlers are the one accepted exception</strong>, because events require methods that return <code>void</code>. Every other <code>async</code> method, including those called from an event handler, returns a <code>Task</code>.</p>
+<div class="lab callout callout-style-default callout-tip no-icon callout-titled" title="Lab 1.4: Dialogs">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Lab 1.4: Dialogs
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><span class="emoji" data-emoji="dart">🎯</span> <strong>Goal.</strong> <em>Click me!</em> asks whether to quit, and <em>Popup message</em> shows a message inside the window.</p>
+<ol type="1">
+<li><p>Add the package:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb25"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="ex">dotnet</span> add package MessageBox.Avalonia <span class="at">--version</span> 12.0.0</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
+<li><p>In <code>MainWindow.axaml</code>, add <code>Click="OnGreetButtonClicked"</code> to the <em>Click me!</em> button.</p></li>
+<li><p>In <code>MainWindow.axaml.cs</code>, add two lines at the top:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb26"><pre class="sourceCode csharp code-with-copy"><code class="sourceCode cs"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="kw">using</span> MsBox<span class="op">.</span><span class="fu">Avalonia</span><span class="op">;</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="kw">using</span> MsBox<span class="op">.</span><span class="fu">Avalonia</span><span class="op">.</span><span class="fu">Enums</span><span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>and this handler to the class:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb27"><pre class="sourceCode csharp code-with-copy"><code class="sourceCode cs"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="kw">private</span> async <span class="dt">void</span> <span class="fu">OnGreetButtonClicked</span><span class="op">(</span><span class="dt">object</span><span class="op">?</span> sender<span class="op">,</span> RoutedEventArgs e<span class="op">)</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">var</span> box <span class="op">=</span> MessageBoxManager<span class="op">.</span><span class="fu">GetMessageBoxStandard</span><span class="op">(</span></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Hello"</span><span class="op">,</span> <span class="st">"Hello from Avalonia! Do you want to quit?"</span><span class="op">,</span> ButtonEnum<span class="op">.</span><span class="fu">YesNo</span><span class="op">);</span></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">var</span> result <span class="op">=</span> await box<span class="op">.</span><span class="fu">ShowAsync</span><span class="op">();</span></span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">if</span> <span class="op">(</span>result <span class="op">==</span> ButtonResult<span class="op">.</span><span class="fu">Yes</span><span class="op">)</span></span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>    <span class="op">{</span></span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>        <span class="fu">Close</span><span class="op">();</span></span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
+<li><p>Now <em>Popup message</em>, on your own: attach a handler <code>OnShowPopupButtonClicked</code> and show a message box with only a title and a text (no <code>ButtonEnum</code>). Show it with <code>ShowAsPopupAsync(this)</code> instead of <code>ShowAsync()</code>.</p></li>
+</ol>
+<p><span class="emoji" data-emoji="white_check_mark">✅</span> <strong>Check.</strong> <em>Click me!</em> opens a separate dialog window; <em>Yes</em> closes the app, <em>No</em> only the dialog. <em>Popup message</em> shows the message as an overlay inside the main window, not as a window of its own.</p>
+</div>
+</div>
+</section>
+<section id="window-events" class="level2" data-number="1.8">
+<h2 data-number="1.8" class="anchored" data-anchor-id="window-events"><span class="header-section-number">1.8</span> Window events</h2>
+<p>Besides the events of its controls, a window has events of its own. The most useful ones:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Event</th>
+<th>Occurs when</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>Opened</code></td>
+<td>the window has been shown for the first time.</td>
+</tr>
+<tr class="even">
+<td><code>Loaded</code></td>
+<td>the window and all its controls are created and laid out. Initialization code that needs the controls belongs here.</td>
+</tr>
+<tr class="odd">
+<td><code>Activated</code> / <code>Deactivated</code></td>
+<td>the window becomes the active window, or another window does.</td>
+</tr>
+<tr class="even">
+<td><code>PositionChanged</code></td>
+<td>the window was moved.</td>
+</tr>
+<tr class="odd">
+<td><code>SizeChanged</code></td>
+<td>the window’s size changed.</td>
+</tr>
+<tr class="even">
+<td><code>Closing</code></td>
+<td>the window is about to close. Setting <code>e.Cancel = true</code> in the handler keeps it open, e.g.&nbsp;to ask about unsaved changes.</td>
+</tr>
+<tr class="odd">
+<td><code>Closed</code></td>
+<td>the window has been closed.</td>
+</tr>
+</tbody>
+</table>
+<p>There is no event for minimizing or maximizing. The <code>WindowState</code> property holds that state; subscribe to <code>PropertyChanged</code> and check whether <code>e.Property</code> is <code>Window.WindowStateProperty</code> to be notified.</p>
+</section>
+<section id="the-previewer" class="level2" data-number="1.9">
+<h2 data-number="1.9" class="anchored" data-anchor-id="the-previewer"><span class="header-section-number">1.9</span> The previewer</h2>
+<p>Rider (with the <em>AvaloniaRider</em> plugin) and VS Code (with the Avalonia extension) render a live preview of an <code>.axaml</code> file next to the editor, without starting the app. That’s handy for adjusting a layout. The <code>d:</code> attributes from Lab 1.2 set the size of that preview.</p>
+<p>The previewer is <strong>not completely reliable</strong>. It can lag behind your edits, keep showing an error you already fixed, or fail to load for reasons that have nothing to do with your XAML. A rebuild usually clears it. A red previewer is no proof that your XAML is wrong: check with <code>dotnet build</code> first.</p>
+</section>
+<section id="try-it-yourself" class="level2" data-number="1.10">
+<h2 data-number="1.10" class="anchored" data-anchor-id="try-it-yourself"><span class="header-section-number">1.10</span> Try it yourself</h2>
+<p>Extend HelloAvalonia:</p>
+<ol type="1">
+<li>Add a button that resets the counter to 0.</li>
+<li>Disable <em>Increment counter</em> once the counter reaches 10. Every control has an <code>IsEnabled</code> property.</li>
+<li>Swap <code>ShowAsync</code> and <code>ShowAsPopupAsync</code> in the two dialog handlers and compare.</li>
+<li>Add a <code>TextBox</code> and change the greeting dialog to greet the name entered there. A <code>TextBox</code> has a <code>Text</code> property.</li>
+<li>Handle the window’s <code>Closing</code> event: ask <em>“Do you really want to quit?”</em> and keep the window open when the answer is <em>No</em>. Watch out: the handler can’t wait for the dialog before deciding, because the window closes as soon as the handler returns. Cancel first, ask, and call <code>Close()</code> yourself on <em>Yes</em>. Then make sure that this second <code>Close()</code> doesn’t ask again.</li>
+</ol>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/bschroedhtl\.github\.io\/2627-pose-5-avalonia\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+            // target, if specified
+            link.setAttribute("target", "_blank");
+            if (link.getAttribute("rel") === null) {
+              link.setAttribute("rel", "noopener");
+            }
+            // default icon
+            link.classList.add("external");
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../../../../index.html" class="pagination-link" aria-label="Introduction">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Introduction</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../../../../content/01-DesktopUI/material/02_layout-and-controls/README.html" class="pagination-link" aria-label="Layouts and Controls">
+        <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Layouts and Controls</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>© 2026 — HTL Leonding</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">
+<p>Author: Birgit Schröder</p>
+</div>
+  </div>
+</footer>
+
+
+
+
+<script src="../../../../site_libs/quarto-html/zenscroll-min.js"></script>
+</body></html>

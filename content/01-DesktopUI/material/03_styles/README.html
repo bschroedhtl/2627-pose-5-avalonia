@@ -1,0 +1,1068 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.18">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>3&nbsp; Styles – Desktop UI with Avalonia</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../../">
+<link href="../../../../content/01-DesktopUI/material/04_databinding/README.html" rel="next">
+<link href="../../../../content/01-DesktopUI/material/02_layout-and-controls/README.html" rel="prev">
+<script src="../../../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../../site_libs/bootstrap/bootstrap-fa39313ee0ae67082205aa4c05164dde.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<style>html{ scroll-behavior: smooth; }</style>
+
+
+<link rel="stylesheet" href="../../../../styles.css">
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../../../content/01-DesktopUI/material/01_avalonia-basics/README.html">Desktop UI</a></li><li class="breadcrumb-item"><a href="../../../../content/01-DesktopUI/material/03_styles/README.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Styles</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../../../../">Desktop UI with Avalonia</a> 
+        <div class="sidebar-tools-main">
+    <a href="../../../../POSE5-Avalonia.pdf" title="Download PDF" class="quarto-navigation-tool px-1" aria-label="Download PDF"><i class="bi bi-file-pdf"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Introduction</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Desktop UI</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../../content/01-DesktopUI/material/01_avalonia-basics/README.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Avalonia Basics</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../../content/01-DesktopUI/material/02_layout-and-controls/README.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Layouts and Controls</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../../content/01-DesktopUI/material/03_styles/README.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Styles</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../../../content/01-DesktopUI/material/04_databinding/README.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Data Binding and MVVM</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#styles-and-selectors" id="toc-styles-and-selectors" class="nav-link active" data-scroll-target="#styles-and-selectors"><span class="header-section-number">3.1</span> Styles and selectors</a>
+  <ul class="collapse">
+  <li><a href="#where-styles-live" id="toc-where-styles-live" class="nav-link" data-scroll-target="#where-styles-live"><span class="header-section-number">3.1.1</span> Where styles live</a></li>
+  </ul></li>
+  <li><a href="#cascading" id="toc-cascading" class="nav-link" data-scroll-target="#cascading"><span class="header-section-number">3.2</span> Cascading</a></li>
+  <li><a href="#pseudo-classes" id="toc-pseudo-classes" class="nav-link" data-scroll-target="#pseudo-classes"><span class="header-section-number">3.3</span> Pseudo-classes</a></li>
+  <li><a href="#transitions-and-animations" id="toc-transitions-and-animations" class="nav-link" data-scroll-target="#transitions-and-animations"><span class="header-section-number">3.4</span> Transitions and animations</a></li>
+  <li><a href="#classes-from-data" id="toc-classes-from-data" class="nav-link" data-scroll-target="#classes-from-data"><span class="header-section-number">3.5</span> Classes from data</a></li>
+  <li><a href="#resources" id="toc-resources" class="nav-link" data-scroll-target="#resources"><span class="header-section-number">3.6</span> Resources</a></li>
+  <li><a href="#control-templates" id="toc-control-templates" class="nav-link" data-scroll-target="#control-templates"><span class="header-section-number">3.7</span> Control templates</a>
+  <ul class="collapse">
+  <li><a href="#styling-the-parts-of-the-built-in-templates" id="toc-styling-the-parts-of-the-built-in-templates" class="nav-link" data-scroll-target="#styling-the-parts-of-the-built-in-templates"><span class="header-section-number">3.7.1</span> Styling the parts of the built-in templates</a></li>
+  </ul></li>
+  <li><a href="#try-it-yourself" id="toc-try-it-yourself" class="nav-link" data-scroll-target="#try-it-yourself"><span class="header-section-number">3.8</span> Try it yourself</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../../../content/01-DesktopUI/material/01_avalonia-basics/README.html">Desktop UI</a></li><li class="breadcrumb-item"><a href="../../../../content/01-DesktopUI/material/03_styles/README.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Styles</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Styles</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>Setting <code>FontSize="20"</code> on every button of an app is tedious and error-prone. A <strong>style</strong> sets properties in one place, for all controls it applies to. Avalonia styles work much like CSS: a <strong>selector</strong> picks the controls, <strong>setters</strong> set their properties.</p>
+<p>In the labs you build <strong>StylesDemo</strong>: one window with a tab per topic.</p>
+<blockquote class="blockquote">
+<p>If you search the web for help, you will often find WPF answers. WPF styles work differently (keys, <code>TargetType</code>, triggers); in Avalonia, look for <em>selectors</em>.</p>
+</blockquote>
+<section id="styles-and-selectors" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="styles-and-selectors"><span class="header-section-number">3.1</span> Styles and selectors</h2>
+<p>A style is a <code>Style</code> element with a <code>Selector</code> and one or more <code>Setter</code>s:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode xml code-with-copy"><code class="sourceCode xml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">Style</span> <span class="ot">Selector=</span><span class="st">"Button"</span>&gt;</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">Setter</span> <span class="ot">Property=</span><span class="st">"FontStyle"</span> <span class="ot">Value=</span><span class="st">"Italic"</span>/&gt;</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">Setter</span> <span class="ot">Property=</span><span class="st">"FontSize"</span> <span class="ot">Value=</span><span class="st">"20"</span>/&gt;</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>&lt;/<span class="kw">Style</span>&gt;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The selector <code>Button</code> matches <strong>every</strong> button in the style’s scope. To style only some buttons, give them a <strong>style class</strong> and add it to the selector with a dot:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode xml code-with-copy"><code class="sourceCode xml"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">Style</span> <span class="ot">Selector=</span><span class="st">"Button.bigText"</span>&gt;</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">Setter</span> <span class="ot">Property=</span><span class="st">"FontSize"</span> <span class="ot">Value=</span><span class="st">"20"</span>/&gt;</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>&lt;/<span class="kw">Style</span>&gt;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode xml code-with-copy"><code class="sourceCode xml"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">Button</span> <span class="ot">Classes=</span><span class="st">"bigText"</span> <span class="ot">Content=</span><span class="st">"Create new employee"</span>/&gt;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>An element can have several classes (<code>Classes="bigText danger"</code>), and code can add and remove them at runtime (<code>myButton.Classes.Add("bigText")</code>). The selector always needs a type in front of the class (<code>Button.bigText</code>, not <code>.bigText</code>), so that the compiler knows which <code>FontSize</code> the setter means.</p>
+<p>Other useful selector parts:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Selector</th>
+<th>Matches</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>Button</code></td>
+<td>every <code>Button</code></td>
+</tr>
+<tr class="even">
+<td><code>Button.bigText</code></td>
+<td>every <code>Button</code> with the class <code>bigText</code></td>
+</tr>
+<tr class="odd">
+<td><code>#SaveButton</code></td>
+<td>the element named <code>SaveButton</code></td>
+</tr>
+<tr class="even">
+<td><code>StackPanel Button</code></td>
+<td>every <code>Button</code> somewhere inside a <code>StackPanel</code></td>
+</tr>
+<tr class="odd">
+<td><code>StackPanel &gt; Button</code></td>
+<td>every <code>Button</code> that is a direct child of a <code>StackPanel</code></td>
+</tr>
+</tbody>
+</table>
+<section id="where-styles-live" class="level3" data-number="3.1.1">
+<h3 data-number="3.1.1" class="anchored" data-anchor-id="where-styles-live"><span class="header-section-number">3.1.1</span> Where styles live</h3>
+<p>Styles are collected in the <code>Styles</code> property of a control, and apply to that control and everything inside it:</p>
+<ul>
+<li><code>&lt;StackPanel.Styles&gt;</code> (or any other control): only inside that panel,</li>
+<li><code>&lt;Window.Styles&gt;</code>: in this window,</li>
+<li><code>&lt;Application.Styles&gt;</code> in <code>App.axaml</code>: in the whole application. The <code>&lt;FluentTheme/&gt;</code> already there is itself a large collection of styles.</li>
+</ul>
+<p>Styles you want to share between several windows can also go into a file of their own and be included with <code>&lt;StyleInclude Source="/Styles/Buttons.axaml"/&gt;</code>.</p>
+<div class="lab callout callout-style-default callout-tip no-icon callout-titled" title="Lab 3.1: Style classes">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Lab 3.1: Style classes
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><span class="emoji" data-emoji="dart">🎯</span> <strong>Goal.</strong> A window with a first tab, where a style class makes two of three buttons bigger.</p>
+<ol type="1">
+<li><p>Create the project as in Lab 1.1, named <code>StylesDemo</code>.</p></li>
+<li><p>In <code>MainWindow.axaml</code>, set <code>Title="Styles Demo" Width="640" Height="420"</code> and replace the text <code>Welcome to Avalonia!</code> with:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode xml code-with-copy"><code class="sourceCode xml"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">TabControl</span> <span class="ot">TabStripPlacement=</span><span class="st">"Left"</span>&gt;</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">TabItem</span> <span class="ot">Header=</span><span class="st">"Classes"</span>&gt;</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>        &lt;<span class="kw">StackPanel</span> <span class="ot">Margin=</span><span class="st">"16"</span> <span class="ot">Spacing=</span><span class="st">"10"</span>&gt;</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>            &lt;<span class="kw">StackPanel.Styles</span>&gt;</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>                &lt;<span class="kw">Style</span> <span class="ot">Selector=</span><span class="st">"Button.bigText"</span>&gt;</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>                    &lt;<span class="kw">Setter</span> <span class="ot">Property=</span><span class="st">"FontStyle"</span> <span class="ot">Value=</span><span class="st">"Italic"</span>/&gt;</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>                    &lt;<span class="kw">Setter</span> <span class="ot">Property=</span><span class="st">"FontSize"</span> <span class="ot">Value=</span><span class="st">"20"</span>/&gt;</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>                &lt;/<span class="kw">Style</span>&gt;</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>            &lt;/<span class="kw">StackPanel.Styles</span>&gt;</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>            &lt;<span class="kw">Button</span> <span class="ot">Content=</span><span class="st">"Create new employee"</span>/&gt;</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>        &lt;/<span class="kw">StackPanel</span>&gt;</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>    &lt;/<span class="kw">TabItem</span>&gt;</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>&lt;/<span class="kw">TabControl</span>&gt;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><code>TabStripPlacement="Left"</code> puts the tab headers on the left, so there is room for many tabs.</p></li>
+<li><p>Add two more buttons below the first: <em>Edit employee</em> and <em>Edit employee activities</em>. Then give the first two buttons the class <code>bigText</code>.</p></li>
+</ol>
+<p><span class="emoji" data-emoji="white_check_mark">✅</span> <strong>Check.</strong> <em>Create new employee</em> and <em>Edit employee</em> are big and italic, <em>Edit employee activities</em> is not.</p>
+<p><img src="pics/lab-3-1-classes.png" class="img-fluid" style="width:60.0%" alt="The Classes tab: two big italic buttons and one normal button"></p>
+<p><span class="emoji" data-emoji="bulb">💡</span> <strong>Try it.</strong> Change the selector to <code>Button</code> and watch which buttons change. Then give a <code>TextBlock</code> the class <code>bigText</code>.</p>
+</div>
+</div>
+</section>
+</section>
+<section id="cascading" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="cascading"><span class="header-section-number">3.2</span> Cascading</h2>
+<p>When several styles match an element, <strong>all</strong> of them apply: their setters are merged. If two of them set the same property:</p>
+<ul>
+<li>a style whose selector contains a class or pseudo-class beats one with only a type (<code>Button.special</code> beats <code>Button</code>, wherever they are written),</li>
+<li>otherwise the style written <strong>later</strong> wins. There is no “more specific wins” rule as in CSS: <code>TextBlock.caption.small</code> only beats <code>TextBlock.caption</code> if it comes after it.</li>
+</ul>
+<p>That makes variants easy. Instead of copying a style, add a second, more specific one that only changes what is different:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode xml code-with-copy"><code class="sourceCode xml"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">Style</span> <span class="ot">Selector=</span><span class="st">"TextBlock.caption"</span>&gt;</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">Setter</span> <span class="ot">Property=</span><span class="st">"FontSize"</span> <span class="ot">Value=</span><span class="st">"30"</span>/&gt;</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">Setter</span> <span class="ot">Property=</span><span class="st">"FontWeight"</span> <span class="ot">Value=</span><span class="st">"Bold"</span>/&gt;</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">Setter</span> <span class="ot">Property=</span><span class="st">"Margin"</span> <span class="ot">Value=</span><span class="st">"0,0,0,20"</span>/&gt;</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>&lt;/<span class="kw">Style</span>&gt;</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">Style</span> <span class="ot">Selector=</span><span class="st">"TextBlock.caption.small"</span>&gt;</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">Setter</span> <span class="ot">Property=</span><span class="st">"FontSize"</span> <span class="ot">Value=</span><span class="st">"20"</span>/&gt;</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>&lt;/<span class="kw">Style</span>&gt;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode xml code-with-copy"><code class="sourceCode xml"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">TextBlock</span> <span class="ot">Classes=</span><span class="st">"caption"</span> <span class="ot">Text=</span><span class="st">"A form"</span>/&gt;</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">TextBlock</span> <span class="ot">Classes=</span><span class="st">"caption small"</span> <span class="ot">Text=</span><span class="st">"A smaller form"</span>/&gt;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The second <code>TextBlock</code> matches both styles. It gets the bold weight and the margin from <code>caption</code>, and the font size from <code>caption.small</code>, which comes later.</p>
+<div class="lab callout callout-style-default callout-tip no-icon callout-titled" title="Lab 3.2: Cascading">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Lab 3.2: Cascading
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><span class="emoji" data-emoji="dart">🎯</span> <strong>Goal.</strong> A caption and a smaller variant of it, plus a special button that builds on the normal button style.</p>
+<ol type="1">
+<li><p>Add a second tab below the first one:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode xml code-with-copy"><code class="sourceCode xml"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">TabItem</span> <span class="ot">Header=</span><span class="st">"Cascading"</span>&gt;</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">StackPanel</span> <span class="ot">Margin=</span><span class="st">"16"</span> <span class="ot">Spacing=</span><span class="st">"10"</span>&gt;</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>        &lt;<span class="kw">StackPanel.Styles</span>&gt;</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>        &lt;/<span class="kw">StackPanel.Styles</span>&gt;</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    &lt;/<span class="kw">StackPanel</span>&gt;</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>&lt;/<span class="kw">TabItem</span>&gt;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
+<li><p>Add the two caption styles and the two <code>TextBlock</code>s from the section above to the tab.</p></li>
+<li><p>Add two buttons, <em>Default button</em> and <em>Special button</em> (with <code>Classes="special"</code>), and write two styles for them yourself:</p>
+<ul>
+<li>every <code>Button</code> in this tab: italic, font size 20,</li>
+<li>buttons with the class <code>special</code>: additionally <code>Foreground</code> <code>AntiqueWhite</code> and <code>Background</code> <code>DarkSlateBlue</code>.</li>
+</ul></li>
+</ol>
+<p><span class="emoji" data-emoji="white_check_mark">✅</span> <strong>Check.</strong> <em>A smaller form</em> is bold like <em>A form</em>, but smaller. Both buttons are italic and big; only the special one is dark blue.</p>
+<p><img src="pics/lab-3-2-cascading.png" class="img-fluid" style="width:60.0%" alt="The Cascading tab: a big and a smaller bold caption, a default and a dark blue special button"></p>
+<p><span class="emoji" data-emoji="bulb">💡</span> <strong>Try it.</strong> Move the <code>caption.small</code> style above the <code>caption</code> style. Then move the <code>Button.special</code> style above the <code>Button</code> style.</p>
+</div>
+</div>
+</section>
+<section id="pseudo-classes" class="level2" data-number="3.3">
+<h2 data-number="3.3" class="anchored" data-anchor-id="pseudo-classes"><span class="header-section-number">3.3</span> Pseudo-classes</h2>
+<p>Controls change their look in certain states: a button is hovered or pressed, a text box has the keyboard focus. Selectors react to such states with <strong>pseudo-classes</strong>, written with a colon:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Pseudo-class</th>
+<th>The control …</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>:pointerover</code></td>
+<td>is under the mouse pointer</td>
+</tr>
+<tr class="even">
+<td><code>:pressed</code></td>
+<td>is being pressed</td>
+</tr>
+<tr class="odd">
+<td><code>:focus</code></td>
+<td>has the keyboard focus</td>
+</tr>
+<tr class="even">
+<td><code>:disabled</code></td>
+<td>has <code>IsEnabled="False"</code></td>
+</tr>
+<tr class="odd">
+<td><code>:checked</code></td>
+<td>is checked (<code>CheckBox</code>, <code>ToggleButton</code>, …)</td>
+</tr>
+</tbody>
+</table>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode xml code-with-copy"><code class="sourceCode xml"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">Style</span> <span class="ot">Selector=</span><span class="st">"Button:pointerover"</span>&gt;</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">Setter</span> <span class="ot">Property=</span><span class="st">"FontWeight"</span> <span class="ot">Value=</span><span class="st">"Bold"</span>/&gt;</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>&lt;/<span class="kw">Style</span>&gt;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The style applies while the state lasts, and its setters are undone automatically when the state ends. Conditions are combined by writing them one after the other, without spaces: <code>Button.save:pointerover</code> matches only a button with the class <code>save</code> that is hovered.</p>
+</section>
+<section id="transitions-and-animations" class="level2" data-number="3.4">
+<h2 data-number="3.4" class="anchored" data-anchor-id="transitions-and-animations"><span class="header-section-number">3.4</span> Transitions and animations</h2>
+<p>Style changes happen instantly. To animate them, give the property a <strong>transition</strong>: from then on, every change of the property’s value is animated, in both directions.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode xml code-with-copy"><code class="sourceCode xml"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">Style</span> <span class="ot">Selector=</span><span class="st">"TextBox"</span>&gt;</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">Setter</span> <span class="ot">Property=</span><span class="st">"FontSize"</span> <span class="ot">Value=</span><span class="st">"12"</span>/&gt;</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">Setter</span> <span class="ot">Property=</span><span class="st">"Transitions"</span>&gt;</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>        &lt;<span class="kw">Transitions</span>&gt;</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>            &lt;<span class="kw">DoubleTransition</span> <span class="ot">Property=</span><span class="st">"FontSize"</span> <span class="ot">Duration=</span><span class="st">"0:0:0.2"</span>/&gt;</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>        &lt;/<span class="kw">Transitions</span>&gt;</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>    &lt;/<span class="kw">Setter</span>&gt;</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>&lt;/<span class="kw">Style</span>&gt;</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">Style</span> <span class="ot">Selector=</span><span class="st">"TextBox:focus"</span>&gt;</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">Setter</span> <span class="ot">Property=</span><span class="st">"FontSize"</span> <span class="ot">Value=</span><span class="st">"20"</span>/&gt;</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>&lt;/<span class="kw">Style</span>&gt;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The text box grows when it gets the focus and shrinks again when it loses it. There are transitions for other property types, too: <code>ColorTransition</code>, <code>BrushTransition</code>, <code>ThicknessTransition</code>, <code>TransformOperationsTransition</code> and more.</p>
+<p>For animations with several steps, a style can contain <strong>keyframe animations</strong>. They run when the style starts to apply:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="sourceCode xml code-with-copy"><code class="sourceCode xml"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">Style</span> <span class="ot">Selector=</span><span class="st">"Button.fade:pointerover"</span>&gt;</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">Style.Animations</span>&gt;</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>        &lt;<span class="kw">Animation</span> <span class="ot">Duration=</span><span class="st">"0:0:0.2"</span> <span class="ot">FillMode=</span><span class="st">"Forward"</span>&gt;</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>            &lt;<span class="kw">KeyFrame</span> <span class="ot">Cue=</span><span class="st">"0%"</span>&gt;</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>                &lt;<span class="kw">Setter</span> <span class="ot">Property=</span><span class="st">"Opacity"</span> <span class="ot">Value=</span><span class="st">"1"</span>/&gt;</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>            &lt;/<span class="kw">KeyFrame</span>&gt;</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>            &lt;<span class="kw">KeyFrame</span> <span class="ot">Cue=</span><span class="st">"100%"</span>&gt;</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>                &lt;<span class="kw">Setter</span> <span class="ot">Property=</span><span class="st">"Opacity"</span> <span class="ot">Value=</span><span class="st">"0.4"</span>/&gt;</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>            &lt;/<span class="kw">KeyFrame</span>&gt;</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>        &lt;/<span class="kw">Animation</span>&gt;</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>    &lt;/<span class="kw">Style.Animations</span>&gt;</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>&lt;/<span class="kw">Style</span>&gt;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><code>FillMode="Forward"</code> keeps the value of the last keyframe after the animation has finished.</p>
+<div class="lab callout callout-style-default callout-tip no-icon callout-titled" title="Lab 3.3: Pseudo-classes">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Lab 3.3: Pseudo-classes
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><span class="emoji" data-emoji="dart">🎯</span> <strong>Goal.</strong> A <em>Save</em> button that turns bold on hover, and a <em>Cancel</em> button that turns italic while pressed.</p>
+<ol type="1">
+<li>Add a third tab <code>States</code>, built like the <em>Cascading</em> tab: a <code>StackPanel</code> with <code>Margin="16" Spacing="10"</code> and empty <code>StackPanel.Styles</code>.</li>
+<li>Add two buttons: <code>&lt;Button Classes="save" Content="Save"/&gt;</code> and <code>&lt;Button Classes="cancel" Content="Cancel"/&gt;</code>.</li>
+<li>Write the two styles yourself: <code>Button.save:pointerover</code> sets <code>FontWeight</code> to <code>Bold</code>, and <code>Button.cancel:pressed</code> sets <code>FontStyle</code> to <code>Italic</code>.</li>
+</ol>
+<p><span class="emoji" data-emoji="white_check_mark">✅</span> <strong>Check.</strong> <em>Save</em> is bold only while the mouse is over it. <em>Cancel</em> turns italic only while you hold the mouse button down.</p>
+<p><span class="emoji" data-emoji="bulb">💡</span> <strong>Try it.</strong> Remove <code>.save</code> from the selector: now <em>Cancel</em> turns bold on hover, too.</p>
+</div>
+</div>
+<div class="lab callout callout-style-default callout-tip no-icon callout-titled" title="Lab 3.4: Transitions">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Lab 3.4: Transitions
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><span class="emoji" data-emoji="dart">🎯</span> <strong>Goal.</strong> A text box that grows smoothly when it gets the focus.</p>
+<ol type="1">
+<li>Add a fourth tab <code>Animation</code>, built like the others.</li>
+<li>Add the <code>TextBox</code> style with the transition from the section above to the tab’s styles, and two text boxes: <code>&lt;TextBox Text="Focus me"/&gt;</code> and <code>&lt;TextBox Text="Or me"/&gt;</code>.</li>
+<li>Write the <code>TextBox:focus</code> style yourself, with font size 20.</li>
+</ol>
+<p><span class="emoji" data-emoji="white_check_mark">✅</span> <strong>Check.</strong> Click into a text box: it grows smoothly. Click into the other: the first shrinks back while the second grows.</p>
+<p><span class="emoji" data-emoji="bulb">💡</span> <strong>Try it.</strong> Add the keyframe example from the section above and a <code>&lt;Button Classes="fade" Content="Hover to fade"/&gt;</code>. Then remove <code>FillMode="Forward"</code>.</p>
+</div>
+</div>
+</section>
+<section id="classes-from-data" class="level2" data-number="3.5">
+<h2 data-number="3.5" class="anchored" data-anchor-id="classes-from-data"><span class="header-section-number">3.5</span> Classes from data</h2>
+<p>A style class can be switched on and off by a binding. The syntax is <code>Classes.&lt;name&gt;</code>, bound to a <code>bool</code>:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode xml code-with-copy"><code class="sourceCode xml"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">CheckBox</span> <span class="ot">Name=</span><span class="st">"WarningCheck"</span> <span class="ot">Content=</span><span class="st">"Show as warning"</span>/&gt;</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">TextBlock</span> <span class="ot">Classes.warning=</span><span class="st">"{Binding #WarningCheck.IsChecked}"</span> <span class="ot">Text=</span><span class="st">"Disk almost full"</span>/&gt;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>While the check box is checked, the <code>TextBlock</code> has the class <code>warning</code>, and a style <code>TextBlock.warning</code> applies. This is how a style reacts to data: the chapter <em>Data Binding</em> uses the same pattern to highlight list entries, bound to a property of the data instead of a check box.</p>
+<div class="lab callout callout-style-default callout-tip no-icon callout-titled" title="Lab 3.5: Classes from data">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Lab 3.5: Classes from data
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><span class="emoji" data-emoji="dart">🎯</span> <strong>Goal.</strong> A check box that turns a message red.</p>
+<ol type="1">
+<li>Add a fifth tab <code>Binding</code>, built like the others.</li>
+<li>Add the <code>CheckBox</code> and the <code>TextBlock</code> from the section above.</li>
+<li>Write the style <code>TextBlock.warning</code> yourself: <code>Foreground</code> <code>Red</code>, <code>FontWeight</code> <code>Bold</code>.</li>
+</ol>
+<p><span class="emoji" data-emoji="white_check_mark">✅</span> <strong>Check.</strong> Checking the box turns the text red and bold; unchecking it turns it back.</p>
+<p><img src="pics/lab-3-5-class-binding.png" class="img-fluid" style="width:60.0%" alt="The Binding tab with the check box checked and the text in red bold"></p>
+</div>
+</div>
+</section>
+<section id="resources" class="level2" data-number="3.6">
+<h2 data-number="3.6" class="anchored" data-anchor-id="resources"><span class="header-section-number">3.6</span> Resources</h2>
+<p>A <strong>resource</strong> is a named object, stored in the <code>Resources</code> of a control or the application and used with <code>{StaticResource Key}</code>. Colors are the typical example: define them once, use them everywhere.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="sourceCode xml code-with-copy"><code class="sourceCode xml"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">Application.Resources</span>&gt;</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">SolidColorBrush</span> <span class="ot">x:Key=</span><span class="st">"BrandBrush"</span> <span class="ot">Color=</span><span class="st">"DarkSlateBlue"</span>/&gt;</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>&lt;/<span class="kw">Application.Resources</span>&gt;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode xml code-with-copy"><code class="sourceCode xml"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">Setter</span> <span class="ot">Property=</span><span class="st">"Foreground"</span> <span class="ot">Value=</span><span class="st">"{StaticResource BrandBrush}"</span>/&gt;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><code>StaticResource</code> looks the resource up once. <code>DynamicResource</code> keeps watching it, which is needed when the resource can change at runtime, for example when switching between light and dark theme.</p>
+<div class="lab callout callout-style-default callout-tip no-icon callout-titled" title="Lab 3.6: An app-wide style">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Lab 3.6: An app-wide style
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><span class="emoji" data-emoji="dart">🎯</span> <strong>Goal.</strong> Every tab gets a title, styled once for the whole application.</p>
+<ol type="1">
+<li><p>In <code>App.axaml</code>, add the <code>BrandBrush</code> resource from above, and below <code>&lt;FluentTheme /&gt;</code> a style for titles:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="sourceCode xml code-with-copy"><code class="sourceCode xml"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">Style</span> <span class="ot">Selector=</span><span class="st">"TextBlock.title"</span>&gt;</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">Setter</span> <span class="ot">Property=</span><span class="st">"FontSize"</span> <span class="ot">Value=</span><span class="st">"22"</span>/&gt;</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">Setter</span> <span class="ot">Property=</span><span class="st">"FontWeight"</span> <span class="ot">Value=</span><span class="st">"SemiBold"</span>/&gt;</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">Setter</span> <span class="ot">Property=</span><span class="st">"Foreground"</span> <span class="ot">Value=</span><span class="st">"{StaticResource BrandBrush}"</span>/&gt;</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>&lt;/<span class="kw">Style</span>&gt;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div></li>
+<li><p>At the top of each tab’s <code>StackPanel</code>, add a <code>TextBlock</code> with <code>Classes="title"</code> and the tab’s name as text.</p></li>
+</ol>
+<p><span class="emoji" data-emoji="white_check_mark">✅</span> <strong>Check.</strong> All five tabs have a dark blue title, although the style is written only once.</p>
+<p><span class="emoji" data-emoji="bulb">💡</span> <strong>Try it.</strong> Change the color of <code>BrandBrush</code> and see all titles change.</p>
+</div>
+</div>
+</section>
+<section id="control-templates" class="level2" data-number="3.7">
+<h2 data-number="3.7" class="anchored" data-anchor-id="control-templates"><span class="header-section-number">3.7</span> Control templates</h2>
+<p>A style can only set properties that a control has. To change what a control is <strong>made of</strong>, you give it a new <strong>control template</strong>: the tree of elements that draws the control. A template for a button could be a colored <code>Border</code> with a <code>TextBlock</code> inside:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="sourceCode xml code-with-copy"><code class="sourceCode xml"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">ControlTemplate</span> <span class="ot">x:Key=</span><span class="st">"ButtonTemplate"</span> <span class="ot">TargetType=</span><span class="st">"Button"</span>&gt;</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">Border</span> <span class="ot">Name=</span><span class="st">"border"</span> <span class="ot">BorderBrush=</span><span class="st">"Blue"</span> <span class="ot">BorderThickness=</span><span class="st">"3"</span> <span class="ot">CornerRadius=</span><span class="st">"3"</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>            <span class="ot">Background=</span><span class="st">"Azure"</span> <span class="ot">Padding=</span><span class="st">"3"</span> <span class="ot">Margin=</span><span class="st">"3"</span>&gt;</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>        &lt;<span class="kw">TextBlock</span> <span class="ot">Margin=</span><span class="st">"{TemplateBinding Padding}"</span> <span class="ot">Text=</span><span class="st">"{TemplateBinding Content}"</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>                   <span class="ot">VerticalAlignment=</span><span class="st">"Center"</span> <span class="ot">HorizontalAlignment=</span><span class="st">"Center"</span>/&gt;</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>    &lt;/<span class="kw">Border</span>&gt;</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>&lt;/<span class="kw">ControlTemplate</span>&gt;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="sourceCode xml code-with-copy"><code class="sourceCode xml"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">Button</span> <span class="ot">Template=</span><span class="st">"{StaticResource ButtonTemplate}"</span> <span class="ot">Content=</span><span class="st">"Templated button"</span>/&gt;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p><code>{TemplateBinding Content}</code> takes the value from the button the template is applied to, so the same template works for every button text.</p>
+<p>To style an element <strong>inside</strong> a template, the selector uses <code>/template/</code>:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="sourceCode xml code-with-copy"><code class="sourceCode xml"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">Style</span> <span class="ot">Selector=</span><span class="st">"Button:pointerover /template/ Border#border"</span>&gt;</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">Setter</span> <span class="ot">Property=</span><span class="st">"Background"</span> <span class="ot">Value=</span><span class="st">"LightBlue"</span>/&gt;</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>&lt;/<span class="kw">Style</span>&gt;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>This reads: the <code>Border</code> named <code>border</code> inside the template of a hovered <code>Button</code>.</p>
+<section id="styling-the-parts-of-the-built-in-templates" class="level3" data-number="3.7.1">
+<h3 data-number="3.7.1" class="anchored" data-anchor-id="styling-the-parts-of-the-built-in-templates"><span class="header-section-number">3.7.1</span> Styling the parts of the built-in templates</h3>
+<p>The Fluent theme’s own templates have named parts, too. That matters because some states are drawn by the template, not by the button itself. A style <code>Button:pointerover</code> that sets <code>Background</code> has <strong>no visible effect</strong>: while hovered, the theme paints the template part <code>PART_ContentPresenter</code> with its own color. To change the hover color, style that part:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18"><pre class="sourceCode xml code-with-copy"><code class="sourceCode xml"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">Style</span> <span class="ot">Selector=</span><span class="st">"Button.primary"</span>&gt;</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">Setter</span> <span class="ot">Property=</span><span class="st">"Background"</span> <span class="ot">Value=</span><span class="st">"DarkSlateBlue"</span>/&gt;</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">Setter</span> <span class="ot">Property=</span><span class="st">"Foreground"</span> <span class="ot">Value=</span><span class="st">"White"</span>/&gt;</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">Style</span> <span class="ot">Selector=</span><span class="st">"^:pointerover /template/ ContentPresenter#PART_ContentPresenter"</span>&gt;</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>        &lt;<span class="kw">Setter</span> <span class="ot">Property=</span><span class="st">"Background"</span> <span class="ot">Value=</span><span class="st">"MediumPurple"</span>/&gt;</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>    &lt;/<span class="kw">Style</span>&gt;</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>&lt;/<span class="kw">Style</span>&gt;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>The inner style is <strong>nested</strong>: <code>^</code> stands for the selector of the outer style, so the inner selector means <code>Button.primary:pointerover /template/ ContentPresenter#PART_ContentPresenter</code>.</p>
+<p>To replace the look of a control type everywhere, Avalonia uses a <code>ControlTheme</code> instead of styles. That goes beyond this chapter.</p>
+<div class="lab callout callout-style-default callout-tip no-icon callout-titled" title="Lab 3.7: Control templates">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Lab 3.7: Control templates
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><span class="emoji" data-emoji="dart">🎯</span> <strong>Goal.</strong> A button with a template of its own, and a <em>primary</em> button with its own hover color.</p>
+<ol type="1">
+<li>In <code>MainWindow.axaml</code>, add a <code>&lt;Window.Resources&gt;</code> block before the <code>TabControl</code> and put the <code>ButtonTemplate</code> from the section above into it.</li>
+<li>Add a sixth tab <code>Templates</code>, with a title as in Lab 3.6, and the button <code>&lt;Button Template="{StaticResource ButtonTemplate}" Content="Templated button"/&gt;</code>.</li>
+<li>Add the <code>/template/</code> style for the hovered border to the tab’s styles.</li>
+<li>Add a button with <code>Classes="primary"</code> and the text <em>Primary button</em>, and the nested <code>Button.primary</code> style from the section above.</li>
+</ol>
+<p><span class="emoji" data-emoji="white_check_mark">✅</span> <strong>Check.</strong> The templated button is a light blue box with a blue frame; it turns a darker blue on hover. The primary button is dark blue with white text and turns purple on hover.</p>
+<p><img src="pics/lab-3-7-templates.png" class="img-fluid" style="width:60.0%" alt="The Templates tab: a light blue templated button with a blue frame and a dark blue primary button"></p>
+<p><span class="emoji" data-emoji="bulb">💡</span> <strong>Try it.</strong> Replace the nested hover style by <code>Button.primary:pointerover</code> with a <code>Background</code> setter, and hover again.</p>
+</div>
+</div>
+</section>
+</section>
+<section id="try-it-yourself" class="level2" data-number="3.8">
+<h2 data-number="3.8" class="anchored" data-anchor-id="try-it-yourself"><span class="header-section-number">3.8</span> Try it yourself</h2>
+<ol type="1">
+<li>Give all buttons of the <em>States</em> tab a <code>Transitions</code> block, so that their <code>Opacity</code> changes smoothly, and a <code>:pointerover</code> style that sets <code>Opacity</code> to 0.7.</li>
+<li>Move the two caption styles from the <em>Cascading</em> tab into a file <code>Styles/Captions.axaml</code> and include it in <code>App.axaml</code> with <code>StyleInclude</code>.</li>
+<li>Write a control template for a <code>CheckBox</code> that shows <em>ON</em> or <em>OFF</em> instead of a check mark. Hint: the pseudo-class <code>:checked</code> works in <code>/template/</code> selectors, too.</li>
+</ol>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/bschroedhtl\.github\.io\/2627-pose-5-avalonia\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+            // target, if specified
+            link.setAttribute("target", "_blank");
+            if (link.getAttribute("rel") === null) {
+              link.setAttribute("rel", "noopener");
+            }
+            // default icon
+            link.classList.add("external");
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../../../../content/01-DesktopUI/material/02_layout-and-controls/README.html" class="pagination-link" aria-label="Layouts and Controls">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Layouts and Controls</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../../../../content/01-DesktopUI/material/04_databinding/README.html" class="pagination-link" aria-label="Data Binding and MVVM">
+        <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Data Binding and MVVM</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>© 2026 — HTL Leonding</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">
+<p>Author: Birgit Schröder</p>
+</div>
+  </div>
+</footer>
+
+
+
+
+<script src="../../../../site_libs/quarto-html/zenscroll-min.js"></script>
+</body></html>
