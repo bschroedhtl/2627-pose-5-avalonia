@@ -6,10 +6,8 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Birgit Schröder">
-<meta name="dcterms.date" content="2026-09-27">
 
-<title>Desktop UI with Avalonia</title>
+<title>14&nbsp; The UI Thread – Desktop UI with Avalonia</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -28,27 +26,62 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<link href="./content/01-DesktopUI/material/01_ui-basics/01_avalonia-basics/README.html" rel="next">
-<script src="site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-fa39313ee0ae67082205aa4c05164dde.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../../../../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../../../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../../../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../../../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../../../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../../../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../../../../">
+<link href="../../../../../content/01-DesktopUI/material/03_multithreading/13_critical-sections/README.html" rel="prev">
+<script src="../../../../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../../../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../../../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../../../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../../../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../../../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../../../../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../../../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../../../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../../../../site_libs/bootstrap/bootstrap-fa39313ee0ae67082205aa4c05164dde.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -79,7 +112,7 @@ ul.task-list li input[type="checkbox"] {
 <style>html{ scroll-behavior: smooth; }</style>
 
 
-<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="../../../../../styles.css">
 </head>
 
 <body class="nav-sidebar floating quarto-light">
@@ -91,7 +124,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html">Introduction</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../../../../content/01-DesktopUI/material/03_multithreading/10_cpu-vs-io-bound/README.html">Multithreading</a></li><li class="breadcrumb-item"><a href="../../../../../content/01-DesktopUI/material/03_multithreading/14_ui-thread/README.html"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">The UI Thread</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -106,9 +139,9 @@ ul.task-list li input[type="checkbox"] {
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
-      <a href="./">Desktop UI with Avalonia</a> 
+      <a href="../../../../../">Desktop UI with Avalonia</a> 
         <div class="sidebar-tools-main">
-    <a href="./POSE5-Avalonia.pdf" title="Download PDF" class="quarto-navigation-tool px-1" aria-label="Download PDF"><i class="bi bi-file-pdf"></i></a>
+    <a href="../../../../../POSE5-Avalonia.pdf" title="Download PDF" class="quarto-navigation-tool px-1" aria-label="Download PDF"><i class="bi bi-file-pdf"></i></a>
 </div>
     </div>
       </div>
@@ -121,7 +154,7 @@ ul.task-list li input[type="checkbox"] {
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./index.html" class="sidebar-item-text sidebar-link active">
+  <a href="../../../../../index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Introduction</span></a>
   </div>
 </li>
@@ -136,19 +169,19 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./content/01-DesktopUI/material/01_ui-basics/01_avalonia-basics/README.html" class="sidebar-item-text sidebar-link">
+  <a href="../../../../../content/01-DesktopUI/material/01_ui-basics/01_avalonia-basics/README.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Avalonia Basics</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./content/01-DesktopUI/material/01_ui-basics/02_layout-and-controls/README.html" class="sidebar-item-text sidebar-link">
+  <a href="../../../../../content/01-DesktopUI/material/01_ui-basics/02_layout-and-controls/README.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Layouts and Controls</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./content/01-DesktopUI/material/01_ui-basics/03_styles/README.html" class="sidebar-item-text sidebar-link">
+  <a href="../../../../../content/01-DesktopUI/material/01_ui-basics/03_styles/README.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Styles</span></span></a>
   </div>
 </li>
@@ -165,37 +198,37 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./content/01-DesktopUI/material/02_databinding-mvvm/04_data-binding/README.html" class="sidebar-item-text sidebar-link">
+  <a href="../../../../../content/01-DesktopUI/material/02_databinding-mvvm/04_data-binding/README.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Data Binding and View Models</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./content/01-DesktopUI/material/02_databinding-mvvm/05_change-notification/README.html" class="sidebar-item-text sidebar-link">
+  <a href="../../../../../content/01-DesktopUI/material/02_databinding-mvvm/05_change-notification/README.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Change Notification</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./content/01-DesktopUI/material/02_databinding-mvvm/06_commands/README.html" class="sidebar-item-text sidebar-link">
+  <a href="../../../../../content/01-DesktopUI/material/02_databinding-mvvm/06_commands/README.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Commands</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./content/01-DesktopUI/material/02_databinding-mvvm/07_mvvm/README.html" class="sidebar-item-text sidebar-link">
+  <a href="../../../../../content/01-DesktopUI/material/02_databinding-mvvm/07_mvvm/README.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">The MVVM Pattern</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./content/01-DesktopUI/material/02_databinding-mvvm/08_lists-and-templates/README.html" class="sidebar-item-text sidebar-link">
+  <a href="../../../../../content/01-DesktopUI/material/02_databinding-mvvm/08_lists-and-templates/README.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Lists and Data Templates</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./content/01-DesktopUI/material/02_databinding-mvvm/09_master-detail/README.html" class="sidebar-item-text sidebar-link">
+  <a href="../../../../../content/01-DesktopUI/material/02_databinding-mvvm/09_master-detail/README.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Master/Detail</span></span></a>
   </div>
 </li>
@@ -212,31 +245,31 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./content/01-DesktopUI/material/03_multithreading/10_cpu-vs-io-bound/README.html" class="sidebar-item-text sidebar-link">
+  <a href="../../../../../content/01-DesktopUI/material/03_multithreading/10_cpu-vs-io-bound/README.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">CPU-bound vs.&nbsp;I/O-bound</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./content/01-DesktopUI/material/03_multithreading/11_threads-and-tasks/README.html" class="sidebar-item-text sidebar-link">
+  <a href="../../../../../content/01-DesktopUI/material/03_multithreading/11_threads-and-tasks/README.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Threads and Tasks</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./content/01-DesktopUI/material/03_multithreading/12_race-conditions/README.html" class="sidebar-item-text sidebar-link">
+  <a href="../../../../../content/01-DesktopUI/material/03_multithreading/12_race-conditions/README.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Race Conditions</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./content/01-DesktopUI/material/03_multithreading/13_critical-sections/README.html" class="sidebar-item-text sidebar-link">
+  <a href="../../../../../content/01-DesktopUI/material/03_multithreading/13_critical-sections/README.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Protecting Critical Sections</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./content/01-DesktopUI/material/03_multithreading/14_ui-thread/README.html" class="sidebar-item-text sidebar-link">
+  <a href="../../../../../content/01-DesktopUI/material/03_multithreading/14_ui-thread/README.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">The UI Thread</span></span></a>
   </div>
 </li>
@@ -252,39 +285,25 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a>
-  <ul class="collapse">
-  <li><a href="#tools-you-need" id="toc-tools-you-need" class="nav-link" data-scroll-target="#tools-you-need">Tools you need</a></li>
-  </ul></li>
+  <li><a href="#only-the-ui-thread-touches-the-ui" id="toc-only-the-ui-thread-touches-the-ui" class="nav-link active" data-scroll-target="#only-the-ui-thread-touches-the-ui"><span class="header-section-number">14.1</span> Only the UI thread touches the UI</a></li>
+  <li><a href="#dont-flood-the-ui-thread" id="toc-dont-flood-the-ui-thread" class="nav-link" data-scroll-target="#dont-flood-the-ui-thread"><span class="header-section-number">14.2</span> Don’t flood the UI thread</a></li>
+  <li><a href="#further-reading" id="toc-further-reading" class="nav-link" data-scroll-target="#further-reading"><span class="header-section-number">14.3</span> Further reading</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default">
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../../../../content/01-DesktopUI/material/03_multithreading/10_cpu-vs-io-bound/README.html">Multithreading</a></li><li class="breadcrumb-item"><a href="../../../../../content/01-DesktopUI/material/03_multithreading/14_ui-thread/README.html"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">The UI Thread</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Desktop UI with Avalonia</h1>
-<p class="subtitle lead">POSE 5BHIF, school year 2026/27</p>
+<h1 class="title"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">The UI Thread</span></h1>
 </div>
 
 
 
 <div class="quarto-title-meta">
 
-    <div>
-    <div class="quarto-title-meta-heading">Author</div>
-    <div class="quarto-title-meta-contents">
-             <p>Birgit Schröder </p>
-          </div>
-  </div>
     
-    <div>
-    <div class="quarto-title-meta-heading">Published</div>
-    <div class="quarto-title-meta-contents">
-      <p class="date">September 27, 2026</p>
-    </div>
-  </div>
   
     
   </div>
@@ -294,43 +313,27 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="introduction" class="level1 unnumbered">
-<h1 class="unnumbered">Introduction</h1>
-<!--
-  The only page written for the book itself. Everything else is a chapter
-  Readme from ../01-DesktopUI/material/, copied into content/ by
-  _scripts/sync-content.ts. The repository README.md is the lecturers' plan
-  for the year, so it is not the introduction here.
--->
-<p>This book collects the Desktop UI chapters of <strong>POSE</strong> in 5BHIF at HTL Leonding, school year 2026/27. You learn to build desktop applications with <strong>Avalonia</strong> and C#: from your first window to data binding and the MVVM pattern.</p>
-<p>The book is meant to be worked through, not just read. Every chapter contains <strong>labs</strong>, highlighted in boxes like this one:</p>
-<div class="lab callout callout-style-default callout-tip no-icon callout-titled" title="Lab 0.0: How a lab works">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tip</span>Lab 0.0: How a lab works
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p><span class="emoji" data-emoji="dart">🎯</span> <strong>Goal.</strong> What you will have built at the end of the lab.</p>
-<p>The steps: which lines to add and where, and some pieces to write on your own.</p>
-<p><span class="emoji" data-emoji="white_check_mark">✅</span> <strong>Check.</strong> What you must see when you run the app. Don’t continue until you do.</p>
-<p><span class="emoji" data-emoji="bulb">💡</span> <strong>Try it.</strong> An optional experiment.</p>
-</div>
-</div>
-<p>The labs of a chapter build on each other, so do them in order and keep your project between them.</p>
-<section id="tools-you-need" class="level2">
-<h2 class="anchored" data-anchor-id="tools-you-need">Tools you need</h2>
+<section id="only-the-ui-thread-touches-the-ui" class="level2" data-number="14.1">
+<h2 data-number="14.1" class="anchored" data-anchor-id="only-the-ui-thread-touches-the-ui"><span class="header-section-number">14.1</span> Only the UI thread touches the UI</h2>
+<p>GUI frameworks add a rule the compiler cannot enforce: <strong>only the UI thread may touch UI objects.</strong> This is not a lock you take — it is a hard constraint. Background work that wants to update the screen must hand the data over. In Avalonia, the <code>Dispatcher</code> does that:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode csharp code-with-copy"><code class="sourceCode cs"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>Dispatcher<span class="op">.</span><span class="fu">UIThread</span><span class="op">.</span><span class="fu">Post</span><span class="op">(()</span> <span class="op">=&gt;</span> ProgressValue <span class="op">=</span> processed<span class="op">);</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="dont-flood-the-ui-thread" class="level2" data-number="14.2">
+<h2 data-number="14.2" class="anchored" data-anchor-id="dont-flood-the-ui-thread"><span class="header-section-number">14.2</span> Don’t flood the UI thread</h2>
+<p>Two things to watch. Marshalling per item floods the UI thread — a worker reporting tens of thousands of progress updates will swamp it — and the blocking variants (<code>Invoke</code> rather than <code>Post</code>) additionally stall the <em>worker</em> on the UI thread, which distorts any timing you try to measure. The pattern that scales is to let workers write to a thread-safe collection or an <code>Interlocked</code> counter, and have the UI read it on a timer at a fixed frame rate.</p>
+</section>
+<section id="further-reading" class="level2" data-number="14.3">
+<h2 data-number="14.3" class="anchored" data-anchor-id="further-reading"><span class="header-section-number">14.3</span> Further reading</h2>
+<p>For the whole part, <em>Multithreading</em>:</p>
 <ul>
-<li>the <a href="https://dotnet.microsoft.com/download">.NET 10 SDK</a></li>
-<li><a href="https://www.jetbrains.com/rider/">JetBrains Rider</a> with the <em>AvaloniaRider</em> plugin, or <a href="https://code.visualstudio.com/">Visual Studio Code</a> with the Avalonia extension</li>
-<li><a href="https://git-scm.com/">Git</a> and a <a href="https://github.com/">GitHub</a> account</li>
+<li><a href="https://learn.microsoft.com/dotnet/csharp/asynchronous-programming/async-scenarios">Asynchronous programming scenarios</a> — CPU-bound vs.&nbsp;I/O-bound guidance</li>
+<li><a href="https://learn.microsoft.com/dotnet/standard/parallel-programming/task-parallel-library-tpl">Task Parallel Library</a></li>
+<li><a href="https://learn.microsoft.com/dotnet/standard/threading/managed-threading-best-practices">Managed threading best practices</a></li>
+<li><a href="https://learn.microsoft.com/dotnet/api/system.threading.interlocked"><code>Interlocked</code></a> · <a href="https://learn.microsoft.com/dotnet/csharp/language-reference/statements/lock"><code>lock</code> statement</a> · <a href="https://learn.microsoft.com/dotnet/standard/collections/thread-safe/">Thread-safe collections</a></li>
+<li><a href="https://learn.microsoft.com/dotnet/standard/threading/cancellation-in-managed-threads">Cancellation in managed threads</a></li>
 </ul>
 
 
-</section>
 </section>
 
 </main> <!-- /main -->
@@ -743,11 +746,11 @@ ul.task-list li input[type="checkbox"] {
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
+      <a href="../../../../../content/01-DesktopUI/material/03_multithreading/13_critical-sections/README.html" class="pagination-link" aria-label="Protecting Critical Sections">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Protecting Critical Sections</span></span>
+      </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./content/01-DesktopUI/material/01_ui-basics/01_avalonia-basics/README.html" class="pagination-link" aria-label="Avalonia Basics">
-        <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Avalonia Basics</span></span> <i class="bi bi-arrow-right-short"></i>
-      </a>
   </div>
 </nav>
 </div> <!-- /content -->
@@ -768,5 +771,5 @@ ul.task-list li input[type="checkbox"] {
 
 
 
-<script src="site_libs/quarto-html/zenscroll-min.js"></script>
+<script src="../../../../../site_libs/quarto-html/zenscroll-min.js"></script>
 </body></html>

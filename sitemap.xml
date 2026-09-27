@@ -2,26 +2,66 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://bschroedhtl.github.io/2627-pose-5-avalonia/index.html</loc>
-    <lastmod>2026-09-27T15:45:33.460Z</lastmod>
+    <lastmod>2026-09-27T17:01:17.156Z</lastmod>
   </url>
   <url>
-    <loc>https://bschroedhtl.github.io/2627-pose-5-avalonia/content/01-DesktopUI/material/01_avalonia-basics/README.html</loc>
-    <lastmod>2026-09-27T15:46:14.573Z</lastmod>
+    <loc>https://bschroedhtl.github.io/2627-pose-5-avalonia/content/01-DesktopUI/material/01_ui-basics/01_avalonia-basics/README.html</loc>
+    <lastmod>2026-09-27T17:02:01.211Z</lastmod>
   </url>
   <url>
-    <loc>https://bschroedhtl.github.io/2627-pose-5-avalonia/content/01-DesktopUI/material/02_layout-and-controls/README.html</loc>
-    <lastmod>2026-09-27T15:46:14.575Z</lastmod>
+    <loc>https://bschroedhtl.github.io/2627-pose-5-avalonia/content/01-DesktopUI/material/01_ui-basics/02_layout-and-controls/README.html</loc>
+    <lastmod>2026-09-27T17:02:01.212Z</lastmod>
   </url>
   <url>
-    <loc>https://bschroedhtl.github.io/2627-pose-5-avalonia/content/01-DesktopUI/material/03_styles/README.html</loc>
-    <lastmod>2026-09-27T15:46:14.577Z</lastmod>
+    <loc>https://bschroedhtl.github.io/2627-pose-5-avalonia/content/01-DesktopUI/material/01_ui-basics/03_styles/README.html</loc>
+    <lastmod>2026-09-27T17:02:01.214Z</lastmod>
   </url>
   <url>
-    <loc>https://bschroedhtl.github.io/2627-pose-5-avalonia/content/01-DesktopUI/material/04_databinding/README.html</loc>
-    <lastmod>2026-09-27T15:46:14.579Z</lastmod>
+    <loc>https://bschroedhtl.github.io/2627-pose-5-avalonia/content/01-DesktopUI/material/02_databinding-mvvm/04_data-binding/README.html</loc>
+    <lastmod>2026-09-27T17:02:01.215Z</lastmod>
+  </url>
+  <url>
+    <loc>https://bschroedhtl.github.io/2627-pose-5-avalonia/content/01-DesktopUI/material/02_databinding-mvvm/05_change-notification/README.html</loc>
+    <lastmod>2026-09-27T17:02:01.215Z</lastmod>
+  </url>
+  <url>
+    <loc>https://bschroedhtl.github.io/2627-pose-5-avalonia/content/01-DesktopUI/material/02_databinding-mvvm/06_commands/README.html</loc>
+    <lastmod>2026-09-27T17:02:01.216Z</lastmod>
+  </url>
+  <url>
+    <loc>https://bschroedhtl.github.io/2627-pose-5-avalonia/content/01-DesktopUI/material/02_databinding-mvvm/07_mvvm/README.html</loc>
+    <lastmod>2026-09-27T17:02:01.216Z</lastmod>
+  </url>
+  <url>
+    <loc>https://bschroedhtl.github.io/2627-pose-5-avalonia/content/01-DesktopUI/material/02_databinding-mvvm/08_lists-and-templates/README.html</loc>
+    <lastmod>2026-09-27T17:02:01.217Z</lastmod>
+  </url>
+  <url>
+    <loc>https://bschroedhtl.github.io/2627-pose-5-avalonia/content/01-DesktopUI/material/02_databinding-mvvm/09_master-detail/README.html</loc>
+    <lastmod>2026-09-27T17:02:01.218Z</lastmod>
+  </url>
+  <url>
+    <loc>https://bschroedhtl.github.io/2627-pose-5-avalonia/content/01-DesktopUI/material/03_multithreading/10_cpu-vs-io-bound/README.html</loc>
+    <lastmod>2026-09-27T17:02:01.219Z</lastmod>
+  </url>
+  <url>
+    <loc>https://bschroedhtl.github.io/2627-pose-5-avalonia/content/01-DesktopUI/material/03_multithreading/11_threads-and-tasks/README.html</loc>
+    <lastmod>2026-09-27T17:02:01.219Z</lastmod>
+  </url>
+  <url>
+    <loc>https://bschroedhtl.github.io/2627-pose-5-avalonia/content/01-DesktopUI/material/03_multithreading/12_race-conditions/README.html</loc>
+    <lastmod>2026-09-27T17:02:01.220Z</lastmod>
+  </url>
+  <url>
+    <loc>https://bschroedhtl.github.io/2627-pose-5-avalonia/content/01-DesktopUI/material/03_multithreading/13_critical-sections/README.html</loc>
+    <lastmod>2026-09-27T17:02:01.220Z</lastmod>
+  </url>
+  <url>
+    <loc>https://bschroedhtl.github.io/2627-pose-5-avalonia/content/01-DesktopUI/material/03_multithreading/14_ui-thread/README.html</loc>
+    <lastmod>2026-09-27T17:02:01.220Z</lastmod>
   </url>
   <url>
     <loc>https://bschroedhtl.github.io/2627-pose-5-avalonia/POSE5-Avalonia.pdf</loc>
-    <lastmod>2026-09-27T15:47:24.822Z</lastmod>
+    <lastmod>2026-09-27T17:03:08.719Z</lastmod>
   </url>
 </urlset>

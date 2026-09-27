@@ -20,498 +20,960 @@
     ]
   },
   {
-    "objectID": "content/01-DesktopUI/material/01_avalonia-basics/README.html",
-    "href": "content/01-DesktopUI/material/01_avalonia-basics/README.html",
+    "objectID": "content/01-DesktopUI/material/01_ui-basics/01_avalonia-basics/README.html",
+    "href": "content/01-DesktopUI/material/01_ui-basics/01_avalonia-basics/README.html",
     "title": "1  Avalonia Basics",
     "section": "",
     "text": "1.1 Why Avalonia?\nAvalonia is a cross-platform UI framework for .NET. You describe the user interface in XAML, an XML-based markup language, and write the logic in C#. The same app runs on Windows, macOS and Linux, and Avalonia can also target the browser and mobile devices.\nThis chapter covers the foundations: how an Avalonia project is put together, how XAML works, and how a window reacts to clicks. Along the way you build your first app, HelloAvalonia, in four labs. Each lab starts from where the previous one stopped, so work through them in order.",
     "crumbs": [
-      "Desktop UI",
+      "Desktop UI Basics",
       "<span class='chapter-number'>1</span>  <span class='chapter-title'>Avalonia Basics</span>"
     ]
   },
   {
-    "objectID": "content/01-DesktopUI/material/01_avalonia-basics/README.html#why-avalonia",
-    "href": "content/01-DesktopUI/material/01_avalonia-basics/README.html#why-avalonia",
+    "objectID": "content/01-DesktopUI/material/01_ui-basics/01_avalonia-basics/README.html#why-avalonia",
+    "href": "content/01-DesktopUI/material/01_ui-basics/01_avalonia-basics/README.html#why-avalonia",
     "title": "1  Avalonia Basics",
     "section": "",
     "text": "1.1.1 The landscape in 2026\nThere is no reliable market-share figure for desktop UI frameworks. Most desktop applications are internal tools that never show up in any statistic. The signals that do exist all point the same way:\n\nWeb frameworks such as React, Angular and Node.js are used by far more developers than any native desktop toolkit. Many “desktop” apps are web technology too: VS Code, Slack, Teams and Discord are built with Electron.\nWPF, Microsoft’s Windows-only desktop framework, has the largest installed base in the .NET world. It is in maintenance mode, but countless enterprise, industrial, medical and finance applications run on it and still have to be maintained and extended.\nAvalonia is the fastest-growing .NET desktop framework and the leading cross-platform one. Avalonia 12 was released in April 2026; JetBrains, Unity, Autodesk and NASA are among its users.\n\nAs a rough order: web and Electron apps are far ahead, then WPF and WinForms (both legacy), then Avalonia (growing), about level with MAUI and Qt.\n\n\n1.1.2 Why learn it after three years of web development?\n\nA different programming model. A desktop app is one long-running process that keeps its state, has a UI thread and binds the UI to data. A web app mostly answers stateless requests and re-renders a DOM. Desktop development makes you think about state and threading in ways web development rarely does.\nWPF comes almost for free. Avalonia’s XAML, bindings, styles and the MVVM pattern map almost one to one onto WPF. Maintaining existing WPF code is where many junior .NET jobs are: machine control panels, test benches, in-house tools.\nIt runs everywhere, including on your own laptop, whatever operating system it has.\nSome software doesn’t belong in a browser: anything that talks to hardware (serial ports, USB, fieldbuses), runs offline or in isolated networks, computes heavily on the local machine, or drives an embedded Linux touch panel.\nSame stack as the backend. It is the same C#, the same tooling, the same dependency injection and the same unit tests you already know from ASP.NET Core.\nThe patterns transfer. Observable state, commands and composing a UI from components are close relatives of what React and Angular do.\n\nTo be honest about it: most of you will build more web frontends than desktop UIs. Avalonia widens your skill set; it doesn’t replace your web skills.",
     "crumbs": [
-      "Desktop UI",
+      "Desktop UI Basics",
       "<span class='chapter-number'>1</span>  <span class='chapter-title'>Avalonia Basics</span>"
     ]
   },
   {
-    "objectID": "content/01-DesktopUI/material/01_avalonia-basics/README.html#setting-up",
-    "href": "content/01-DesktopUI/material/01_avalonia-basics/README.html#setting-up",
+    "objectID": "content/01-DesktopUI/material/01_ui-basics/01_avalonia-basics/README.html#setting-up",
+    "href": "content/01-DesktopUI/material/01_ui-basics/01_avalonia-basics/README.html#setting-up",
     "title": "1  Avalonia Basics",
     "section": "1.2 Setting up",
     "text": "1.2 Setting up\nYou need:\n\nthe .NET 10 SDK,\nan IDE: JetBrains Rider with the AvaloniaRider plugin, or Visual Studio Code with the Avalonia for VS Code extension,\nthe Avalonia project templates. Install them once per machine:\ndotnet new install Avalonia.Templates\n\n\n\n\n\n\n\nTipLab 1.1: Create and run the project\n\n\n\n🎯 Goal. An empty Avalonia app that starts and shows a window.\n\nCreate the project and a solution file for it:\ndotnet new avalonia.app -n HelloAvalonia -o HelloAvalonia\ncd HelloAvalonia\ndotnet new sln -n HelloAvalonia\ndotnet sln add HelloAvalonia.csproj\nThe solution file (HelloAvalonia.slnx) is optional for a single project, but it lets Rider open the folder as a solution.\nOpen HelloAvalonia.csproj and add one line to the first &lt;PropertyGroup&gt;:\n&lt;TreatWarningsAsErrors&gt;true&lt;/TreatWarningsAsErrors&gt;\nFrom now on every compiler warning stops the build. Warnings are almost always real problems (a possible null, an unused variable), and this way you can’t ignore them.\nStart the app:\ndotnet run\n\n✅ Check. A window titled HelloAvalonia opens and shows the text Welcome to Avalonia!. Close it before you continue.",
     "crumbs": [
-      "Desktop UI",
+      "Desktop UI Basics",
       "<span class='chapter-number'>1</span>  <span class='chapter-title'>Avalonia Basics</span>"
     ]
   },
   {
-    "objectID": "content/01-DesktopUI/material/01_avalonia-basics/README.html#the-project-files",
-    "href": "content/01-DesktopUI/material/01_avalonia-basics/README.html#the-project-files",
+    "objectID": "content/01-DesktopUI/material/01_ui-basics/01_avalonia-basics/README.html#the-project-files",
+    "href": "content/01-DesktopUI/material/01_ui-basics/01_avalonia-basics/README.html#the-project-files",
     "title": "1  Avalonia Basics",
     "section": "1.3 The project files",
     "text": "1.3 The project files\nAn Avalonia application strictly separates what the UI looks like from what it does. The layout lives in a XAML file with the extension .axaml; the logic lives in a C# file of the same name with .axaml.cs appended, the code-behind. Your new project contains:\n\n\n\n\n\n\n\nFile\nPurpose\n\n\n\n\nProgram.cs\nThe Main entry point. Configures and starts the Avalonia application.\n\n\nApp.axaml / App.axaml.cs\nThe application object: the global theme, and which window opens at startup.\n\n\nMainWindow.axaml\nThe view: the layout and controls of the main window, in XAML.\n\n\nMainWindow.axaml.cs\nThe code-behind: the C# logic that belongs to MainWindow.axaml.\n\n\nHelloAvalonia.csproj\nThe project file: target framework and NuGet packages.\n\n\napp.manifest\nWindows-only settings. Leave it as it is.\n\n\n\nRider shows each .axaml file with its .axaml.cs file nested underneath, because the two belong together.\nThe extension is .axaml, not .xaml, although the language is XAML. The different extension only exists so that IDEs never confuse Avalonia files with those of Microsoft’s XAML frameworks, which use .xaml.\n\n1.3.1 How the application starts\nProgram.Main builds the application from the App class and starts it. App.axaml defines the application-wide resources, most importantly the theme:\n&lt;Application xmlns=\"https://github.com/avaloniaui\"\n             xmlns:x=\"http://schemas.microsoft.com/winfx/2006/xaml\"\n             x:Class=\"HelloAvalonia.App\"\n             RequestedThemeVariant=\"Default\"&gt;\n    &lt;Application.Styles&gt;\n        &lt;FluentTheme /&gt;\n    &lt;/Application.Styles&gt;\n&lt;/Application&gt;\nRequestedThemeVariant=\"Default\" follows the operating system’s light or dark mode. Which window opens first is decided in code, in App.axaml.cs:\npublic override void OnFrameworkInitializationCompleted()\n{\n    if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)\n    {\n        desktop.MainWindow = new MainWindow();\n    }\n\n    base.OnFrameworkInitializationCompleted();\n}\nProgram.cs also contains a call to .WithDeveloperTools(), surrounded by #if DEBUG. It connects debug builds to Avalonia’s developer tools; we don’t need them in this chapter, so leave the line as it is.\n\n\n1.3.2 How XAML and code-behind are connected\nLook at the top of MainWindow.axaml:\n&lt;Window ...\n        x:Class=\"HelloAvalonia.MainWindow\"&gt;\nx:Class tells the XAML compiler that this markup belongs to the C# class HelloAvalonia.MainWindow (namespace plus class name). In MainWindow.axaml.cs that class is declared partial:\npublic partial class MainWindow : Window\n{\n    public MainWindow()\n    {\n        InitializeComponent();\n    }\n}\nAt build time, Avalonia generates the second half of this partial class from the XAML file: a field for every named control, and the code that builds the controls. InitializeComponent(), called once in the constructor, runs that generated code. Without it the window would stay empty. Two files, one class.\nThe XAML is compiled straight into the program; it is not parsed at runtime. A typo in a property name is therefore a build error, not a crash when the window opens.",
     "crumbs": [
-      "Desktop UI",
+      "Desktop UI Basics",
       "<span class='chapter-number'>1</span>  <span class='chapter-title'>Avalonia Basics</span>"
     ]
   },
   {
-    "objectID": "content/01-DesktopUI/material/01_avalonia-basics/README.html#xaml-basics",
-    "href": "content/01-DesktopUI/material/01_avalonia-basics/README.html#xaml-basics",
+    "objectID": "content/01-DesktopUI/material/01_ui-basics/01_avalonia-basics/README.html#xaml-basics",
+    "href": "content/01-DesktopUI/material/01_ui-basics/01_avalonia-basics/README.html#xaml-basics",
     "title": "1  Avalonia Basics",
     "section": "1.4 XAML basics",
-    "text": "1.4 XAML basics\nXAML uses XML syntax, so the usual XML rules apply:\n\nA file has exactly one root element, and all other elements are correctly nested inside it. For a window, the root is &lt;Window&gt;; for a reusable part of a UI, it is a &lt;UserControl&gt;.\nElement and attribute names are case-sensitive, and attribute values are always in double quotes.\nThe nesting of elements forms a tree. Avalonia turns that tree into the UI.\n\nEvery element stands for a class. When the window is created, &lt;Button&gt; creates a Button object through its parameterless constructor. Every attribute sets a public property of that object or subscribes to one of its events:\n&lt;Button Background=\"AliceBlue\" Content=\"Click me!\"/&gt;\nThe attribute values are strings. Behind the scenes, type converters turn them into the right type, for example \"AliceBlue\" into a brush.\n\n1.4.1 Namespaces\nThe root element of every XAML file declares at least two XML namespaces:\nxmlns=\"https://github.com/avaloniaui\"\nxmlns:x=\"http://schemas.microsoft.com/winfx/2006/xaml\"\n\nThe first is the default namespace (no prefix). It contains all Avalonia controls, so you can write &lt;Button&gt; directly.\nThe second maps the XAML language namespace to the prefix x. Language features such as x:Class and x:Name come from there.\n\nTo use your own classes in XAML, declare a namespace for them with a prefix of your choice:\nxmlns:models=\"using:HelloAvalonia.Models\"\nThen &lt;models:Person/&gt; creates a HelloAvalonia.Models.Person. For a class in a different assembly (another project or a NuGet package), the older form names the assembly as well: xmlns:logic=\"clr-namespace:LogicNamespace;assembly=Logic\".\n\n\n1.4.2 Property element syntax\nSome values are too complex for a string. Instead of an attribute, you can then write the property as a child element named &lt;Type.Property&gt;:\n&lt;Button Background=\"AliceBlue\"&gt;\n    &lt;Button.Content&gt;\n        &lt;Ellipse Width=\"120\" Height=\"90\" Fill=\"LightBlue\"/&gt;\n    &lt;/Button.Content&gt;\n&lt;/Button&gt;\nHere the button’s Content is no longer text but an Ellipse. Content is also the button’s content property, so you may leave out &lt;Button.Content&gt; and put the Ellipse directly between &lt;Button&gt; and &lt;/Button&gt;.\n\n\n1.4.3 Naming elements\nTo access an element from code, give it a name:\n&lt;TextBlock Name=\"CounterText\" Text=\"Counter: 0\"/&gt;\nThe generated half of the partial class then contains a field CounterText of type TextBlock: the exact object the XAML created. x:Name=\"CounterText\" does the same. Name is a property of the Avalonia controls, while x:Name is a XAML language feature that works on any element. For controls, use Name.\n\n\n1.4.4 Markup extensions\nSometimes a property should not get a fixed value but one that comes from somewhere else. That is the job of markup extensions, written in curly braces. Here, the second button takes its background from the first:\n&lt;Button Name=\"Btn1\" Background=\"LightYellow\"/&gt;\n&lt;Button Background=\"{Binding #Btn1.Background}\"/&gt;\n#Btn1 refers to the element named Btn1. The most important markup extensions are:\n\n\n\n\n\n\n\nExtension\nDescription\n\n\n\n\nBinding\nTakes the value from a data source and keeps it up to date (chapter Data Binding).\n\n\nStaticResource\nTakes the value from a resource, once, when the element is created.\n\n\nDynamicResource\nTakes the value from a resource and follows it when the resource changes.\n\n\nTemplateBinding\nUsed inside a control template (chapter Styles).\n\n\n\n\n\n1.4.5 Styled properties\nAvalonia controls don’t use plain C# properties for most of their settings. They use styled properties, which are registered with Avalonia’s property system (AvaloniaProperty.Register). You set and read them like any other property, but they can do more:\n\nthey have default values,\nthey notify Avalonia whenever their value changes,\nthey can validate new values and run a callback when the value changes.\n\nThat is what makes data binding, styles and animations possible: all three only work with styled properties. Every property of a built-in control that you would want to style or bind already is one.\n\n\n1.4.6 Attached properties\nAn attached property is set on one element but belongs to another, usually the layout container around it. In this example, each button says at which edge of the DockPanel it wants to be docked:\n&lt;DockPanel&gt;\n    &lt;Button DockPanel.Dock=\"Top\"&gt;Click me!&lt;/Button&gt;\n    &lt;Button DockPanel.Dock=\"Bottom\"&gt;Click me too!&lt;/Button&gt;\n&lt;/DockPanel&gt;\nDockPanel.Dock only makes sense on a child of a DockPanel. Without attached properties, Button would need a Dock property, plus a property for every other container it could ever be placed in. The same mechanism places elements in the rows and columns of a grid, as you’ll see next.",
+    "text": "1.4 XAML basics\nXAML uses XML syntax, so the usual XML rules apply:\n\nA file has exactly one root element, and all other elements are correctly nested inside it. For a window, the root is &lt;Window&gt;; for a reusable part of a UI, it is a &lt;UserControl&gt;.\nElement and attribute names are case-sensitive, and attribute values are always in double quotes.\nThe nesting of elements forms a tree. Avalonia turns that tree into the UI.\n\nEvery element stands for a class. When the window is created, &lt;Button&gt; creates a Button object through its parameterless constructor. Every attribute sets a public property of that object or subscribes to one of its events:\n&lt;Button Background=\"AliceBlue\" Content=\"Click me!\"/&gt;\nThe attribute values are strings. Behind the scenes, type converters turn them into the right type, for example \"AliceBlue\" into a brush.\n\n1.4.1 Namespaces\nThe root element of every XAML file declares at least two XML namespaces:\nxmlns=\"https://github.com/avaloniaui\"\nxmlns:x=\"http://schemas.microsoft.com/winfx/2006/xaml\"\n\nThe first is the default namespace (no prefix). It contains all Avalonia controls, so you can write &lt;Button&gt; directly.\nThe second maps the XAML language namespace to the prefix x. Language features such as x:Class and x:Name come from there.\n\nTo use your own classes in XAML, declare a namespace for them with a prefix of your choice:\nxmlns:models=\"using:HelloAvalonia.Models\"\nThen &lt;models:Person/&gt; creates a HelloAvalonia.Models.Person. For a class in a different assembly (another project or a NuGet package), the older form names the assembly as well: xmlns:logic=\"clr-namespace:LogicNamespace;assembly=Logic\".\n\n\n1.4.2 Property element syntax\nSome values are too complex for a string. Instead of an attribute, you can then write the property as a child element named &lt;Type.Property&gt;:\n&lt;Button Background=\"AliceBlue\"&gt;\n    &lt;Button.Content&gt;\n        &lt;Ellipse Width=\"120\" Height=\"90\" Fill=\"LightBlue\"/&gt;\n    &lt;/Button.Content&gt;\n&lt;/Button&gt;\nHere the button’s Content is no longer text but an Ellipse. Content is also the button’s content property, so you may leave out &lt;Button.Content&gt; and put the Ellipse directly between &lt;Button&gt; and &lt;/Button&gt;.\n\n\n1.4.3 Naming elements\nTo access an element from code, give it a name:\n&lt;TextBlock Name=\"CounterText\" Text=\"Counter: 0\"/&gt;\nThe generated half of the partial class then contains a field CounterText of type TextBlock: the exact object the XAML created. x:Name=\"CounterText\" does the same. Name is a property of the Avalonia controls, while x:Name is a XAML language feature that works on any element. For controls, use Name.\n\n\n1.4.4 Markup extensions\nSometimes a property should not get a fixed value but one that comes from somewhere else. That is the job of markup extensions, written in curly braces. Here, the second button takes its background from the first:\n&lt;Button Name=\"Btn1\" Background=\"LightYellow\"/&gt;\n&lt;Button Background=\"{Binding #Btn1.Background}\"/&gt;\n#Btn1 refers to the element named Btn1. The most important markup extensions are:\n\n\n\n\n\n\n\nExtension\nDescription\n\n\n\n\nBinding\nTakes the value from a data source and keeps it up to date (chapter Data Binding and View Models).\n\n\nStaticResource\nTakes the value from a resource, once, when the element is created.\n\n\nDynamicResource\nTakes the value from a resource and follows it when the resource changes.\n\n\nTemplateBinding\nUsed inside a control template (chapter Styles).\n\n\n\n\n\n1.4.5 Styled properties\nAvalonia controls don’t use plain C# properties for most of their settings. They use styled properties, which are registered with Avalonia’s property system (AvaloniaProperty.Register). You set and read them like any other property, but they can do more:\n\nthey have default values,\nthey notify Avalonia whenever their value changes,\nthey can validate new values and run a callback when the value changes.\n\nThat is what makes data binding, styles and animations possible: all three only work with styled properties. Every property of a built-in control that you would want to style or bind already is one.\n\n\n1.4.6 Attached properties\nAn attached property is set on one element but belongs to another, usually the layout container around it. In this example, each button says at which edge of the DockPanel it wants to be docked:\n&lt;DockPanel&gt;\n    &lt;Button DockPanel.Dock=\"Top\"&gt;Click me!&lt;/Button&gt;\n    &lt;Button DockPanel.Dock=\"Bottom\"&gt;Click me too!&lt;/Button&gt;\n&lt;/DockPanel&gt;\nDockPanel.Dock only makes sense on a child of a DockPanel. Without attached properties, Button would need a Dock property, plus a property for every other container it could ever be placed in. The same mechanism places elements in the rows and columns of a grid, as you’ll see next.",
     "crumbs": [
-      "Desktop UI",
+      "Desktop UI Basics",
       "<span class='chapter-number'>1</span>  <span class='chapter-title'>Avalonia Basics</span>"
     ]
   },
   {
-    "objectID": "content/01-DesktopUI/material/01_avalonia-basics/README.html#a-first-layout",
-    "href": "content/01-DesktopUI/material/01_avalonia-basics/README.html#a-first-layout",
+    "objectID": "content/01-DesktopUI/material/01_ui-basics/01_avalonia-basics/README.html#a-first-layout",
+    "href": "content/01-DesktopUI/material/01_ui-basics/01_avalonia-basics/README.html#a-first-layout",
     "title": "1  Avalonia Basics",
     "section": "1.5 A first layout",
     "text": "1.5 A first layout\nA Window can only have one direct child. To show more than one element, that child is a layout container (a panel), and everything else goes inside it. The two most common panels are:\n\nGrid divides the space into rows and columns. RowDefinitions=\"*,Auto\" creates two rows: the second is exactly as tall as its content (Auto), and the first takes all the remaining space (*). Children choose their row with the attached property Grid.Row.\nStackPanel arranges its children one after another, vertically by default or horizontally with Orientation=\"Horizontal\". Spacing adds a gap between the children.\n\nThe chapter Layouts and Controls covers all panels in detail.\n\n\n\n\n\n\nTipLab 1.2: The layout\n\n\n\n🎯 Goal. The window shows a greeting, a counter and four buttons. The buttons don’t do anything yet.\nAll changes are in MainWindow.axaml.\n\nIn the &lt;Window&gt; start tag, change the title to Title=\"Hello Avalonia\" and add after it:\nWidth=\"480\" Height=\"360\" MinWidth=\"420\" MinHeight=\"320\"\nWindowStartupLocation=\"CenterScreen\"\nAlso set d:DesignWidth=\"480\" and d:DesignHeight=\"360\". The d: attributes only apply to the previewer in the IDE; mc:Ignorable=\"d\" tells the compiler to skip them.\nReplace the text Welcome to Avalonia! with a grid of two rows:\n&lt;Grid RowDefinitions=\"*,Auto\" Margin=\"32\"&gt;\n&lt;/Grid&gt;\nInside the grid, add the upper row, a StackPanel with the greeting:\n&lt;StackPanel Grid.Row=\"0\" Spacing=\"20\"\n            VerticalAlignment=\"Center\" HorizontalAlignment=\"Center\"&gt;\n    &lt;TextBlock Text=\"Hello, Avalonia!\" FontSize=\"36\" FontWeight=\"SemiBold\"\n               HorizontalAlignment=\"Center\"/&gt;\n&lt;/StackPanel&gt;\nIn that StackPanel, below the greeting, add a button and the counter:\n&lt;Button Content=\"Click me!\" Classes=\"accent\" Padding=\"24,10\"\n        HorizontalAlignment=\"Center\"/&gt;\n&lt;TextBlock Text=\"Counter: 0\" FontSize=\"16\" Opacity=\"0.7\"\n           HorizontalAlignment=\"Center\"/&gt;\nClasses=\"accent\" paints the button in the system’s accent color (chapter Styles).\nBelow that StackPanel, still inside the grid, add the lower row:\n&lt;StackPanel Grid.Row=\"1\" Orientation=\"Horizontal\" Spacing=\"12\"\n            HorizontalAlignment=\"Center\"&gt;\n    &lt;Button Content=\"Increment counter\" Padding=\"16,8\"/&gt;\n&lt;/StackPanel&gt;\nThen add two more buttons to it yourself: Popup message and Close, with the same padding.\n\n✅ Check. dotnet run: the window is centered on the screen, the greeting and counter sit in the middle, and the three buttons are lined up along the bottom. Make the window narrower and wider: the layout adapts, but the window can’t get smaller than 420 × 320.",
     "crumbs": [
-      "Desktop UI",
+      "Desktop UI Basics",
       "<span class='chapter-number'>1</span>  <span class='chapter-title'>Avalonia Basics</span>"
     ]
   },
   {
-    "objectID": "content/01-DesktopUI/material/01_avalonia-basics/README.html#events",
-    "href": "content/01-DesktopUI/material/01_avalonia-basics/README.html#events",
+    "objectID": "content/01-DesktopUI/material/01_ui-basics/01_avalonia-basics/README.html#events",
+    "href": "content/01-DesktopUI/material/01_ui-basics/01_avalonia-basics/README.html#events",
     "title": "1  Avalonia Basics",
     "section": "1.6 Events",
-    "text": "1.6 Events\nTo react to user input, you attach a handler method to an event. The method runs every time the event occurs. There are two ways to attach it.\nIn XAML, name the method in the event attribute. The method must exist in the code-behind:\n&lt;Button Name=\"DemoButton\" Content=\"Click me!\" Click=\"OnDemoButtonClicked\"/&gt;\nprivate void OnDemoButtonClicked(object? sender, RoutedEventArgs e)\n{\n    DemoButton.Content = \"Clicked!\";\n}\nIn code, subscribe to the event in the constructor, after InitializeComponent() has created the controls:\npublic MainWindow()\n{\n    InitializeComponent();\n    DemoButton.Click += OnDemoButtonClicked;\n}\nBoth do the same. The labs use the XAML form. Later, with MVVM, most event handlers are replaced by commands.\nA few conventions that the handlers in this book follow:\n\nHandlers are private: only the window itself needs them.\nThe signature is (object? sender, RoutedEventArgs e). sender is the control that raised the event.\nNames follow the pattern On&lt;Control&gt;&lt;Event&gt;, e.g. OnCloseButtonClicked, so you can quickly find the handler of a XAML attribute.\n\n\n1.6.1 Routed events\nClick is a routed event: it doesn’t stay at the button you clicked. It first fires on the button, then on the button’s parent, then on its parent, all the way up to the window. This is called bubbling. Because of it, one handler on a container can react to clicks on any button inside it.\nWhen two nested controls both handle the same event, the inner handler can stop it with e.Handled = true, and the outer control never sees it.\n\n\n1.6.2 State lives in the code-behind\nAs long as there is no data binding, the state of the window is just a field in the MainWindow class. A handler changes the field and then updates the UI by hand:\nprivate int _counter;\n\nprivate void OnIncrementCounterButtonClicked(object? sender, RoutedEventArgs e)\n{\n    _counter++;\n    CounterText.Text = \"Counter: \" + _counter;\n}\nForgetting the second line is a classic bug: the state changes, the screen doesn’t. Data binding (chapter Data Binding) removes exactly this manual step.\n\n\n\n\n\n\nTipLab 1.3: The counter\n\n\n\n🎯 Goal. Increment counter counts up, and Close closes the window.\n\nIn MainWindow.axaml, add Name=\"CounterText\" to the counter’s TextBlock, and Click=\"OnIncrementCounterButtonClicked\" to the Increment counter button.\nIn MainWindow.axaml.cs, add using Avalonia.Interactivity; at the top (for RoutedEventArgs). Then add the field _counter and the method OnIncrementCounterButtonClicked from the section State lives in the code-behind to the class.\nNow the Close button, on your own: add Click=\"OnCloseButtonClicked\" to it and write the handler. A window closes itself with Close().\n\n✅ Check. Each click on Increment counter raises the number by one. Close ends the app.\n\n💡 Try it. Rename OnCloseButtonClicked in the C# file only and build. The XAML compiler checks that every handler named in XAML exists, but its message is not very clear: AVLN3000: Unable to find suitable setter or adder for property Click. It does point at the right line and column of MainWindow.axaml, though. Remember this message: it almost always means a misspelled handler name. Undo the rename afterwards.",
+    "text": "1.6 Events\nTo react to user input, you attach a handler method to an event. The method runs every time the event occurs. There are two ways to attach it.\nIn XAML, name the method in the event attribute. The method must exist in the code-behind:\n&lt;Button Name=\"DemoButton\" Content=\"Click me!\" Click=\"OnDemoButtonClicked\"/&gt;\nprivate void OnDemoButtonClicked(object? sender, RoutedEventArgs e)\n{\n    DemoButton.Content = \"Clicked!\";\n}\nIn code, subscribe to the event in the constructor, after InitializeComponent() has created the controls:\npublic MainWindow()\n{\n    InitializeComponent();\n    DemoButton.Click += OnDemoButtonClicked;\n}\nBoth do the same. The labs use the XAML form. Later, with MVVM, most event handlers are replaced by commands.\nA few conventions that the handlers in this book follow:\n\nHandlers are private: only the window itself needs them.\nThe signature is (object? sender, RoutedEventArgs e). sender is the control that raised the event.\nNames follow the pattern On&lt;Control&gt;&lt;Event&gt;, e.g. OnCloseButtonClicked, so you can quickly find the handler of a XAML attribute.\n\n\n1.6.1 Routed events\nClick is a routed event: it doesn’t stay at the button you clicked. It first fires on the button, then on the button’s parent, then on its parent, all the way up to the window. This is called bubbling. Because of it, one handler on a container can react to clicks on any button inside it.\nWhen two nested controls both handle the same event, the inner handler can stop it with e.Handled = true, and the outer control never sees it.\n\n\n1.6.2 State lives in the code-behind\nAs long as there is no data binding, the state of the window is just a field in the MainWindow class. A handler changes the field and then updates the UI by hand:\nprivate int _counter;\n\nprivate void OnIncrementCounterButtonClicked(object? sender, RoutedEventArgs e)\n{\n    _counter++;\n    CounterText.Text = \"Counter: \" + _counter;\n}\nForgetting the second line is a classic bug: the state changes, the screen doesn’t. Data binding (chapter Data Binding and View Models) removes exactly this manual step.\n\n\n\n\n\n\nTipLab 1.3: The counter\n\n\n\n🎯 Goal. Increment counter counts up, and Close closes the window.\n\nIn MainWindow.axaml, add Name=\"CounterText\" to the counter’s TextBlock, and Click=\"OnIncrementCounterButtonClicked\" to the Increment counter button.\nIn MainWindow.axaml.cs, add using Avalonia.Interactivity; at the top (for RoutedEventArgs). Then add the field _counter and the method OnIncrementCounterButtonClicked from the section State lives in the code-behind to the class.\nNow the Close button, on your own: add Click=\"OnCloseButtonClicked\" to it and write the handler. A window closes itself with Close().\n\n✅ Check. Each click on Increment counter raises the number by one. Close ends the app.\n\n💡 Try it. Rename OnCloseButtonClicked in the C# file only and build. The XAML compiler checks that every handler named in XAML exists, but its message is not very clear: AVLN3000: Unable to find suitable setter or adder for property Click. It does point at the right line and column of MainWindow.axaml, though. Remember this message: it almost always means a misspelled handler name. Undo the rename afterwards.",
     "crumbs": [
-      "Desktop UI",
+      "Desktop UI Basics",
       "<span class='chapter-number'>1</span>  <span class='chapter-title'>Avalonia Basics</span>"
     ]
   },
   {
-    "objectID": "content/01-DesktopUI/material/01_avalonia-basics/README.html#dialogs",
-    "href": "content/01-DesktopUI/material/01_avalonia-basics/README.html#dialogs",
+    "objectID": "content/01-DesktopUI/material/01_ui-basics/01_avalonia-basics/README.html#dialogs",
+    "href": "content/01-DesktopUI/material/01_ui-basics/01_avalonia-basics/README.html#dialogs",
     "title": "1  Avalonia Basics",
     "section": "1.7 Dialogs",
     "text": "1.7 Dialogs\nAvalonia itself has no ready-made message box. The NuGet package MessageBox.Avalonia provides one. It can show a dialog in two ways:\n\nShowAsync() opens it as a separate window.\nShowAsPopupAsync(this) shows it as an overlay inside this window.\n\nBoth methods return a Task, so they are awaited, and the handlers that call them are marked async. A handler is then async void, which is normally a mistake in C#: nobody can await the method, and an exception thrown in it can’t be caught by the caller. Event handlers are the one accepted exception, because events require methods that return void. Every other async method, including those called from an event handler, returns a Task.\n\n\n\n\n\n\nTipLab 1.4: Dialogs\n\n\n\n🎯 Goal. Click me! asks whether to quit, and Popup message shows a message inside the window.\n\nAdd the package:\ndotnet add package MessageBox.Avalonia --version 12.0.0\nIn MainWindow.axaml, add Click=\"OnGreetButtonClicked\" to the Click me! button.\nIn MainWindow.axaml.cs, add two lines at the top:\nusing MsBox.Avalonia;\nusing MsBox.Avalonia.Enums;\nand this handler to the class:\nprivate async void OnGreetButtonClicked(object? sender, RoutedEventArgs e)\n{\n    var box = MessageBoxManager.GetMessageBoxStandard(\n        \"Hello\", \"Hello from Avalonia! Do you want to quit?\", ButtonEnum.YesNo);\n    var result = await box.ShowAsync();\n    if (result == ButtonResult.Yes)\n    {\n        Close();\n    }\n}\nNow Popup message, on your own: attach a handler OnShowPopupButtonClicked and show a message box with only a title and a text (no ButtonEnum). Show it with ShowAsPopupAsync(this) instead of ShowAsync().\n\n✅ Check. Click me! opens a separate dialog window; Yes closes the app, No only the dialog. Popup message shows the message as an overlay inside the main window, not as a window of its own.",
     "crumbs": [
-      "Desktop UI",
+      "Desktop UI Basics",
       "<span class='chapter-number'>1</span>  <span class='chapter-title'>Avalonia Basics</span>"
     ]
   },
   {
-    "objectID": "content/01-DesktopUI/material/01_avalonia-basics/README.html#window-events",
-    "href": "content/01-DesktopUI/material/01_avalonia-basics/README.html#window-events",
+    "objectID": "content/01-DesktopUI/material/01_ui-basics/01_avalonia-basics/README.html#window-events",
+    "href": "content/01-DesktopUI/material/01_ui-basics/01_avalonia-basics/README.html#window-events",
     "title": "1  Avalonia Basics",
     "section": "1.8 Window events",
     "text": "1.8 Window events\nBesides the events of its controls, a window has events of its own. The most useful ones:\n\n\n\n\n\n\n\nEvent\nOccurs when\n\n\n\n\nOpened\nthe window has been shown for the first time.\n\n\nLoaded\nthe window and all its controls are created and laid out. Initialization code that needs the controls belongs here.\n\n\nActivated / Deactivated\nthe window becomes the active window, or another window does.\n\n\nPositionChanged\nthe window was moved.\n\n\nSizeChanged\nthe window’s size changed.\n\n\nClosing\nthe window is about to close. Setting e.Cancel = true in the handler keeps it open, e.g. to ask about unsaved changes.\n\n\nClosed\nthe window has been closed.\n\n\n\nThere is no event for minimizing or maximizing. The WindowState property holds that state; subscribe to PropertyChanged and check whether e.Property is Window.WindowStateProperty to be notified.",
     "crumbs": [
-      "Desktop UI",
+      "Desktop UI Basics",
       "<span class='chapter-number'>1</span>  <span class='chapter-title'>Avalonia Basics</span>"
     ]
   },
   {
-    "objectID": "content/01-DesktopUI/material/01_avalonia-basics/README.html#the-previewer",
-    "href": "content/01-DesktopUI/material/01_avalonia-basics/README.html#the-previewer",
+    "objectID": "content/01-DesktopUI/material/01_ui-basics/01_avalonia-basics/README.html#the-previewer",
+    "href": "content/01-DesktopUI/material/01_ui-basics/01_avalonia-basics/README.html#the-previewer",
     "title": "1  Avalonia Basics",
     "section": "1.9 The previewer",
     "text": "1.9 The previewer\nRider (with the AvaloniaRider plugin) and VS Code (with the Avalonia extension) render a live preview of an .axaml file next to the editor, without starting the app. That’s handy for adjusting a layout. The d: attributes from Lab 1.2 set the size of that preview.\nThe previewer is not completely reliable. It can lag behind your edits, keep showing an error you already fixed, or fail to load for reasons that have nothing to do with your XAML. A rebuild usually clears it. A red previewer is no proof that your XAML is wrong: check with dotnet build first.",
     "crumbs": [
-      "Desktop UI",
+      "Desktop UI Basics",
       "<span class='chapter-number'>1</span>  <span class='chapter-title'>Avalonia Basics</span>"
     ]
   },
   {
-    "objectID": "content/01-DesktopUI/material/01_avalonia-basics/README.html#try-it-yourself",
-    "href": "content/01-DesktopUI/material/01_avalonia-basics/README.html#try-it-yourself",
+    "objectID": "content/01-DesktopUI/material/01_ui-basics/01_avalonia-basics/README.html#try-it-yourself",
+    "href": "content/01-DesktopUI/material/01_ui-basics/01_avalonia-basics/README.html#try-it-yourself",
     "title": "1  Avalonia Basics",
     "section": "1.10 Try it yourself",
     "text": "1.10 Try it yourself\nExtend HelloAvalonia:\n\nAdd a button that resets the counter to 0.\nDisable Increment counter once the counter reaches 10. Every control has an IsEnabled property.\nSwap ShowAsync and ShowAsPopupAsync in the two dialog handlers and compare.\nAdd a TextBox and change the greeting dialog to greet the name entered there. A TextBox has a Text property.\nHandle the window’s Closing event: ask “Do you really want to quit?” and keep the window open when the answer is No. Watch out: the handler can’t wait for the dialog before deciding, because the window closes as soon as the handler returns. Cancel first, ask, and call Close() yourself on Yes. Then make sure that this second Close() doesn’t ask again.",
     "crumbs": [
-      "Desktop UI",
+      "Desktop UI Basics",
       "<span class='chapter-number'>1</span>  <span class='chapter-title'>Avalonia Basics</span>"
     ]
   },
   {
-    "objectID": "content/01-DesktopUI/material/02_layout-and-controls/README.html",
-    "href": "content/01-DesktopUI/material/02_layout-and-controls/README.html",
+    "objectID": "content/01-DesktopUI/material/01_ui-basics/02_layout-and-controls/README.html",
+    "href": "content/01-DesktopUI/material/01_ui-basics/02_layout-and-controls/README.html",
     "title": "2  Layouts and Controls",
     "section": "",
     "text": "2.1 Layout basics\nA window can hold only one child. Everything else is arranged by panels: containers that decide where their children go and how big they are. This chapter introduces the panels you will use all the time, plus a few helpers around them.\nIn the labs you build LayoutDemo: a launcher window with one button per panel, each opening a small window where you try that panel out.\nEvery control also has a few properties that tell its panel how to place it:",
     "crumbs": [
-      "Desktop UI",
+      "Desktop UI Basics",
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Layouts and Controls</span>"
     ]
   },
   {
-    "objectID": "content/01-DesktopUI/material/02_layout-and-controls/README.html#layout-basics",
-    "href": "content/01-DesktopUI/material/02_layout-and-controls/README.html#layout-basics",
+    "objectID": "content/01-DesktopUI/material/01_ui-basics/02_layout-and-controls/README.html#layout-basics",
+    "href": "content/01-DesktopUI/material/01_ui-basics/02_layout-and-controls/README.html#layout-basics",
     "title": "2  Layouts and Controls",
     "section": "",
     "text": "Panels (classes derived from Panel) hold any number of children. All other controls hold at most one child, usually in their Content property.\nPanels can be nested: a Grid cell can contain a StackPanel, which contains another Grid, and so on. Real layouts are almost always nested.\nAvoid fixed sizes. Let the panels size the controls, so the layout adapts when the window is resized or the text changes.\nLayout runs in two passes: in the measure pass every element reports how much space it would like; in the arrange pass the panel assigns each child its final position and size.\n\n\n\n\n\n\n\n\n\nProperty\nMeaning\n\n\n\n\nHorizontalAlignment, VerticalAlignment\nStretch (fill the available space), Left/Top, Center, Right/Bottom\n\n\nMargin\nSpace around the control: \"10\" on all sides, \"10,5\" left/right and top/bottom, \"10,5,10,0\" left, top, right, bottom\n\n\nPadding\nSpace inside the control, between its border and its content\n\n\nWidth, Height, MinWidth, MaxWidth, …\nFixed or limited sizes; use sparingly\n\n\n\n\n\n\n\n\n\nTipLab 2.1: The launcher\n\n\n\n🎯 Goal. A launcher window with a Grid button that opens a second window.\n\nCreate the project as in Lab 1.1, but named LayoutDemo, including the solution file and TreatWarningsAsErrors.\nIn MainWindow.axaml, set Title=\"Layout Demo\" Width=\"360\" Height=\"560\" and replace the text Welcome to Avalonia! with:\n&lt;StackPanel Margin=\"24\" Spacing=\"10\"&gt;\n    &lt;TextBlock Text=\"Layouts and Controls\" FontSize=\"22\" FontWeight=\"SemiBold\"/&gt;\n    &lt;Button Content=\"Grid\" HorizontalAlignment=\"Stretch\" Click=\"OnOpenGridClicked\"/&gt;\n&lt;/StackPanel&gt;\nCreate a second window. In the project folder, run:\ndotnet new avalonia.window -n GridWindow\nThis creates GridWindow.axaml and GridWindow.axaml.cs. In GridWindow.axaml, set Title=\"Grid\" Width=\"620\" Height=\"560\".\nIn MainWindow.axaml.cs, add using Avalonia.Interactivity; and this handler:\nprivate void OnOpenGridClicked(object? sender, RoutedEventArgs e) =&gt; new GridWindow().Show();\nShow() opens the window next to the launcher; you can open it several times. (Its sibling ShowDialog(this) would block the launcher until the new window is closed.)\n\n✅ Check. The launcher shows a heading and a full-width Grid button. Each click opens a window Grid with the text Welcome to Avalonia!.\nAll further labs of this chapter follow the same pattern: create a window with dotnet new avalonia.window, give it a title and a size, and add a launcher button with a handler.",
     "crumbs": [
-      "Desktop UI",
+      "Desktop UI Basics",
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Layouts and Controls</span>"
     ]
   },
   {
-    "objectID": "content/01-DesktopUI/material/02_layout-and-controls/README.html#grid",
-    "href": "content/01-DesktopUI/material/02_layout-and-controls/README.html#grid",
+    "objectID": "content/01-DesktopUI/material/01_ui-basics/02_layout-and-controls/README.html#grid",
+    "href": "content/01-DesktopUI/material/01_ui-basics/02_layout-and-controls/README.html#grid",
     "title": "2  Layouts and Controls",
     "section": "2.2 Grid",
     "text": "2.2 Grid\nA Grid arranges its children in rows and columns. Each child picks its cell with the attached properties Grid.Row and Grid.Column (both start at 0, which is also the default). Several children may share a cell; the one declared later is drawn on top.\n&lt;Grid ShowGridLines=\"True\"&gt;\n    &lt;Grid.RowDefinitions&gt;\n        &lt;RowDefinition/&gt;\n        &lt;RowDefinition/&gt;\n    &lt;/Grid.RowDefinitions&gt;\n    &lt;Grid.ColumnDefinitions&gt;\n        &lt;ColumnDefinition/&gt;\n        &lt;ColumnDefinition/&gt;\n        &lt;ColumnDefinition/&gt;\n    &lt;/Grid.ColumnDefinitions&gt;\n    &lt;Button Grid.Row=\"0\" Grid.Column=\"1\" HorizontalAlignment=\"Center\"&gt;Button 1&lt;/Button&gt;\n    &lt;Ellipse Grid.Row=\"1\" Grid.Column=\"2\" Fill=\"Beige\"/&gt;\n    &lt;Button Grid.Row=\"1\" Grid.Column=\"2\" HorizontalAlignment=\"Center\"\n            Background=\"Transparent\"&gt;Button 2&lt;/Button&gt;\n&lt;/Grid&gt;\nThis grid has two rows and three columns. Button 2 sits on top of the beige ellipse in the same cell. ShowGridLines draws the cell borders; it is a debugging aid, remove it when the layout is done.\nThe row and column definitions can also be written as a compact attribute:\n&lt;Grid RowDefinitions=\"*,*\" ColumnDefinitions=\"*,*,*\"&gt;\n\n2.2.1 Sizing rows and columns\nEvery row height and column width is one of three kinds:\n\na fixed size in pixels: Width=\"100\",\nAuto: as big as the content needs,\nstar (*): a share of the remaining space. * and 2* split it 1 : 2. A definition without a size counts as *.\n\n&lt;Grid ColumnDefinitions=\"100,Auto,*,2*\"&gt;\nThe first column is always 100 pixels wide, the second fits its content, and the third and fourth share the rest in the ratio 1 : 2, growing and shrinking with the window.\n\n\n2.2.2 Spanning cells\nGrid.RowSpan and Grid.ColumnSpan let a child cover several rows or columns, like rowspan/colspan in an HTML table:\n&lt;Label Grid.Row=\"4\" Grid.ColumnSpan=\"2\" Content=\"Rectangles showing column width\"/&gt;\n\n\n\n\n\n\nTipLab 2.2: Grid basics\n\n\n\n🎯 Goal. The grid example from above, in the first tab of the Grid window.\n\nIn GridWindow.axaml, replace the text Welcome to Avalonia! with a TabControl with one tab:\n&lt;TabControl&gt;\n    &lt;TabItem Header=\"Basics\"&gt;\n    &lt;/TabItem&gt;\n&lt;/TabControl&gt;\nA TabControl shows one TabItem at a time; the headers switch between them.\nPut the grid example from the section Grid into the tab, and give the grid a Margin=\"16\".\n\n✅ Check. The Basics tab shows the dotted grid lines, Button 1 in the middle of the top row, and Button 2 over the beige ellipse at the bottom right.\n\n💡 Try it. Replace the two definition blocks by the compact attributes. Then remove HorizontalAlignment=\"Center\" from Button 1.\n\n\n\n\n\n\n\n\nTipLab 2.3: Sizing rows and columns\n\n\n\n🎯 Goal. A second tab that shows the three kinds of sizes side by side.\n\nAdd a second tab to the TabControl in GridWindow.axaml:\n&lt;TabItem Header=\"Sizing\"&gt;\n    &lt;Grid Margin=\"16\" RowDefinitions=\"*,*,2*,2*,*,Auto\" ColumnDefinitions=\"Auto,*\"&gt;\n    &lt;/Grid&gt;\n&lt;/TabItem&gt;\nFill row 0 of the grid:\n&lt;Rectangle Grid.Row=\"0\" Fill=\"Red\"/&gt;\n&lt;Label Grid.Row=\"0\" Content=\"*\" FontSize=\"24\"/&gt;\n&lt;Rectangle Grid.Row=\"0\" Grid.Column=\"1\" Fill=\"Orange\"/&gt;\nFill the other rows yourself, following this table. Where the label is on a dark color, give it Foreground=\"Yellow\".\n\n\n\nRow\nLeft column (Auto)\nLabel\nRight column (*)\n\n\n\n\n1\nYellow\n*\nGreen\n\n\n2\nBlue\n2*\nIndigo\n\n\n3\nViolet\n2*\nBlack\n\n\n4\n–\nRectangles showing column width, spanning both columns\n–\n\n\n5\nWheat\nAuto\nPurple\n\n\n\n\n✅ Check. Rows 2 and 3 are twice as tall as rows 0, 1 and 4; row 5 is exactly as tall as its label. The left column is as wide as its widest label.\n\n💡 Try it. Make the window taller and shorter: which rows change their height, and which don’t?",
     "crumbs": [
-      "Desktop UI",
+      "Desktop UI Basics",
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Layouts and Controls</span>"
     ]
   },
   {
-    "objectID": "content/01-DesktopUI/material/02_layout-and-controls/README.html#stackpanel",
-    "href": "content/01-DesktopUI/material/02_layout-and-controls/README.html#stackpanel",
+    "objectID": "content/01-DesktopUI/material/01_ui-basics/02_layout-and-controls/README.html#stackpanel",
+    "href": "content/01-DesktopUI/material/01_ui-basics/02_layout-and-controls/README.html#stackpanel",
     "title": "2  Layouts and Controls",
     "section": "2.3 StackPanel",
     "text": "2.3 StackPanel\nA StackPanel puts its children one after another, vertically by default or horizontally with Orientation=\"Horizontal\". Spacing adds a gap between them.\n&lt;StackPanel Background=\"Aquamarine\"&gt;\n    &lt;TextBlock Text=\"First name\"/&gt;\n    &lt;TextBox/&gt;\n    &lt;TextBlock Text=\"Last name\"/&gt;\n    &lt;TextBox Width=\"100\" HorizontalAlignment=\"Left\"/&gt;\n&lt;/StackPanel&gt;\nIn a vertical StackPanel every child is as wide as the panel, unless it sets its own width and alignment like the second TextBox.\n\n\n\n\n\n\nTipLab 2.4: StackPanel\n\n\n\n🎯 Goal. A StackPanel window with the example above.\n\nCreate StackPanelWindow (title StackPanel, 420 × 380) and its launcher button, as in Lab 2.1.\nReplace the window’s text with the StackPanel example, and give the panel a Margin=\"16\".\n\n✅ Check. A turquoise block with the two labels and input fields, the second field only 100 pixels wide.\n💡 Try it. Set Orientation=\"Horizontal\". What happens to the first TextBox, which has no width of its own? Add Spacing=\"8\".",
     "crumbs": [
-      "Desktop UI",
+      "Desktop UI Basics",
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Layouts and Controls</span>"
     ]
   },
   {
-    "objectID": "content/01-DesktopUI/material/02_layout-and-controls/README.html#dockpanel",
-    "href": "content/01-DesktopUI/material/02_layout-and-controls/README.html#dockpanel",
+    "objectID": "content/01-DesktopUI/material/01_ui-basics/02_layout-and-controls/README.html#dockpanel",
+    "href": "content/01-DesktopUI/material/01_ui-basics/02_layout-and-controls/README.html#dockpanel",
     "title": "2  Layouts and Controls",
     "section": "2.4 DockPanel",
     "text": "2.4 DockPanel\nA DockPanel attaches each child to one of its edges with the attached property DockPanel.Dock (Top, Bottom, Left, Right). The order matters: each child is docked into the space the previous children left over. With LastChildFill=\"True\" (the default), the last child fills whatever remains.\nIn the direction it is docked, a child only gets the size it asks for. A button docked to the top is therefore only as tall as its text, even with VerticalAlignment=\"Stretch\"; give it a Height to make it taller (a Width for Left/Right). Along the edge, Stretch fills the full length.\n\n\n\n\n\n\nTipLab 2.5: DockPanel\n\n\n\n🎯 Goal. Five buttons docked to different edges.\n\nCreate DockPanelWindow (title DockPanel, 420 × 320) and its launcher button.\nReplace the window’s text with a DockPanel and its first two buttons:\n&lt;DockPanel Margin=\"16\"&gt;\n    &lt;Button DockPanel.Dock=\"Top\" Background=\"LightBlue\" Height=\"50\"\n            HorizontalAlignment=\"Stretch\"\n            HorizontalContentAlignment=\"Center\" VerticalContentAlignment=\"Center\"&gt;Button1&lt;/Button&gt;\n    &lt;Button DockPanel.Dock=\"Left\" Background=\"LightGreen\" Width=\"90\"\n            VerticalAlignment=\"Stretch\"\n            HorizontalContentAlignment=\"Center\" VerticalContentAlignment=\"Center\"&gt;Button2&lt;/Button&gt;\n&lt;/DockPanel&gt;\nHorizontalContentAlignment/VerticalContentAlignment center the text inside the larger button.\nAdd three more buttons yourself:\n\nButton3, docked Right, LightCoral, 90 wide,\nButton4, docked Top, LightYellow, 50 tall,\nButton 5, not docked, LightGray, stretched in both directions.\n\n\n✅ Check. Button1 spans the full width at the top. Button4 is also at the top, but only between Button2 and Button3, because it came later. Button 5 fills the middle.\n\n💡 Try it. Move Button1 below Button2 in the XAML. Then set LastChildFill=\"False\".",
     "crumbs": [
-      "Desktop UI",
+      "Desktop UI Basics",
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Layouts and Controls</span>"
     ]
   },
   {
-    "objectID": "content/01-DesktopUI/material/02_layout-and-controls/README.html#wrappanel",
-    "href": "content/01-DesktopUI/material/02_layout-and-controls/README.html#wrappanel",
+    "objectID": "content/01-DesktopUI/material/01_ui-basics/02_layout-and-controls/README.html#wrappanel",
+    "href": "content/01-DesktopUI/material/01_ui-basics/02_layout-and-controls/README.html#wrappanel",
     "title": "2  Layouts and Controls",
     "section": "2.5 WrapPanel",
     "text": "2.5 WrapPanel\nA WrapPanel works like a horizontal StackPanel, but starts a new line when the next child doesn’t fit any more. A StackPanel would simply let it run off the edge. With Orientation=\"Vertical\" it fills columns instead of lines.\n\n\n\n\n\n\nTipLab 2.6: WrapPanel\n\n\n\n🎯 Goal. Nine buttons that wrap when the window gets narrow.\n\nCreate WrapPanelWindow (title WrapPanel, 380 × 360) and its launcher button.\nReplace the window’s text with a &lt;WrapPanel Margin=\"16\"&gt; containing nine buttons, Button1 to Button9.\n\n✅ Check. The buttons fill a line, then continue on the next one. Make the window narrower and wider: the lines re-flow.\n\n💡 Try it. Set Orientation=\"Vertical\" and resize the window again.",
     "crumbs": [
-      "Desktop UI",
+      "Desktop UI Basics",
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Layouts and Controls</span>"
     ]
   },
   {
-    "objectID": "content/01-DesktopUI/material/02_layout-and-controls/README.html#canvas",
-    "href": "content/01-DesktopUI/material/02_layout-and-controls/README.html#canvas",
+    "objectID": "content/01-DesktopUI/material/01_ui-basics/02_layout-and-controls/README.html#canvas",
+    "href": "content/01-DesktopUI/material/01_ui-basics/02_layout-and-controls/README.html#canvas",
     "title": "2  Layouts and Controls",
     "section": "2.6 Canvas",
     "text": "2.6 Canvas\nA Canvas doesn’t arrange anything: you position every child yourself, with the attached properties Canvas.Left, Canvas.Top, Canvas.Right and Canvas.Bottom. It is the only panel that works with coordinates. That makes it right for drawings and diagrams, and wrong for forms: nothing adapts when the window or the text size changes.\n&lt;Canvas&gt;\n    &lt;TextBlock Canvas.Top=\"10\" Canvas.Left=\"10\" Text=\"First name\"/&gt;\n    &lt;TextBox Canvas.Top=\"30\" Canvas.Left=\"10\" Width=\"200\"/&gt;\n&lt;/Canvas&gt;\n\n\n\n\n\n\nTipLab 2.7: Canvas\n\n\n\n🎯 Goal. A small form, positioned by coordinates.\n\nCreate CanvasWindow (title Canvas, 360 × 300) and its launcher button.\nReplace the window’s text with the Canvas example above; add Margin=\"16\" and Background=\"AliceBlue\" to the canvas.\nAdd a Last name label and input field yourself, 50 pixels below the first pair.\n\n✅ Check. Both pairs are shown on a light blue area, the input fields 200 pixels wide.\n💡 Try it. Make the window very narrow: the input fields are cut off instead of getting smaller.",
     "crumbs": [
-      "Desktop UI",
+      "Desktop UI Basics",
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Layouts and Controls</span>"
     ]
   },
   {
-    "objectID": "content/01-DesktopUI/material/02_layout-and-controls/README.html#uniformgrid",
-    "href": "content/01-DesktopUI/material/02_layout-and-controls/README.html#uniformgrid",
+    "objectID": "content/01-DesktopUI/material/01_ui-basics/02_layout-and-controls/README.html#uniformgrid",
+    "href": "content/01-DesktopUI/material/01_ui-basics/02_layout-and-controls/README.html#uniformgrid",
     "title": "2  Layouts and Controls",
     "section": "2.7 UniformGrid",
     "text": "2.7 UniformGrid\nA UniformGrid is a grid whose cells all have the same size. You don’t place the children; they fill the cells in order. Rows and Columns fix the number of rows or columns; the other number follows from the number of children.\n\n\n\n\n\n\nTipLab 2.8: UniformGrid\n\n\n\n🎯 Goal. Six buttons of equal size in two rows.\n\nCreate UniformGridWindow (title UniformGrid, 360 × 320) and its launcher button.\nReplace the window’s text with:\n&lt;UniformGrid Margin=\"16\" Rows=\"2\"&gt;\n    &lt;Button HorizontalAlignment=\"Stretch\" VerticalAlignment=\"Stretch\"\n            HorizontalContentAlignment=\"Center\" VerticalContentAlignment=\"Center\"&gt;Button1&lt;/Button&gt;\n&lt;/UniformGrid&gt;\nAdd Button2 to Button6 the same way.\n\n✅ Check. Two rows of three buttons, all of the same size, filling the window.\n💡 Try it. Replace Rows=\"2\" by Columns=\"2\", then remove one button.",
     "crumbs": [
-      "Desktop UI",
+      "Desktop UI Basics",
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Layouts and Controls</span>"
     ]
   },
   {
-    "objectID": "content/01-DesktopUI/material/02_layout-and-controls/README.html#gridsplitter",
-    "href": "content/01-DesktopUI/material/02_layout-and-controls/README.html#gridsplitter",
+    "objectID": "content/01-DesktopUI/material/01_ui-basics/02_layout-and-controls/README.html#gridsplitter",
+    "href": "content/01-DesktopUI/material/01_ui-basics/02_layout-and-controls/README.html#gridsplitter",
     "title": "2  Layouts and Controls",
     "section": "2.8 GridSplitter",
     "text": "2.8 GridSplitter\nA GridSplitter is a bar in a Grid that the user can drag to change the width of columns (or the height of rows) at runtime. Two properties matter:\n\nResizeDirection: always set it explicitly, to Columns or Rows.\nHorizontalAlignment (for columns) decides which columns change: Left changes the splitter’s column and the one before it, Right its column and the one after it, and Stretch (the default) the columns on both sides of it. A splitter in the first column therefore needs HorizontalAlignment=\"Right\"; without it, it tries to resize a column before column 0, and dragging does nothing.\n\nMinWidth/MaxWidth on a ColumnDefinition limit how far the user can drag.\n\n\n\n\n\n\nTipLab 2.9: GridSplitter\n\n\n\n🎯 Goal. A grid whose column width can be changed with the mouse.\n\nCreate GridSplitterWindow (title GridSplitter, 420 × 360) and its launcher button.\nReplace the window’s text with a &lt;Grid Margin=\"16\"&gt; of two rows and two columns. Put &lt;Button Content=\"Button 1\" Margin=\"10\"/&gt; into the top-left cell and Button 2 into the bottom-right cell.\nAdd the splitter at the end of the grid:\n&lt;GridSplitter Grid.Column=\"0\" Grid.RowSpan=\"2\" Width=\"9\" Background=\"Gray\"\n              ResizeDirection=\"Columns\" HorizontalAlignment=\"Right\"/&gt;\n\n✅ Check. A gray bar runs down the right edge of the left column. Dragging it makes the left column wider or narrower.\n💡 Try it. Remove HorizontalAlignment=\"Right\" and drag again. Then add MinWidth=\"80\" to the first column definition (you need the long form of the definitions for that).",
     "crumbs": [
-      "Desktop UI",
+      "Desktop UI Basics",
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Layouts and Controls</span>"
     ]
   },
   {
-    "objectID": "content/01-DesktopUI/material/02_layout-and-controls/README.html#scrollviewer",
-    "href": "content/01-DesktopUI/material/02_layout-and-controls/README.html#scrollviewer",
+    "objectID": "content/01-DesktopUI/material/01_ui-basics/02_layout-and-controls/README.html#scrollviewer",
+    "href": "content/01-DesktopUI/material/01_ui-basics/02_layout-and-controls/README.html#scrollviewer",
     "title": "2  Layouts and Controls",
     "section": "2.9 ScrollViewer",
     "text": "2.9 ScrollViewer\nPanels never scroll. If the content can be larger than the space available, wrap it in a ScrollViewer. It shows a vertical scrollbar when needed; the horizontal one is off unless you set HorizontalScrollBarVisibility (Auto shows it when needed, Visible always).\nTwo ways to break a line in a text:\n\nin an attribute value, the XML character reference &#10;: Text=\"a&#10;b\",\ninside a TextBlock’s content, the element &lt;LineBreak/&gt;.\n\nOne more thing about panels: a panel only receives mouse events where it has a background. If a panel should react to clicks but not be colored, set Background=\"Transparent\".\n\n\n\n\n\n\nTipLab 2.10: ScrollViewer\n\n\n\n🎯 Goal. Content that is wider than the window, with a scrollbar.\n\nCreate ScrollViewerWindow (title ScrollViewer, 420 × 340) and its launcher button.\nReplace the window’s text with:\n&lt;ScrollViewer Margin=\"16\" HorizontalScrollBarVisibility=\"Visible\"&gt;\n    &lt;Grid MinWidth=\"600\" ColumnDefinitions=\"*,*\"&gt;\n    &lt;/Grid&gt;\n&lt;/ScrollViewer&gt;\nIn the grid’s first column, add a TextBox with Margin=\"10\" and the text a and b on two lines. In the second column, add a TextBlock with Margin=\"10\" whose content is a b c d e f g, a &lt;LineBreak/&gt;, and h i.\n\n✅ Check. A horizontal scrollbar is shown below the content. Scroll right to see the second column.\n💡 Try it. Set HorizontalScrollBarVisibility=\"Auto\" and make the window wider than 600 pixels.",
     "crumbs": [
-      "Desktop UI",
+      "Desktop UI Basics",
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Layouts and Controls</span>"
     ]
   },
   {
-    "objectID": "content/01-DesktopUI/material/02_layout-and-controls/README.html#building-a-ui-in-code",
-    "href": "content/01-DesktopUI/material/02_layout-and-controls/README.html#building-a-ui-in-code",
+    "objectID": "content/01-DesktopUI/material/01_ui-basics/02_layout-and-controls/README.html#building-a-ui-in-code",
+    "href": "content/01-DesktopUI/material/01_ui-basics/02_layout-and-controls/README.html#building-a-ui-in-code",
     "title": "2  Layouts and Controls",
     "section": "2.10 Building a UI in code",
     "text": "2.10 Building a UI in code\nEverything you write in XAML can also be written in C#: XAML elements are objects, attributes are properties. Attached properties are set with static methods such as DockPanel.SetDock(button, Dock.Top).\nvar dPanel = new DockPanel();\nvar btnTop = new Button();\nvar btnLeft = new Button();\n\nbtnTop.Content = \"Top Button!\";\nbtnTop.Height = 50;\nbtnTop.HorizontalAlignment = HorizontalAlignment.Stretch;\nbtnTop.HorizontalContentAlignment = HorizontalAlignment.Center;\nbtnTop.VerticalContentAlignment = VerticalAlignment.Center;\n\nbtnLeft.Content = \"Left Button!\";\nbtnLeft.Width = 95;\nbtnLeft.VerticalAlignment = VerticalAlignment.Stretch;\nbtnLeft.HorizontalContentAlignment = HorizontalAlignment.Center;\nbtnLeft.VerticalContentAlignment = VerticalAlignment.Center;\n\nDockPanel.SetDock(btnTop, Dock.Top);\nDockPanel.SetDock(btnLeft, Dock.Left);\n\ndPanel.LastChildFill = false;\ndPanel.Children.Add(btnTop);\ndPanel.Children.Add(btnLeft);\n\nContent = dPanel;\nKeep this for the rare cases where the UI is only known at runtime, for example one button per entry of a list read from a file. For everything else XAML is shorter, easier to read and shows up in the previewer.\n\n\n\n\n\n\nTipLab 2.11: A window built in code\n\n\n\n🎯 Goal. A window whose content is created in C# only.\n\nCreate CodeBehindWindow (title Code-Behind, 360 × 260) and its launcher button.\nIn CodeBehindWindow.axaml, delete the text Welcome to Avalonia!, so the window has no content.\nIn CodeBehindWindow.axaml.cs, add using Avalonia.Layout; (for the alignments), and add the code from the section above to the constructor, after InitializeComponent().\n\n✅ Check. A button Top Button! across the top and Left Button! on the left; the rest of the window stays empty because LastChildFill is false.\n💡 Try it. Add a third button in code, without a dock, and set LastChildFill to true.",
     "crumbs": [
-      "Desktop UI",
+      "Desktop UI Basics",
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Layouts and Controls</span>"
     ]
   },
   {
-    "objectID": "content/01-DesktopUI/material/02_layout-and-controls/README.html#try-it-yourself",
-    "href": "content/01-DesktopUI/material/02_layout-and-controls/README.html#try-it-yourself",
+    "objectID": "content/01-DesktopUI/material/01_ui-basics/02_layout-and-controls/README.html#try-it-yourself",
+    "href": "content/01-DesktopUI/material/01_ui-basics/02_layout-and-controls/README.html#try-it-yourself",
     "title": "2  Layouts and Controls",
     "section": "2.11 Try it yourself",
     "text": "2.11 Try it yourself\n\nBuild a login form with a Grid: two rows with a label and an input field each, labels in an Auto column, fields in a * column, and a right-aligned Login button below.\nRebuild the DockPanel window with a Grid. Which layout needs less XAML?\nThe launcher of LayoutDemo is too long for a small window. Make it scroll.",
     "crumbs": [
-      "Desktop UI",
+      "Desktop UI Basics",
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Layouts and Controls</span>"
     ]
   },
   {
-    "objectID": "content/01-DesktopUI/material/03_styles/README.html",
-    "href": "content/01-DesktopUI/material/03_styles/README.html",
+    "objectID": "content/01-DesktopUI/material/01_ui-basics/03_styles/README.html",
+    "href": "content/01-DesktopUI/material/01_ui-basics/03_styles/README.html",
     "title": "3  Styles",
     "section": "",
     "text": "3.1 Styles and selectors\nSetting FontSize=\"20\" on every button of an app is tedious and error-prone. A style sets properties in one place, for all controls it applies to. Avalonia styles work much like CSS: a selector picks the controls, setters set their properties.\nIn the labs you build StylesDemo: one window with a tab per topic.\nA style is a Style element with a Selector and one or more Setters:\nThe selector Button matches every button in the style’s scope. To style only some buttons, give them a style class and add it to the selector with a dot:\nAn element can have several classes (Classes=\"bigText danger\"), and code can add and remove them at runtime (myButton.Classes.Add(\"bigText\")). The selector always needs a type in front of the class (Button.bigText, not .bigText), so that the compiler knows which FontSize the setter means.\nOther useful selector parts:",
     "crumbs": [
-      "Desktop UI",
+      "Desktop UI Basics",
       "<span class='chapter-number'>3</span>  <span class='chapter-title'>Styles</span>"
     ]
   },
   {
-    "objectID": "content/01-DesktopUI/material/03_styles/README.html#styles-and-selectors",
-    "href": "content/01-DesktopUI/material/03_styles/README.html#styles-and-selectors",
+    "objectID": "content/01-DesktopUI/material/01_ui-basics/03_styles/README.html#styles-and-selectors",
+    "href": "content/01-DesktopUI/material/01_ui-basics/03_styles/README.html#styles-and-selectors",
     "title": "3  Styles",
     "section": "",
     "text": "&lt;Style Selector=\"Button\"&gt;\n    &lt;Setter Property=\"FontStyle\" Value=\"Italic\"/&gt;\n    &lt;Setter Property=\"FontSize\" Value=\"20\"/&gt;\n&lt;/Style&gt;\n\n&lt;Style Selector=\"Button.bigText\"&gt;\n    &lt;Setter Property=\"FontSize\" Value=\"20\"/&gt;\n&lt;/Style&gt;\n&lt;Button Classes=\"bigText\" Content=\"Create new employee\"/&gt;\n\n\n\n\n\n\n\n\n\nSelector\nMatches\n\n\n\n\nButton\nevery Button\n\n\nButton.bigText\nevery Button with the class bigText\n\n\n#SaveButton\nthe element named SaveButton\n\n\nStackPanel Button\nevery Button somewhere inside a StackPanel\n\n\nStackPanel &gt; Button\nevery Button that is a direct child of a StackPanel\n\n\n\n\n3.1.1 Where styles live\nStyles are collected in the Styles property of a control, and apply to that control and everything inside it:\n\n&lt;StackPanel.Styles&gt; (or any other control): only inside that panel,\n&lt;Window.Styles&gt;: in this window,\n&lt;Application.Styles&gt; in App.axaml: in the whole application. The &lt;FluentTheme/&gt; already there is itself a large collection of styles.\n\nStyles you want to share between several windows can also go into a file of their own and be included with &lt;StyleInclude Source=\"/Styles/Buttons.axaml\"/&gt;.\n\n\n\n\n\n\nTipLab 3.1: Style classes\n\n\n\n🎯 Goal. A window with a first tab, where a style class makes two of three buttons bigger.\n\nCreate the project as in Lab 1.1, named StylesDemo.\nIn MainWindow.axaml, set Title=\"Styles Demo\" Width=\"640\" Height=\"420\" and replace the text Welcome to Avalonia! with:\n&lt;TabControl TabStripPlacement=\"Left\"&gt;\n    &lt;TabItem Header=\"Classes\"&gt;\n        &lt;StackPanel Margin=\"16\" Spacing=\"10\"&gt;\n            &lt;StackPanel.Styles&gt;\n                &lt;Style Selector=\"Button.bigText\"&gt;\n                    &lt;Setter Property=\"FontStyle\" Value=\"Italic\"/&gt;\n                    &lt;Setter Property=\"FontSize\" Value=\"20\"/&gt;\n                &lt;/Style&gt;\n            &lt;/StackPanel.Styles&gt;\n            &lt;Button Content=\"Create new employee\"/&gt;\n        &lt;/StackPanel&gt;\n    &lt;/TabItem&gt;\n&lt;/TabControl&gt;\nTabStripPlacement=\"Left\" puts the tab headers on the left, so there is room for many tabs.\nAdd two more buttons below the first: Edit employee and Edit employee activities. Then give the first two buttons the class bigText.\n\n✅ Check. Create new employee and Edit employee are big and italic, Edit employee activities is not.\n\n💡 Try it. Change the selector to Button and watch which buttons change. Then give a TextBlock the class bigText.",
     "crumbs": [
-      "Desktop UI",
+      "Desktop UI Basics",
       "<span class='chapter-number'>3</span>  <span class='chapter-title'>Styles</span>"
     ]
   },
   {
-    "objectID": "content/01-DesktopUI/material/03_styles/README.html#cascading",
-    "href": "content/01-DesktopUI/material/03_styles/README.html#cascading",
+    "objectID": "content/01-DesktopUI/material/01_ui-basics/03_styles/README.html#cascading",
+    "href": "content/01-DesktopUI/material/01_ui-basics/03_styles/README.html#cascading",
     "title": "3  Styles",
     "section": "3.2 Cascading",
     "text": "3.2 Cascading\nWhen several styles match an element, all of them apply: their setters are merged. If two of them set the same property:\n\na style whose selector contains a class or pseudo-class beats one with only a type (Button.special beats Button, wherever they are written),\notherwise the style written later wins. There is no “more specific wins” rule as in CSS: TextBlock.caption.small only beats TextBlock.caption if it comes after it.\n\nThat makes variants easy. Instead of copying a style, add a second, more specific one that only changes what is different:\n&lt;Style Selector=\"TextBlock.caption\"&gt;\n    &lt;Setter Property=\"FontSize\" Value=\"30\"/&gt;\n    &lt;Setter Property=\"FontWeight\" Value=\"Bold\"/&gt;\n    &lt;Setter Property=\"Margin\" Value=\"0,0,0,20\"/&gt;\n&lt;/Style&gt;\n&lt;Style Selector=\"TextBlock.caption.small\"&gt;\n    &lt;Setter Property=\"FontSize\" Value=\"20\"/&gt;\n&lt;/Style&gt;\n&lt;TextBlock Classes=\"caption\" Text=\"A form\"/&gt;\n&lt;TextBlock Classes=\"caption small\" Text=\"A smaller form\"/&gt;\nThe second TextBlock matches both styles. It gets the bold weight and the margin from caption, and the font size from caption.small, which comes later.\n\n\n\n\n\n\nTipLab 3.2: Cascading\n\n\n\n🎯 Goal. A caption and a smaller variant of it, plus a special button that builds on the normal button style.\n\nAdd a second tab below the first one:\n&lt;TabItem Header=\"Cascading\"&gt;\n    &lt;StackPanel Margin=\"16\" Spacing=\"10\"&gt;\n        &lt;StackPanel.Styles&gt;\n        &lt;/StackPanel.Styles&gt;\n    &lt;/StackPanel&gt;\n&lt;/TabItem&gt;\nAdd the two caption styles and the two TextBlocks from the section above to the tab.\nAdd two buttons, Default button and Special button (with Classes=\"special\"), and write two styles for them yourself:\n\nevery Button in this tab: italic, font size 20,\nbuttons with the class special: additionally Foreground AntiqueWhite and Background DarkSlateBlue.\n\n\n✅ Check. A smaller form is bold like A form, but smaller. Both buttons are italic and big; only the special one is dark blue.\n\n💡 Try it. Move the caption.small style above the caption style. Then move the Button.special style above the Button style.",
     "crumbs": [
-      "Desktop UI",
+      "Desktop UI Basics",
       "<span class='chapter-number'>3</span>  <span class='chapter-title'>Styles</span>"
     ]
   },
   {
-    "objectID": "content/01-DesktopUI/material/03_styles/README.html#pseudo-classes",
-    "href": "content/01-DesktopUI/material/03_styles/README.html#pseudo-classes",
+    "objectID": "content/01-DesktopUI/material/01_ui-basics/03_styles/README.html#pseudo-classes",
+    "href": "content/01-DesktopUI/material/01_ui-basics/03_styles/README.html#pseudo-classes",
     "title": "3  Styles",
     "section": "3.3 Pseudo-classes",
     "text": "3.3 Pseudo-classes\nControls change their look in certain states: a button is hovered or pressed, a text box has the keyboard focus. Selectors react to such states with pseudo-classes, written with a colon:\n\n\n\nPseudo-class\nThe control …\n\n\n\n\n:pointerover\nis under the mouse pointer\n\n\n:pressed\nis being pressed\n\n\n:focus\nhas the keyboard focus\n\n\n:disabled\nhas IsEnabled=\"False\"\n\n\n:checked\nis checked (CheckBox, ToggleButton, …)\n\n\n\n&lt;Style Selector=\"Button:pointerover\"&gt;\n    &lt;Setter Property=\"FontWeight\" Value=\"Bold\"/&gt;\n&lt;/Style&gt;\nThe style applies while the state lasts, and its setters are undone automatically when the state ends. Conditions are combined by writing them one after the other, without spaces: Button.save:pointerover matches only a button with the class save that is hovered.",
     "crumbs": [
-      "Desktop UI",
+      "Desktop UI Basics",
       "<span class='chapter-number'>3</span>  <span class='chapter-title'>Styles</span>"
     ]
   },
   {
-    "objectID": "content/01-DesktopUI/material/03_styles/README.html#transitions-and-animations",
-    "href": "content/01-DesktopUI/material/03_styles/README.html#transitions-and-animations",
+    "objectID": "content/01-DesktopUI/material/01_ui-basics/03_styles/README.html#transitions-and-animations",
+    "href": "content/01-DesktopUI/material/01_ui-basics/03_styles/README.html#transitions-and-animations",
     "title": "3  Styles",
     "section": "3.4 Transitions and animations",
     "text": "3.4 Transitions and animations\nStyle changes happen instantly. To animate them, give the property a transition: from then on, every change of the property’s value is animated, in both directions.\n&lt;Style Selector=\"TextBox\"&gt;\n    &lt;Setter Property=\"FontSize\" Value=\"12\"/&gt;\n    &lt;Setter Property=\"Transitions\"&gt;\n        &lt;Transitions&gt;\n            &lt;DoubleTransition Property=\"FontSize\" Duration=\"0:0:0.2\"/&gt;\n        &lt;/Transitions&gt;\n    &lt;/Setter&gt;\n&lt;/Style&gt;\n&lt;Style Selector=\"TextBox:focus\"&gt;\n    &lt;Setter Property=\"FontSize\" Value=\"20\"/&gt;\n&lt;/Style&gt;\nThe text box grows when it gets the focus and shrinks again when it loses it. There are transitions for other property types, too: ColorTransition, BrushTransition, ThicknessTransition, TransformOperationsTransition and more.\nFor animations with several steps, a style can contain keyframe animations. They run when the style starts to apply:\n&lt;Style Selector=\"Button.fade:pointerover\"&gt;\n    &lt;Style.Animations&gt;\n        &lt;Animation Duration=\"0:0:0.2\" FillMode=\"Forward\"&gt;\n            &lt;KeyFrame Cue=\"0%\"&gt;\n                &lt;Setter Property=\"Opacity\" Value=\"1\"/&gt;\n            &lt;/KeyFrame&gt;\n            &lt;KeyFrame Cue=\"100%\"&gt;\n                &lt;Setter Property=\"Opacity\" Value=\"0.4\"/&gt;\n            &lt;/KeyFrame&gt;\n        &lt;/Animation&gt;\n    &lt;/Style.Animations&gt;\n&lt;/Style&gt;\nFillMode=\"Forward\" keeps the value of the last keyframe after the animation has finished.\n\n\n\n\n\n\nTipLab 3.3: Pseudo-classes\n\n\n\n🎯 Goal. A Save button that turns bold on hover, and a Cancel button that turns italic while pressed.\n\nAdd a third tab States, built like the Cascading tab: a StackPanel with Margin=\"16\" Spacing=\"10\" and empty StackPanel.Styles.\nAdd two buttons: &lt;Button Classes=\"save\" Content=\"Save\"/&gt; and &lt;Button Classes=\"cancel\" Content=\"Cancel\"/&gt;.\nWrite the two styles yourself: Button.save:pointerover sets FontWeight to Bold, and Button.cancel:pressed sets FontStyle to Italic.\n\n✅ Check. Save is bold only while the mouse is over it. Cancel turns italic only while you hold the mouse button down.\n💡 Try it. Remove .save from the selector: now Cancel turns bold on hover, too.\n\n\n\n\n\n\n\n\nTipLab 3.4: Transitions\n\n\n\n🎯 Goal. A text box that grows smoothly when it gets the focus.\n\nAdd a fourth tab Animation, built like the others.\nAdd the TextBox style with the transition from the section above to the tab’s styles, and two text boxes: &lt;TextBox Text=\"Focus me\"/&gt; and &lt;TextBox Text=\"Or me\"/&gt;.\nWrite the TextBox:focus style yourself, with font size 20.\n\n✅ Check. Click into a text box: it grows smoothly. Click into the other: the first shrinks back while the second grows.\n💡 Try it. Add the keyframe example from the section above and a &lt;Button Classes=\"fade\" Content=\"Hover to fade\"/&gt;. Then remove FillMode=\"Forward\".",
     "crumbs": [
-      "Desktop UI",
+      "Desktop UI Basics",
       "<span class='chapter-number'>3</span>  <span class='chapter-title'>Styles</span>"
     ]
   },
   {
-    "objectID": "content/01-DesktopUI/material/03_styles/README.html#classes-from-data",
-    "href": "content/01-DesktopUI/material/03_styles/README.html#classes-from-data",
+    "objectID": "content/01-DesktopUI/material/01_ui-basics/03_styles/README.html#classes-from-data",
+    "href": "content/01-DesktopUI/material/01_ui-basics/03_styles/README.html#classes-from-data",
     "title": "3  Styles",
     "section": "3.5 Classes from data",
-    "text": "3.5 Classes from data\nA style class can be switched on and off by a binding. The syntax is Classes.&lt;name&gt;, bound to a bool:\n&lt;CheckBox Name=\"WarningCheck\" Content=\"Show as warning\"/&gt;\n&lt;TextBlock Classes.warning=\"{Binding #WarningCheck.IsChecked}\" Text=\"Disk almost full\"/&gt;\nWhile the check box is checked, the TextBlock has the class warning, and a style TextBlock.warning applies. This is how a style reacts to data: the chapter Data Binding uses the same pattern to highlight list entries, bound to a property of the data instead of a check box.\n\n\n\n\n\n\nTipLab 3.5: Classes from data\n\n\n\n🎯 Goal. A check box that turns a message red.\n\nAdd a fifth tab Binding, built like the others.\nAdd the CheckBox and the TextBlock from the section above.\nWrite the style TextBlock.warning yourself: Foreground Red, FontWeight Bold.\n\n✅ Check. Checking the box turns the text red and bold; unchecking it turns it back.",
+    "text": "3.5 Classes from data\nA style class can be switched on and off by a binding. The syntax is Classes.&lt;name&gt;, bound to a bool:\n&lt;CheckBox Name=\"WarningCheck\" Content=\"Show as warning\"/&gt;\n&lt;TextBlock Classes.warning=\"{Binding #WarningCheck.IsChecked}\" Text=\"Disk almost full\"/&gt;\nWhile the check box is checked, the TextBlock has the class warning, and a style TextBlock.warning applies. This is how a style reacts to data: the chapter Master/Detail uses the same pattern to highlight list entries, bound to a property of the data instead of a check box.\n\n\n\n\n\n\nTipLab 3.5: Classes from data\n\n\n\n🎯 Goal. A check box that turns a message red.\n\nAdd a fifth tab Binding, built like the others.\nAdd the CheckBox and the TextBlock from the section above.\nWrite the style TextBlock.warning yourself: Foreground Red, FontWeight Bold.\n\n✅ Check. Checking the box turns the text red and bold; unchecking it turns it back.",
     "crumbs": [
-      "Desktop UI",
+      "Desktop UI Basics",
       "<span class='chapter-number'>3</span>  <span class='chapter-title'>Styles</span>"
     ]
   },
   {
-    "objectID": "content/01-DesktopUI/material/03_styles/README.html#resources",
-    "href": "content/01-DesktopUI/material/03_styles/README.html#resources",
+    "objectID": "content/01-DesktopUI/material/01_ui-basics/03_styles/README.html#resources",
+    "href": "content/01-DesktopUI/material/01_ui-basics/03_styles/README.html#resources",
     "title": "3  Styles",
     "section": "3.6 Resources",
     "text": "3.6 Resources\nA resource is a named object, stored in the Resources of a control or the application and used with {StaticResource Key}. Colors are the typical example: define them once, use them everywhere.\n&lt;Application.Resources&gt;\n    &lt;SolidColorBrush x:Key=\"BrandBrush\" Color=\"DarkSlateBlue\"/&gt;\n&lt;/Application.Resources&gt;\n&lt;Setter Property=\"Foreground\" Value=\"{StaticResource BrandBrush}\"/&gt;\nStaticResource looks the resource up once. DynamicResource keeps watching it, which is needed when the resource can change at runtime, for example when switching between light and dark theme.\n\n\n\n\n\n\nTipLab 3.6: An app-wide style\n\n\n\n🎯 Goal. Every tab gets a title, styled once for the whole application.\n\nIn App.axaml, add the BrandBrush resource from above, and below &lt;FluentTheme /&gt; a style for titles:\n&lt;Style Selector=\"TextBlock.title\"&gt;\n    &lt;Setter Property=\"FontSize\" Value=\"22\"/&gt;\n    &lt;Setter Property=\"FontWeight\" Value=\"SemiBold\"/&gt;\n    &lt;Setter Property=\"Foreground\" Value=\"{StaticResource BrandBrush}\"/&gt;\n&lt;/Style&gt;\nAt the top of each tab’s StackPanel, add a TextBlock with Classes=\"title\" and the tab’s name as text.\n\n✅ Check. All five tabs have a dark blue title, although the style is written only once.\n💡 Try it. Change the color of BrandBrush and see all titles change.",
     "crumbs": [
-      "Desktop UI",
+      "Desktop UI Basics",
       "<span class='chapter-number'>3</span>  <span class='chapter-title'>Styles</span>"
     ]
   },
   {
-    "objectID": "content/01-DesktopUI/material/03_styles/README.html#control-templates",
-    "href": "content/01-DesktopUI/material/03_styles/README.html#control-templates",
+    "objectID": "content/01-DesktopUI/material/01_ui-basics/03_styles/README.html#control-templates",
+    "href": "content/01-DesktopUI/material/01_ui-basics/03_styles/README.html#control-templates",
     "title": "3  Styles",
     "section": "3.7 Control templates",
     "text": "3.7 Control templates\nA style can only set properties that a control has. To change what a control is made of, you give it a new control template: the tree of elements that draws the control. A template for a button could be a colored Border with a TextBlock inside:\n&lt;ControlTemplate x:Key=\"ButtonTemplate\" TargetType=\"Button\"&gt;\n    &lt;Border Name=\"border\" BorderBrush=\"Blue\" BorderThickness=\"3\" CornerRadius=\"3\"\n            Background=\"Azure\" Padding=\"3\" Margin=\"3\"&gt;\n        &lt;TextBlock Margin=\"{TemplateBinding Padding}\" Text=\"{TemplateBinding Content}\"\n                   VerticalAlignment=\"Center\" HorizontalAlignment=\"Center\"/&gt;\n    &lt;/Border&gt;\n&lt;/ControlTemplate&gt;\n&lt;Button Template=\"{StaticResource ButtonTemplate}\" Content=\"Templated button\"/&gt;\n{TemplateBinding Content} takes the value from the button the template is applied to, so the same template works for every button text.\nTo style an element inside a template, the selector uses /template/:\n&lt;Style Selector=\"Button:pointerover /template/ Border#border\"&gt;\n    &lt;Setter Property=\"Background\" Value=\"LightBlue\"/&gt;\n&lt;/Style&gt;\nThis reads: the Border named border inside the template of a hovered Button.\n\n3.7.1 Styling the parts of the built-in templates\nThe Fluent theme’s own templates have named parts, too. That matters because some states are drawn by the template, not by the button itself. A style Button:pointerover that sets Background has no visible effect: while hovered, the theme paints the template part PART_ContentPresenter with its own color. To change the hover color, style that part:\n&lt;Style Selector=\"Button.primary\"&gt;\n    &lt;Setter Property=\"Background\" Value=\"DarkSlateBlue\"/&gt;\n    &lt;Setter Property=\"Foreground\" Value=\"White\"/&gt;\n\n    &lt;Style Selector=\"^:pointerover /template/ ContentPresenter#PART_ContentPresenter\"&gt;\n        &lt;Setter Property=\"Background\" Value=\"MediumPurple\"/&gt;\n    &lt;/Style&gt;\n&lt;/Style&gt;\nThe inner style is nested: ^ stands for the selector of the outer style, so the inner selector means Button.primary:pointerover /template/ ContentPresenter#PART_ContentPresenter.\nTo replace the look of a control type everywhere, Avalonia uses a ControlTheme instead of styles. That goes beyond this chapter.\n\n\n\n\n\n\nTipLab 3.7: Control templates\n\n\n\n🎯 Goal. A button with a template of its own, and a primary button with its own hover color.\n\nIn MainWindow.axaml, add a &lt;Window.Resources&gt; block before the TabControl and put the ButtonTemplate from the section above into it.\nAdd a sixth tab Templates, with a title as in Lab 3.6, and the button &lt;Button Template=\"{StaticResource ButtonTemplate}\" Content=\"Templated button\"/&gt;.\nAdd the /template/ style for the hovered border to the tab’s styles.\nAdd a button with Classes=\"primary\" and the text Primary button, and the nested Button.primary style from the section above.\n\n✅ Check. The templated button is a light blue box with a blue frame; it turns a darker blue on hover. The primary button is dark blue with white text and turns purple on hover.\n\n💡 Try it. Replace the nested hover style by Button.primary:pointerover with a Background setter, and hover again.",
     "crumbs": [
-      "Desktop UI",
+      "Desktop UI Basics",
       "<span class='chapter-number'>3</span>  <span class='chapter-title'>Styles</span>"
     ]
   },
   {
-    "objectID": "content/01-DesktopUI/material/03_styles/README.html#try-it-yourself",
-    "href": "content/01-DesktopUI/material/03_styles/README.html#try-it-yourself",
+    "objectID": "content/01-DesktopUI/material/01_ui-basics/03_styles/README.html#try-it-yourself",
+    "href": "content/01-DesktopUI/material/01_ui-basics/03_styles/README.html#try-it-yourself",
     "title": "3  Styles",
     "section": "3.8 Try it yourself",
     "text": "3.8 Try it yourself\n\nGive all buttons of the States tab a Transitions block, so that their Opacity changes smoothly, and a :pointerover style that sets Opacity to 0.7.\nMove the two caption styles from the Cascading tab into a file Styles/Captions.axaml and include it in App.axaml with StyleInclude.\nWrite a control template for a CheckBox that shows ON or OFF instead of a check mark. Hint: the pseudo-class :checked works in /template/ selectors, too.",
     "crumbs": [
-      "Desktop UI",
+      "Desktop UI Basics",
       "<span class='chapter-number'>3</span>  <span class='chapter-title'>Styles</span>"
     ]
   },
   {
-    "objectID": "content/01-DesktopUI/material/04_databinding/README.html",
-    "href": "content/01-DesktopUI/material/04_databinding/README.html",
-    "title": "4  Data Binding and MVVM",
+    "objectID": "content/01-DesktopUI/material/02_databinding-mvvm/04_data-binding/README.html",
+    "href": "content/01-DesktopUI/material/02_databinding-mvvm/04_data-binding/README.html",
+    "title": "4  Data Binding and View Models",
     "section": "",
-    "text": "4.1 Data binding\nIn HelloAvalonia, every change of the state needed a line like CounterText.Text = \"Counter: \" + _counter;. Forget it once, and the screen shows old data. Data binding connects a control property to a data property, and keeps the two in sync automatically. On top of it sits the MVVM pattern, which this course uses from now on.\nThe labs have two parts. In the first, you rebuild HelloAvalonia with MVVM as HelloMvvm. In the second, you build DatabindingDemo, a list of people with a detail form.\nA binding connects a target, a property of a control, with a source, a property of some object. The target must be a styled property (chapter Avalonia Basics); every property of the built-in controls that you would want to bind is one.\nYou have met bindings already, with another element as the source:",
+    "text": "4.1 Data binding\nIn HelloAvalonia, every change of the state needed a line like CounterText.Text = \"Counter: \" + _counter;. Forget it once, and the screen shows old data. Data binding connects a control property to a data property, and keeps the two in sync automatically. On top of it sits the MVVM pattern, which this course uses from now on.\nThis part has two lab projects. In the chapters up to The MVVM Pattern, you rebuild HelloAvalonia with MVVM as HelloMvvm. From Lists and Data Templates on, you build DatabindingDemo, a list of people with a detail form.\nA binding connects a target, a property of a control, with a source, a property of some object. The target must be a styled property (chapter Avalonia Basics); every property of the built-in controls that you would want to bind is one.\nYou have met bindings already, with another element as the source:",
     "crumbs": [
-      "Desktop UI",
-      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Data Binding and MVVM</span>"
+      "Data Binding and MVVM",
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Data Binding and View Models</span>"
     ]
   },
   {
-    "objectID": "content/01-DesktopUI/material/04_databinding/README.html#data-binding",
-    "href": "content/01-DesktopUI/material/04_databinding/README.html#data-binding",
-    "title": "4  Data Binding and MVVM",
+    "objectID": "content/01-DesktopUI/material/02_databinding-mvvm/04_data-binding/README.html#data-binding",
+    "href": "content/01-DesktopUI/material/02_databinding-mvvm/04_data-binding/README.html#data-binding",
+    "title": "4  Data Binding and View Models",
     "section": "",
     "text": "&lt;TextBox Name=\"TBRight\"/&gt;\n&lt;TextBox Text=\"{Binding #TBRight.Text}\"/&gt;\n\n4.1.1 Binding modes\n\n\n\n\n\n\n\nMode\nDirection\n\n\n\n\nOneWay\nsource → target: the control shows the value\n\n\nTwoWay\nsource ↔︎ target: the control shows the value, and user input changes it\n\n\nOneTime\nsource → target, once, when the binding is created\n\n\nOneWayToSource\ntarget → source only\n\n\n\nYou rarely set a mode yourself. Properties that users edit (TextBox.Text, CheckBox.IsChecked, Slider.Value, ListBox.SelectedItem, …) default to TwoWay, all others to OneWay. User input is written to the source immediately, on every keystroke.",
     "crumbs": [
-      "Desktop UI",
-      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Data Binding and MVVM</span>"
+      "Data Binding and MVVM",
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Data Binding and View Models</span>"
     ]
   },
   {
-    "objectID": "content/01-DesktopUI/material/04_databinding/README.html#view-models-and-the-datacontext",
-    "href": "content/01-DesktopUI/material/04_databinding/README.html#view-models-and-the-datacontext",
-    "title": "4  Data Binding and MVVM",
+    "objectID": "content/01-DesktopUI/material/02_databinding-mvvm/04_data-binding/README.html#view-models-and-the-datacontext",
+    "href": "content/01-DesktopUI/material/02_databinding-mvvm/04_data-binding/README.html#view-models-and-the-datacontext",
+    "title": "4  Data Binding and View Models",
     "section": "4.2 View models and the DataContext",
-    "text": "4.2 View models and the DataContext\nMVVM (Model-View-ViewModel) splits an application into three parts:\n\nthe View: the window, its XAML and a minimal code-behind,\nthe ViewModel: a plain C# class holding the state of the view and the actions on it, as properties and commands. It knows nothing about windows or controls,\nthe Model: the data and business logic behind it.\n\nThe view finds its view model through the DataContext. Set it once, usually in the window’s constructor:\npublic MainWindow()\n{\n    InitializeComponent();\n    DataContext = new MainWindowViewModel();\n}\nThe DataContext is inherited by every control inside the window. A binding without a # source then refers to a property of the view model: {Binding Name}.\nTwo more lines belong in every window that uses a view model:\n&lt;Window ...\n        xmlns:vm=\"using:HelloMvvm\"\n        x:DataType=\"vm:MainWindowViewModel\"&gt;\n\n    &lt;Design.DataContext&gt;\n        &lt;vm:MainWindowViewModel/&gt;\n    &lt;/Design.DataContext&gt;\n\nx:DataType tells the compiler the type of the DataContext. The bindings are then compiled: a misspelled property name is a build error (AVLN2000), not an empty text box at runtime.\nDesign.DataContext gives the previewer an instance to show, because it can’t run the window’s constructor.\n\n\n\n\n\n\n\nTipLab 4.1: A first view model\n\n\n\n🎯 Goal. HelloMvvm with a name input and a greeting, bound to a view model.\n\nCreate the project as in Lab 1.1, named HelloMvvm.\nAdd a class MainWindowViewModel (file MainWindowViewModel.cs) with a string property Name, initially \"\", and this read-only property:\npublic string Greeting =&gt; string.IsNullOrWhiteSpace(Name) ? \"Hello, stranger!\" : $\"Hello, {Name}!\";\nIn MainWindow.axaml, add xmlns:vm and x:DataType to the &lt;Window&gt; start tag as shown above, set Title=\"Hello MVVM\" Width=\"520\" Height=\"560\", and add the Design.DataContext block. Then replace the text Welcome to Avalonia! with:\n&lt;Grid RowDefinitions=\"*,Auto\" Margin=\"32\"&gt;\n    &lt;StackPanel Grid.Row=\"0\" Spacing=\"12\"&gt;\n        &lt;TextBox PlaceholderText=\"Enter your name\" Text=\"{Binding Name}\"/&gt;\n        &lt;TextBlock Text=\"{Binding Greeting}\" FontSize=\"24\"/&gt;\n    &lt;/StackPanel&gt;\n&lt;/Grid&gt;\nIn MainWindow.axaml.cs, set the DataContext in the constructor as shown above.\n\n✅ Check. The window shows Hello, stranger!. Now type your name: the greeting does not change. That is not a mistake in your code. Read on to see why.\n💡 Try it. Misspell Greeting in the XAML and build.",
+    "text": "4.2 View models and the DataContext\nMVVM (Model-View-ViewModel) splits an application into three parts:\n\nthe View: the window, its XAML and a minimal code-behind,\nthe ViewModel: a plain C# class holding the state of the view and the actions on it, as properties and commands. It knows nothing about windows or controls,\nthe Model: the data and business logic behind it.\n\nThe view finds its view model through the DataContext. Set it once, usually in the window’s constructor:\npublic MainWindow()\n{\n    InitializeComponent();\n    DataContext = new MainWindowViewModel();\n}\nThe DataContext is inherited by every control inside the window. A binding without a # source then refers to a property of the view model: {Binding Name}.\nTwo more lines belong in every window that uses a view model:\n&lt;Window ...\n        xmlns:vm=\"using:HelloMvvm\"\n        x:DataType=\"vm:MainWindowViewModel\"&gt;\n\n    &lt;Design.DataContext&gt;\n        &lt;vm:MainWindowViewModel/&gt;\n    &lt;/Design.DataContext&gt;\n\nx:DataType tells the compiler the type of the DataContext. The bindings are then compiled: a misspelled property name is a build error (AVLN2000), not an empty text box at runtime.\nDesign.DataContext gives the previewer an instance to show, because it can’t run the window’s constructor.\n\n\n\n\n\n\n\nTipLab 4.1: A first view model\n\n\n\n🎯 Goal. HelloMvvm with a name input and a greeting, bound to a view model.\n\nCreate the project as in Lab 1.1, named HelloMvvm.\nAdd a class MainWindowViewModel (file MainWindowViewModel.cs) with a string property Name, initially \"\", and this read-only property:\npublic string Greeting =&gt; string.IsNullOrWhiteSpace(Name) ? \"Hello, stranger!\" : $\"Hello, {Name}!\";\nIn MainWindow.axaml, add xmlns:vm and x:DataType to the &lt;Window&gt; start tag as shown above, set Title=\"Hello MVVM\" Width=\"520\" Height=\"560\", and add the Design.DataContext block. Then replace the text Welcome to Avalonia! with:\n&lt;Grid RowDefinitions=\"*,Auto\" Margin=\"32\"&gt;\n    &lt;StackPanel Grid.Row=\"0\" Spacing=\"12\"&gt;\n        &lt;TextBox PlaceholderText=\"Enter your name\" Text=\"{Binding Name}\"/&gt;\n        &lt;TextBlock Text=\"{Binding Greeting}\" FontSize=\"24\"/&gt;\n    &lt;/StackPanel&gt;\n&lt;/Grid&gt;\nIn MainWindow.axaml.cs, set the DataContext in the constructor as shown above.\n\n✅ Check. The window shows Hello, stranger!. Now type your name: the greeting does not change. That is not a mistake in your code. The next chapter explains why.\n💡 Try it. Misspell Greeting in the XAML and build.",
     "crumbs": [
-      "Desktop UI",
-      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Data Binding and MVVM</span>"
+      "Data Binding and MVVM",
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Data Binding and View Models</span>"
     ]
   },
   {
-    "objectID": "content/01-DesktopUI/material/04_databinding/README.html#change-notification",
-    "href": "content/01-DesktopUI/material/04_databinding/README.html#change-notification",
-    "title": "4  Data Binding and MVVM",
-    "section": "4.3 Change notification",
-    "text": "4.3 Change notification\nTyping in the text box does set Name: the binding writes every keystroke into the view model. But nobody tells the TextBlock that Greeting has changed. The binding read it once, when the DataContext was set, and has no reason to read it again.\nA view model announces changes with the interface INotifyPropertyChanged, which consists of a single event. Every binding subscribes to it, and re-reads its property when the event names it. Written by hand, every property needs this:\npublic class MainWindowViewModel : INotifyPropertyChanged\n{\n    private string _name = \"\";\n\n    public string Name\n    {\n        get =&gt; _name;\n        set\n        {\n            if (value == _name) return;\n            _name = value;\n            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Name)));\n            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Greeting)));\n        }\n    }\n\n    public event PropertyChangedEventHandler? PropertyChanged;\n}\n\n4.3.1 CommunityToolkit.Mvvm\nThe NuGet package CommunityToolkit.Mvvm writes this code for you, with a source generator that runs at build time:\npublic partial class MainWindowViewModel : ObservableObject\n{\n    [ObservableProperty]\n    [NotifyPropertyChangedFor(nameof(Greeting))]\n    private string _name = \"\";\n}\n\nObservableObject implements INotifyPropertyChanged.\n[ObservableProperty] on the private field _name generates the public property Name, including the notification. You write the field, but use the property.\n[NotifyPropertyChangedFor(nameof(Greeting))] additionally announces a change of Greeting whenever Name changes.\nThe class must be partial: the generator writes the other half, like the XAML compiler does for a window. In Rider, Go to Declaration on Name shows the generated code.\n\nTo run your own code when a property changes, add a method with a special name; the generator calls it after every change:\npartial void OnNameChanged(string value) =&gt; Console.WriteLine($\"Name is now {value}\");\nThe toolkit also allows [ObservableProperty] on a property instead of a field (public partial string Name { get; set; }). You will see that form in later exercises; this book uses the field form.\n\n\n\n\n\n\nTipLab 4.2: Change notification\n\n\n\n🎯 Goal. The greeting follows the name as you type.\n\nAdd the package:\ndotnet add package CommunityToolkit.Mvvm --version 8.4.0\nTurn MainWindowViewModel into the toolkit version from the section above: make it partial, derive it from ObservableObject (namespace CommunityToolkit.Mvvm.ComponentModel), and replace the Name property by the field _name with its two attributes. Keep Greeting as it is.\n\n✅ Check. The greeting changes with every letter you type, and shows Hello, stranger! again when you empty the text box.",
+    "objectID": "content/01-DesktopUI/material/02_databinding-mvvm/05_change-notification/README.html",
+    "href": "content/01-DesktopUI/material/02_databinding-mvvm/05_change-notification/README.html",
+    "title": "5  Change Notification",
+    "section": "",
+    "text": "5.1 Why the greeting doesn’t change\nAt the end of Lab 4.1, the greeting ignored your typing. This chapter explains why, fixes it with the CommunityToolkit.Mvvm package, and then lets the user change the view model through two-way bindings.\nTyping in the text box does set Name: the binding writes every keystroke into the view model. But nobody tells the TextBlock that Greeting has changed. The binding read it once, when the DataContext was set, and has no reason to read it again.\nA view model announces changes with the interface INotifyPropertyChanged, which consists of a single event. Every binding subscribes to it, and re-reads its property when the event names it. Written by hand, every property needs this:",
     "crumbs": [
-      "Desktop UI",
-      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Data Binding and MVVM</span>"
+      "Data Binding and MVVM",
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Change Notification</span>"
     ]
   },
   {
-    "objectID": "content/01-DesktopUI/material/04_databinding/README.html#two-way-binding",
-    "href": "content/01-DesktopUI/material/04_databinding/README.html#two-way-binding",
-    "title": "4  Data Binding and MVVM",
-    "section": "4.4 Two-way binding",
-    "text": "4.4 Two-way binding\nInput controls bind TwoWay by default, so the user can change any view model property directly: the text of a TextBox, the value of a Slider, the state of a CheckBox. The same property can be bound to several controls at once, and they all stay in sync.\nA bool property can also switch a style class, as in the chapter Styles:\n&lt;TextBlock Text=\"{Binding Greeting}\" Classes.bold=\"{Binding IsGreetingBold}\"/&gt;\n\n\n\n\n\n\nTipLab 4.3: Two-way binding\n\n\n\n🎯 Goal. A slider sets the size of the greeting, a check box makes it bold.\n\nIn the view model, add:\n[ObservableProperty]\nprivate double _greetingFontSize = 24;\nIn MainWindow.axaml, bind the greeting’s font size with FontSize=\"{Binding GreetingFontSize}\" (instead of 24), and add below it:\n&lt;Slider Minimum=\"16\" Maximum=\"48\" Value=\"{Binding GreetingFontSize}\"/&gt;\nOn your own: add a bool property IsGreetingBold, a CheckBox Bold bound to it, and bind the class bold of the greeting to it. Define the style TextBlock.bold in &lt;Window.Styles&gt;.\n\n✅ Check. Dragging the slider resizes the greeting, the check box switches bold on and off. There is still no event handler in your code.",
+    "objectID": "content/01-DesktopUI/material/02_databinding-mvvm/05_change-notification/README.html#why-the-greeting-doesnt-change",
+    "href": "content/01-DesktopUI/material/02_databinding-mvvm/05_change-notification/README.html#why-the-greeting-doesnt-change",
+    "title": "5  Change Notification",
+    "section": "",
+    "text": "public class MainWindowViewModel : INotifyPropertyChanged\n{\n    private string _name = \"\";\n\n    public string Name\n    {\n        get =&gt; _name;\n        set\n        {\n            if (value == _name) return;\n            _name = value;\n            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Name)));\n            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Greeting)));\n        }\n    }\n\n    public event PropertyChangedEventHandler? PropertyChanged;\n}",
     "crumbs": [
-      "Desktop UI",
-      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Data Binding and MVVM</span>"
+      "Data Binding and MVVM",
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Change Notification</span>"
     ]
   },
   {
-    "objectID": "content/01-DesktopUI/material/04_databinding/README.html#commands",
-    "href": "content/01-DesktopUI/material/04_databinding/README.html#commands",
-    "title": "4  Data Binding and MVVM",
-    "section": "4.5 Commands",
-    "text": "4.5 Commands\nButtons in a view model world don’t call Click handlers; they execute commands of the view model. [RelayCommand] on a method generates a command property with the method name plus Command:\n[RelayCommand]\nprivate void IncrementCounter() =&gt; Counter++;\n&lt;Button Content=\"Increment\" Command=\"{Binding IncrementCounterCommand}\"/&gt;\nA command can decide whether it may run. The button is disabled while it may not:\n[ObservableProperty]\n[NotifyCanExecuteChangedFor(nameof(ResetCounterCommand))]\nprivate int _counter;\n\n[RelayCommand(CanExecute = nameof(CanResetCounter))]\nprivate void ResetCounter() =&gt; Counter = 0;\n\nprivate bool CanResetCounter() =&gt; Counter &gt; 0;\n[NotifyCanExecuteChangedFor] tells the command to ask CanResetCounter again whenever Counter changes.\nA command method can also take a parameter, which the button passes with CommandParameter:\n[RelayCommand]\nprivate void IncrementBy(int amount) =&gt; Counter += amount;\n&lt;Button Content=\"+5\" Command=\"{Binding IncrementByCommand}\"&gt;\n    &lt;Button.CommandParameter&gt;\n        &lt;x:Int32&gt;5&lt;/x:Int32&gt;\n    &lt;/Button.CommandParameter&gt;\n&lt;/Button&gt;\nWatch out: CommandParameter=\"5\" looks the same, but passes the string \"5\". The command expects an int, so it refuses to run, and the button stays disabled without any error message. &lt;x:Int32&gt; creates a real number.\n\n\n\n\n\n\nTipLab 4.4: Commands\n\n\n\n🎯 Goal. A counter with Increment, +5 and Reset, where Reset is disabled at 0.\n\nIn the view model, add an observable int field _counter and the IncrementCounter command from the section above.\nIn MainWindow.axaml, at the end of the upper StackPanel, add:\n&lt;TextBlock Text=\"{Binding Counter, StringFormat='Counter: {0}'}\"/&gt;\n&lt;StackPanel Orientation=\"Horizontal\" Spacing=\"12\"&gt;\n    &lt;Button Content=\"Increment\" Command=\"{Binding IncrementCounterCommand}\"/&gt;\n&lt;/StackPanel&gt;\nStringFormat puts the value into a text; {0} stands for the value.\nAdd the +5 button and its command from the section above.\nOn your own: add a Reset button and a ResetCounter command that is only enabled while the counter is above 0.\n\n✅ Check. Reset is disabled at the start. Increment and +5 count up and enable it; Reset sets the counter to 0 and is disabled again.\n💡 Try it. Replace the &lt;Button.CommandParameter&gt; element by CommandParameter=\"5\".",
+    "objectID": "content/01-DesktopUI/material/02_databinding-mvvm/05_change-notification/README.html#communitytoolkit.mvvm",
+    "href": "content/01-DesktopUI/material/02_databinding-mvvm/05_change-notification/README.html#communitytoolkit.mvvm",
+    "title": "5  Change Notification",
+    "section": "5.2 CommunityToolkit.Mvvm",
+    "text": "5.2 CommunityToolkit.Mvvm\nThe NuGet package CommunityToolkit.Mvvm writes this code for you, with a source generator that runs at build time:\npublic partial class MainWindowViewModel : ObservableObject\n{\n    [ObservableProperty]\n    [NotifyPropertyChangedFor(nameof(Greeting))]\n    private string _name = \"\";\n}\n\nObservableObject implements INotifyPropertyChanged.\n[ObservableProperty] on the private field _name generates the public property Name, including the notification. You write the field, but use the property.\n[NotifyPropertyChangedFor(nameof(Greeting))] additionally announces a change of Greeting whenever Name changes.\nThe class must be partial: the generator writes the other half, like the XAML compiler does for a window. In Rider, Go to Declaration on Name shows the generated code.\n\nTo run your own code when a property changes, add a method with a special name; the generator calls it after every change:\npartial void OnNameChanged(string value) =&gt; Console.WriteLine($\"Name is now {value}\");\nThe toolkit also allows [ObservableProperty] on a property instead of a field (public partial string Name { get; set; }). You will see that form in later exercises; this book uses the field form.\n\n\n\n\n\n\nTipLab 5.1: Change notification\n\n\n\n🎯 Goal. The greeting follows the name as you type.\n\nAdd the package:\ndotnet add package CommunityToolkit.Mvvm --version 8.4.0\nTurn MainWindowViewModel into the toolkit version from the section above: make it partial, derive it from ObservableObject (namespace CommunityToolkit.Mvvm.ComponentModel), and replace the Name property by the field _name with its two attributes. Keep Greeting as it is.\n\n✅ Check. The greeting changes with every letter you type, and shows Hello, stranger! again when you empty the text box.",
     "crumbs": [
-      "Desktop UI",
-      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Data Binding and MVVM</span>"
+      "Data Binding and MVVM",
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Change Notification</span>"
     ]
   },
   {
-    "objectID": "content/01-DesktopUI/material/04_databinding/README.html#what-stays-in-the-code-behind",
-    "href": "content/01-DesktopUI/material/04_databinding/README.html#what-stays-in-the-code-behind",
-    "title": "4  Data Binding and MVVM",
-    "section": "4.6 What stays in the code-behind",
-    "text": "4.6 What stays in the code-behind\nMVVM doesn’t mean that every button must be a command. Showing a dialog or closing the window needs the window itself, which the view model deliberately doesn’t know. These actions stay in the code-behind. The code-behind may read the view model when it needs data from it:\nvar viewModel = (MainWindowViewModel)DataContext!;\nThe rule of thumb: state and logic go into the view model, things that only concern the window stay in the view.\n\n\n\n\n\n\nTipLab 4.5: Dialogs in the code-behind\n\n\n\n🎯 Goal. Greet shows the current greeting in a dialog, Close closes the window.\n\nAdd the package MessageBox.Avalonia as in Lab 1.4.\nIn MainWindow.axaml, add the lower row of the grid:\n&lt;StackPanel Grid.Row=\"1\" Orientation=\"Horizontal\" Spacing=\"12\" HorizontalAlignment=\"Center\"&gt;\n    &lt;Button Content=\"Greet\" Classes=\"accent\" Click=\"OnGreetButtonClicked\"/&gt;\n&lt;/StackPanel&gt;\nIn MainWindow.axaml.cs, add the using lines for Avalonia.Interactivity and MsBox.Avalonia, and the handler:\nprivate async void OnGreetButtonClicked(object? sender, RoutedEventArgs e)\n{\n    var viewModel = (MainWindowViewModel)DataContext!;\n    var box = MessageBoxManager.GetMessageBoxStandard(\"Greeting\", viewModel.Greeting);\n    await box.ShowAsync();\n}\nOn your own: a Close button next to Greet, as in Lab 1.3.\n\n✅ Check. Greet shows the greeting for the name you typed. Close ends the app.",
+    "objectID": "content/01-DesktopUI/material/02_databinding-mvvm/05_change-notification/README.html#two-way-binding",
+    "href": "content/01-DesktopUI/material/02_databinding-mvvm/05_change-notification/README.html#two-way-binding",
+    "title": "5  Change Notification",
+    "section": "5.3 Two-way binding",
+    "text": "5.3 Two-way binding\nInput controls bind TwoWay by default, so the user can change any view model property directly: the text of a TextBox, the value of a Slider, the state of a CheckBox. The same property can be bound to several controls at once, and they all stay in sync.\nA bool property can also switch a style class, as in the chapter Styles:\n&lt;TextBlock Text=\"{Binding Greeting}\" Classes.bold=\"{Binding IsGreetingBold}\"/&gt;\n\n\n\n\n\n\nTipLab 5.2: Two-way binding\n\n\n\n🎯 Goal. A slider sets the size of the greeting, a check box makes it bold.\n\nIn the view model, add:\n[ObservableProperty]\nprivate double _greetingFontSize = 24;\nIn MainWindow.axaml, bind the greeting’s font size with FontSize=\"{Binding GreetingFontSize}\" (instead of 24), and add below it:\n&lt;Slider Minimum=\"16\" Maximum=\"48\" Value=\"{Binding GreetingFontSize}\"/&gt;\nOn your own: add a bool property IsGreetingBold, a CheckBox Bold bound to it, and bind the class bold of the greeting to it. Define the style TextBlock.bold in &lt;Window.Styles&gt;.\n\n✅ Check. Dragging the slider resizes the greeting, the check box switches bold on and off. There is still no event handler in your code.",
     "crumbs": [
-      "Desktop UI",
-      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Data Binding and MVVM</span>"
+      "Data Binding and MVVM",
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Change Notification</span>"
     ]
   },
   {
-    "objectID": "content/01-DesktopUI/material/04_databinding/README.html#mvvm-compared-with-mvc",
-    "href": "content/01-DesktopUI/material/04_databinding/README.html#mvvm-compared-with-mvc",
-    "title": "4  Data Binding and MVVM",
-    "section": "4.7 MVVM compared with MVC",
-    "text": "4.7 MVVM compared with MVC\nFrom web development you know MVC (Model-View-Controller), the pattern behind ASP.NET Core MVC, Spring MVC or Ruby on Rails. Both patterns separate the data (model) from its presentation (view). They differ in what sits between the two, and in how the view is kept up to date.\n\nMVC. Every input, in the web a request, goes to a controller. It updates or queries the model, selects a view and passes it the data to show. The view renders it, in the web as a new HTML page. The controller knows the view; the view is output only.\nMVVM. The input goes to the view: the controls themselves. They pass it on to the view model through data binding and commands. The view model holds the state and knows nothing about the view: it only announces that something has changed, and the bindings update the controls. Instead of rendering a new page per request, the view stays open and follows the view model continuously.\n\n\n\n\n\n\n\n\n\nMVC\nMVVM\n\n\n\n\nReceives the input\nController\nView; bindings and commands forward it\n\n\nWho knows the view\nThe controller selects and fills it\nNobody; the view binds to the view model\n\n\nUpdating the display\nThe controller renders a view, in the web a new page per request\nBindings react to change notifications, continuously\n\n\nState\nMostly per request, the server stays stateless\nLong-lived, in the view model\n\n\nGlue code between view and logic\nWritten in the controller\nProvided by the data binding framework\n\n\nTesting without a UI\nControllers, with request and response objects\nThe view model is a plain class: direct unit tests\n\n\nTypical for\nServer-side web applications\nDesktop and mobile UIs: Avalonia, WPF, .NET MAUI\n\n\n\nFront-end frameworks such as Angular and Vue are closer to MVVM than to MVC: a component class holds the state, and its template binds to it.",
+    "objectID": "content/01-DesktopUI/material/02_databinding-mvvm/05_change-notification/README.html#try-it-yourself",
+    "href": "content/01-DesktopUI/material/02_databinding-mvvm/05_change-notification/README.html#try-it-yourself",
+    "title": "5  Change Notification",
+    "section": "5.4 Try it yourself",
+    "text": "5.4 Try it yourself\n\nAdd a Shout check box that shows the greeting in capital letters.",
     "crumbs": [
-      "Desktop UI",
-      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Data Binding and MVVM</span>"
+      "Data Binding and MVVM",
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Change Notification</span>"
     ]
   },
   {
-    "objectID": "content/01-DesktopUI/material/04_databinding/README.html#lists",
-    "href": "content/01-DesktopUI/material/04_databinding/README.html#lists",
-    "title": "4  Data Binding and MVVM",
-    "section": "4.8 Lists",
-    "text": "4.8 Lists\nTo show a list, bind the ItemsSource of a ListBox to a collection. When items are added or removed later, the list must be told, just like a single property. That’s what ObservableCollection&lt;T&gt; does: it announces every change of the collection. Changes inside an item, like a new name, are announced by the item itself, so the item class is an ObservableObject, too.\npublic partial class Person : ObservableObject\n{\n    [ObservableProperty]\n    private string _firstName = \"\";\n\n    [ObservableProperty]\n    private string _lastName = \"\";\n\n    [ObservableProperty]\n    [NotifyPropertyChangedFor(nameof(IsFullOfAge))]\n    private DateTime _birthDate;\n\n    public bool IsFullOfAge =&gt; DateTime.Today.AddYears(-18) &gt;= BirthDate;\n}\npublic static class PersonRepository\n{\n    public static ObservableCollection&lt;Person&gt; GetDummyPeople() =&gt; new()\n    {\n        new Person { FirstName = \"John\", LastName = \"Doe\", BirthDate = new DateTime(1975, 1, 1) },\n        new Person { FirstName = \"Jane\", LastName = \"Roe\", BirthDate = new DateTime(1980, 3, 1) },\n        new Person { FirstName = \"Lisa\", LastName = \"Doe\", BirthDate = new DateTime(2015, 1, 1) },\n    };\n}\nThe view model exposes the collection as a property:\npublic ObservableCollection&lt;Person&gt; People { get; } = PersonRepository.GetDummyPeople();\n\n\n\n\n\n\nTipLab 4.6: A list of people\n\n\n\n🎯 Goal. DatabindingDemo shows the three people in a list.\n\nCreate the project as in Lab 1.1, named DatabindingDemo, and add the package CommunityToolkit.Mvvm as in Lab 4.2.\nAdd the classes Person and PersonRepository from the section above, each in a file of its own.\nAdd a MainWindowViewModel: an ObservableObject with the property People. Set it as DataContext in the constructor of MainWindow, and add xmlns:vm, x:DataType and Design.DataContext to MainWindow.axaml as in Lab 4.1.\nSet Title=\"People\" Width=\"480\" Height=\"560\" and replace the text Welcome to Avalonia! with:\n&lt;Grid RowDefinitions=\"Auto,*\" Margin=\"16\"&gt;\n    &lt;ListBox Grid.Row=\"0\" Height=\"160\" ItemsSource=\"{Binding People}\"/&gt;\n&lt;/Grid&gt;\n\n✅ Check. The list has three entries, but each one reads DatabindingDemo.Person. The list doesn’t know how to show a person, so it calls ToString(). The next section fixes that.",
+    "objectID": "content/01-DesktopUI/material/02_databinding-mvvm/06_commands/README.html",
+    "href": "content/01-DesktopUI/material/02_databinding-mvvm/06_commands/README.html",
+    "title": "6  Commands",
+    "section": "",
+    "text": "6.1 Commands\nSo far the user changes the view model by typing, dragging and checking. Buttons need another mechanism: in a view model world they don’t call Click handlers, they execute commands of the view model.\n[RelayCommand] on a method generates a command property with the method name plus Command:",
     "crumbs": [
-      "Desktop UI",
-      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Data Binding and MVVM</span>"
+      "Data Binding and MVVM",
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Commands</span>"
     ]
   },
   {
-    "objectID": "content/01-DesktopUI/material/04_databinding/README.html#data-templates",
-    "href": "content/01-DesktopUI/material/04_databinding/README.html#data-templates",
-    "title": "4  Data Binding and MVVM",
-    "section": "4.9 Data templates",
-    "text": "4.9 Data templates\nA data template describes how to show an object of a certain type. For the items of a list, it is the ItemTemplate:\n&lt;ListBox ItemsSource=\"{Binding People}\"&gt;\n    &lt;ListBox.ItemTemplate&gt;\n        &lt;DataTemplate x:DataType=\"vm:Person\"&gt;\n            &lt;StackPanel Orientation=\"Horizontal\" Spacing=\"5\"&gt;\n                &lt;TextBlock Text=\"{Binding FirstName}\"/&gt;\n                &lt;TextBlock Text=\"{Binding LastName}\"/&gt;\n            &lt;/StackPanel&gt;\n        &lt;/DataTemplate&gt;\n    &lt;/ListBox.ItemTemplate&gt;\n&lt;/ListBox&gt;\nInside the template, the DataContext is the item, so {Binding FirstName} is the first name of this person. x:DataType makes these bindings compiled, too.\nStringFormat formats a value with a .NET format string:\n&lt;TextBlock Text=\"{Binding BirthDate, StringFormat='{}{0:dd.MM.yyyy}'}\"/&gt;\nThe {} at the start is needed because the format itself starts with a {; without it, the XAML parser would take {0:dd.MM.yyyy} for a markup extension.\nA template can also be stored as a resource with an x:Key and used in several places, for example to show a single object with a ContentControl:\n&lt;ContentControl Content=\"{Binding SelectedPerson}\"\n                ContentTemplate=\"{StaticResource PersonTemplate}\"/&gt;\n\n\n\n\n\n\nTipLab 4.7: A data template\n\n\n\n🎯 Goal. Each list entry shows first name, last name and birth date.\n\nAdd the ItemTemplate from the section above to the ListBox.\nOn your own: add the birth date as a third TextBlock, formatted as dd.MM.yyyy.\n\n✅ Check. The list shows John Doe 01.01.1975, Jane Roe 01.03.1980 and Lisa Doe 01.01.2015.",
+    "objectID": "content/01-DesktopUI/material/02_databinding-mvvm/06_commands/README.html#commands",
+    "href": "content/01-DesktopUI/material/02_databinding-mvvm/06_commands/README.html#commands",
+    "title": "6  Commands",
+    "section": "",
+    "text": "[RelayCommand]\nprivate void IncrementCounter() =&gt; Counter++;\n&lt;Button Content=\"Increment\" Command=\"{Binding IncrementCounterCommand}\"/&gt;",
     "crumbs": [
-      "Desktop UI",
-      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Data Binding and MVVM</span>"
+      "Data Binding and MVVM",
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Commands</span>"
     ]
   },
   {
-    "objectID": "content/01-DesktopUI/material/04_databinding/README.html#masterdetail",
-    "href": "content/01-DesktopUI/material/04_databinding/README.html#masterdetail",
-    "title": "4  Data Binding and MVVM",
-    "section": "4.10 Master/detail",
-    "text": "4.10 Master/detail\nA list and a form that edits the selected entry is called master/detail. It needs one more view model property for the selected item, bound to the list’s SelectedItem:\n[ObservableProperty]\nprivate Person? _selectedPerson;\n&lt;ListBox ItemsSource=\"{Binding People}\" SelectedItem=\"{Binding SelectedPerson}\"/&gt;\nThe form binds through that property with a path: {Binding SelectedPerson.FirstName}. Because Person announces its changes, editing the name in the form updates the list entry at the same time.\nAs long as nothing is selected, the form should be hidden. A converter turns the selected person into a bool; Avalonia has a ready-made one for this check:\n&lt;StackPanel IsVisible=\"{Binding SelectedPerson, Converter={x:Static ObjectConverters.IsNotNull}}\"&gt;\n\n\n\n\n\n\nTipLab 4.8: Master/detail\n\n\n\n🎯 Goal. Selecting a person opens a form to edit the name.\n\nAdd the SelectedPerson property from above to the view model, and bind the list’s SelectedItem to it.\nBelow the ListBox, add the detail form:\n&lt;StackPanel Grid.Row=\"1\" Margin=\"0,16,0,0\" Spacing=\"4\"\n            IsVisible=\"{Binding SelectedPerson, Converter={x:Static ObjectConverters.IsNotNull}}\"&gt;\n    &lt;TextBlock Text=\"First name\"/&gt;\n    &lt;TextBox Text=\"{Binding SelectedPerson.FirstName}\"/&gt;\n&lt;/StackPanel&gt;\nOn your own: add a label and a text box for the last name.\n\n✅ Check. The form is hidden until you select a person. Changing the first name in the form changes the list entry with every keystroke.",
+    "objectID": "content/01-DesktopUI/material/02_databinding-mvvm/06_commands/README.html#enabling-and-disabling-a-command",
+    "href": "content/01-DesktopUI/material/02_databinding-mvvm/06_commands/README.html#enabling-and-disabling-a-command",
+    "title": "6  Commands",
+    "section": "6.2 Enabling and disabling a command",
+    "text": "6.2 Enabling and disabling a command\nA command can decide whether it may run. The button is disabled while it may not:\n[ObservableProperty]\n[NotifyCanExecuteChangedFor(nameof(ResetCounterCommand))]\nprivate int _counter;\n\n[RelayCommand(CanExecute = nameof(CanResetCounter))]\nprivate void ResetCounter() =&gt; Counter = 0;\n\nprivate bool CanResetCounter() =&gt; Counter &gt; 0;\n[NotifyCanExecuteChangedFor] tells the command to ask CanResetCounter again whenever Counter changes.",
     "crumbs": [
-      "Desktop UI",
-      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Data Binding and MVVM</span>"
+      "Data Binding and MVVM",
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Commands</span>"
     ]
   },
   {
-    "objectID": "content/01-DesktopUI/material/04_databinding/README.html#styling-items-by-their-data",
-    "href": "content/01-DesktopUI/material/04_databinding/README.html#styling-items-by-their-data",
-    "title": "4  Data Binding and MVVM",
-    "section": "4.11 Styling items by their data",
-    "text": "4.11 Styling items by their data\nThe chapter Styles switched a style class with a check box. The same works with a property of the data, inside a data template. The ! in front of a path negates a bool:\n&lt;StackPanel Orientation=\"Horizontal\" Spacing=\"5\" Classes.underage=\"{Binding !IsFullOfAge}\"&gt;\n&lt;Style Selector=\"StackPanel.underage\"&gt;\n    &lt;Setter Property=\"Background\" Value=\"LightCoral\"/&gt;\n&lt;/Style&gt;\nNow everything fits together. A command that changes a person’s birth date sets the property BirthDate. The generated setter announces BirthDate and, because of [NotifyPropertyChangedFor], IsFullOfAge. The formatted birth date and the highlighted row update on their own, without knowing about each other and without any refresh code.\n\n\n\n\n\n\nTipLab 4.9: Data-driven highlighting\n\n\n\n🎯 Goal. People under 18 are highlighted, and a button makes the selected person one year older.\n\nAdd Classes.underage to the template’s StackPanel and the StackPanel.underage style to &lt;Window.Styles&gt;, as shown above.\nOn your own: add a command MakeOneYearOlder that moves the selected person’s birth date one year back (BirthDate.AddYears(-1)). It may only run while a person is selected. Add a button Make one year older at the end of the detail form.\n\n✅ Check. Lisa’s row is red. Select her and click Make one year older a few times: her birth date moves back, and when she turns 18 the red disappears.",
+    "objectID": "content/01-DesktopUI/material/02_databinding-mvvm/06_commands/README.html#command-parameters",
+    "href": "content/01-DesktopUI/material/02_databinding-mvvm/06_commands/README.html#command-parameters",
+    "title": "6  Commands",
+    "section": "6.3 Command parameters",
+    "text": "6.3 Command parameters\nA command method can also take a parameter, which the button passes with CommandParameter:\n[RelayCommand]\nprivate void IncrementBy(int amount) =&gt; Counter += amount;\n&lt;Button Content=\"+5\" Command=\"{Binding IncrementByCommand}\"&gt;\n    &lt;Button.CommandParameter&gt;\n        &lt;x:Int32&gt;5&lt;/x:Int32&gt;\n    &lt;/Button.CommandParameter&gt;\n&lt;/Button&gt;\nWatch out: CommandParameter=\"5\" looks the same, but passes the string \"5\". The command expects an int, so it refuses to run, and the button stays disabled without any error message. &lt;x:Int32&gt; creates a real number.\n\n\n\n\n\n\nTipLab 6.1: Commands\n\n\n\n🎯 Goal. A counter with Increment, +5 and Reset, where Reset is disabled at 0.\n\nIn the view model, add an observable int field _counter and the IncrementCounter command from the section Commands.\nIn MainWindow.axaml, at the end of the upper StackPanel, add:\n&lt;TextBlock Text=\"{Binding Counter, StringFormat='Counter: {0}'}\"/&gt;\n&lt;StackPanel Orientation=\"Horizontal\" Spacing=\"12\"&gt;\n    &lt;Button Content=\"Increment\" Command=\"{Binding IncrementCounterCommand}\"/&gt;\n&lt;/StackPanel&gt;\nStringFormat puts the value into a text; {0} stands for the value.\nAdd the +5 button and its command from the section above.\nOn your own: add a Reset button and a ResetCounter command that is only enabled while the counter is above 0.\n\n✅ Check. Reset is disabled at the start. Increment and +5 count up and enable it; Reset sets the counter to 0 and is disabled again.\n💡 Try it. Replace the &lt;Button.CommandParameter&gt; element by CommandParameter=\"5\".",
     "crumbs": [
-      "Desktop UI",
-      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Data Binding and MVVM</span>"
+      "Data Binding and MVVM",
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Commands</span>"
     ]
   },
   {
-    "objectID": "content/01-DesktopUI/material/04_databinding/README.html#try-it-yourself",
-    "href": "content/01-DesktopUI/material/04_databinding/README.html#try-it-yourself",
-    "title": "4  Data Binding and MVVM",
-    "section": "4.12 Try it yourself",
-    "text": "4.12 Try it yourself\n\nHelloMvvm: add a Shout check box that shows the greeting in capital letters.\nHelloMvvm: add a -5 button using the same IncrementByCommand.\nDatabindingDemo: add an Add person button that adds a new, empty person to People and selects it, and a Remove button for the selected person.\nDatabindingDemo: replace the detail form with a ContentControl and a keyed DataTemplate, as shown in the section Data templates. What happens to the form when nothing is selected?",
+    "objectID": "content/01-DesktopUI/material/02_databinding-mvvm/06_commands/README.html#try-it-yourself",
+    "href": "content/01-DesktopUI/material/02_databinding-mvvm/06_commands/README.html#try-it-yourself",
+    "title": "6  Commands",
+    "section": "6.4 Try it yourself",
+    "text": "6.4 Try it yourself\n\nAdd a -5 button using the same IncrementByCommand.",
     "crumbs": [
-      "Desktop UI",
-      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Data Binding and MVVM</span>"
+      "Data Binding and MVVM",
+      "<span class='chapter-number'>6</span>  <span class='chapter-title'>Commands</span>"
+    ]
+  },
+  {
+    "objectID": "content/01-DesktopUI/material/02_databinding-mvvm/07_mvvm/README.html",
+    "href": "content/01-DesktopUI/material/02_databinding-mvvm/07_mvvm/README.html",
+    "title": "7  The MVVM Pattern",
+    "section": "",
+    "text": "7.1 What stays in the code-behind\nHelloMvvm now has its state and logic in a view model, bound to the view without a single event handler. This chapter draws the line between view model and view, finishes HelloMvvm, and compares MVVM with the MVC pattern you know from web development.\nMVVM doesn’t mean that every button must be a command. Showing a dialog or closing the window needs the window itself, which the view model deliberately doesn’t know. These actions stay in the code-behind. The code-behind may read the view model when it needs data from it:\nThe rule of thumb: state and logic go into the view model, things that only concern the window stay in the view.",
+    "crumbs": [
+      "Data Binding and MVVM",
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>The MVVM Pattern</span>"
+    ]
+  },
+  {
+    "objectID": "content/01-DesktopUI/material/02_databinding-mvvm/07_mvvm/README.html#what-stays-in-the-code-behind",
+    "href": "content/01-DesktopUI/material/02_databinding-mvvm/07_mvvm/README.html#what-stays-in-the-code-behind",
+    "title": "7  The MVVM Pattern",
+    "section": "",
+    "text": "var viewModel = (MainWindowViewModel)DataContext!;\n\n\n\n\n\n\n\nTipLab 7.1: Dialogs in the code-behind\n\n\n\n🎯 Goal. Greet shows the current greeting in a dialog, Close closes the window.\n\nAdd the package MessageBox.Avalonia as in Lab 1.4.\nIn MainWindow.axaml, add the lower row of the grid:\n&lt;StackPanel Grid.Row=\"1\" Orientation=\"Horizontal\" Spacing=\"12\" HorizontalAlignment=\"Center\"&gt;\n    &lt;Button Content=\"Greet\" Classes=\"accent\" Click=\"OnGreetButtonClicked\"/&gt;\n&lt;/StackPanel&gt;\nIn MainWindow.axaml.cs, add the using lines for Avalonia.Interactivity and MsBox.Avalonia, and the handler:\nprivate async void OnGreetButtonClicked(object? sender, RoutedEventArgs e)\n{\n    var viewModel = (MainWindowViewModel)DataContext!;\n    var box = MessageBoxManager.GetMessageBoxStandard(\"Greeting\", viewModel.Greeting);\n    await box.ShowAsync();\n}\nOn your own: a Close button next to Greet, as in Lab 1.3.\n\n✅ Check. Greet shows the greeting for the name you typed. Close ends the app.",
+    "crumbs": [
+      "Data Binding and MVVM",
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>The MVVM Pattern</span>"
+    ]
+  },
+  {
+    "objectID": "content/01-DesktopUI/material/02_databinding-mvvm/07_mvvm/README.html#mvvm-compared-with-mvc",
+    "href": "content/01-DesktopUI/material/02_databinding-mvvm/07_mvvm/README.html#mvvm-compared-with-mvc",
+    "title": "7  The MVVM Pattern",
+    "section": "7.2 MVVM compared with MVC",
+    "text": "7.2 MVVM compared with MVC\nFrom web development you know MVC (Model-View-Controller), the pattern behind ASP.NET Core MVC, Spring MVC or Ruby on Rails. Both patterns separate the data (model) from its presentation (view). They differ in what sits between the two, and in how the view is kept up to date.\n\nMVC. Every input, in the web a request, goes to a controller. It updates or queries the model, selects a view and passes it the data to show. The view renders it, in the web as a new HTML page. The controller knows the view; the view is output only.\nMVVM. The input goes to the view: the controls themselves. They pass it on to the view model through data binding and commands. The view model holds the state and knows nothing about the view: it only announces that something has changed, and the bindings update the controls. Instead of rendering a new page per request, the view stays open and follows the view model continuously.\n\n\n\n\n\n\n\n\n\nMVC\nMVVM\n\n\n\n\nReceives the input\nController\nView; bindings and commands forward it\n\n\nWho knows the view\nThe controller selects and fills it\nNobody; the view binds to the view model\n\n\nUpdating the display\nThe controller renders a view, in the web a new page per request\nBindings react to change notifications, continuously\n\n\nState\nMostly per request, the server stays stateless\nLong-lived, in the view model\n\n\nGlue code between view and logic\nWritten in the controller\nProvided by the data binding framework\n\n\nTesting without a UI\nControllers, with request and response objects\nThe view model is a plain class: direct unit tests\n\n\nTypical for\nServer-side web applications\nDesktop and mobile UIs: Avalonia, WPF, .NET MAUI\n\n\n\nFront-end frameworks such as Angular and Vue are closer to MVVM than to MVC: a component class holds the state, and its template binds to it.",
+    "crumbs": [
+      "Data Binding and MVVM",
+      "<span class='chapter-number'>7</span>  <span class='chapter-title'>The MVVM Pattern</span>"
+    ]
+  },
+  {
+    "objectID": "content/01-DesktopUI/material/02_databinding-mvvm/08_lists-and-templates/README.html",
+    "href": "content/01-DesktopUI/material/02_databinding-mvvm/08_lists-and-templates/README.html",
+    "title": "8  Lists and Data Templates",
+    "section": "",
+    "text": "8.1 Lists\nA view model often holds not one object but many. This chapter starts the second lab project, DatabindingDemo: a list of people, bound to a ListBox, and a data template that decides how each person is shown.\nTo show a list, bind the ItemsSource of a ListBox to a collection. When items are added or removed later, the list must be told, just like a single property. That’s what ObservableCollection&lt;T&gt; does: it announces every change of the collection. Changes inside an item, like a new name, are announced by the item itself, so the item class is an ObservableObject, too.\nThe view model exposes the collection as a property:",
+    "crumbs": [
+      "Data Binding and MVVM",
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Lists and Data Templates</span>"
+    ]
+  },
+  {
+    "objectID": "content/01-DesktopUI/material/02_databinding-mvvm/08_lists-and-templates/README.html#lists",
+    "href": "content/01-DesktopUI/material/02_databinding-mvvm/08_lists-and-templates/README.html#lists",
+    "title": "8  Lists and Data Templates",
+    "section": "",
+    "text": "public partial class Person : ObservableObject\n{\n    [ObservableProperty]\n    private string _firstName = \"\";\n\n    [ObservableProperty]\n    private string _lastName = \"\";\n\n    [ObservableProperty]\n    [NotifyPropertyChangedFor(nameof(IsFullOfAge))]\n    private DateTime _birthDate;\n\n    public bool IsFullOfAge =&gt; DateTime.Today.AddYears(-18) &gt;= BirthDate;\n}\npublic static class PersonRepository\n{\n    public static ObservableCollection&lt;Person&gt; GetDummyPeople() =&gt; new()\n    {\n        new Person { FirstName = \"John\", LastName = \"Doe\", BirthDate = new DateTime(1975, 1, 1) },\n        new Person { FirstName = \"Jane\", LastName = \"Roe\", BirthDate = new DateTime(1980, 3, 1) },\n        new Person { FirstName = \"Lisa\", LastName = \"Doe\", BirthDate = new DateTime(2015, 1, 1) },\n    };\n}\n\npublic ObservableCollection&lt;Person&gt; People { get; } = PersonRepository.GetDummyPeople();\n\n\n\n\n\n\nTipLab 8.1: A list of people\n\n\n\n🎯 Goal. DatabindingDemo shows the three people in a list.\n\nCreate the project as in Lab 1.1, named DatabindingDemo, and add the package CommunityToolkit.Mvvm as in Lab 5.1.\nAdd the classes Person and PersonRepository from the section above, each in a file of its own.\nAdd a MainWindowViewModel: an ObservableObject with the property People. Set it as DataContext in the constructor of MainWindow, and add xmlns:vm, x:DataType and Design.DataContext to MainWindow.axaml as in Lab 4.1.\nSet Title=\"People\" Width=\"480\" Height=\"560\" and replace the text Welcome to Avalonia! with:\n&lt;Grid RowDefinitions=\"Auto,*\" Margin=\"16\"&gt;\n    &lt;ListBox Grid.Row=\"0\" Height=\"160\" ItemsSource=\"{Binding People}\"/&gt;\n&lt;/Grid&gt;\n\n✅ Check. The list has three entries, but each one reads DatabindingDemo.Person. The list doesn’t know how to show a person, so it calls ToString(). The next section fixes that.",
+    "crumbs": [
+      "Data Binding and MVVM",
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Lists and Data Templates</span>"
+    ]
+  },
+  {
+    "objectID": "content/01-DesktopUI/material/02_databinding-mvvm/08_lists-and-templates/README.html#data-templates",
+    "href": "content/01-DesktopUI/material/02_databinding-mvvm/08_lists-and-templates/README.html#data-templates",
+    "title": "8  Lists and Data Templates",
+    "section": "8.2 Data templates",
+    "text": "8.2 Data templates\nA data template describes how to show an object of a certain type. For the items of a list, it is the ItemTemplate:\n&lt;ListBox ItemsSource=\"{Binding People}\"&gt;\n    &lt;ListBox.ItemTemplate&gt;\n        &lt;DataTemplate x:DataType=\"vm:Person\"&gt;\n            &lt;StackPanel Orientation=\"Horizontal\" Spacing=\"5\"&gt;\n                &lt;TextBlock Text=\"{Binding FirstName}\"/&gt;\n                &lt;TextBlock Text=\"{Binding LastName}\"/&gt;\n            &lt;/StackPanel&gt;\n        &lt;/DataTemplate&gt;\n    &lt;/ListBox.ItemTemplate&gt;\n&lt;/ListBox&gt;\nInside the template, the DataContext is the item, so {Binding FirstName} is the first name of this person. x:DataType makes these bindings compiled, too.\nStringFormat formats a value with a .NET format string:\n&lt;TextBlock Text=\"{Binding BirthDate, StringFormat='{}{0:dd.MM.yyyy}'}\"/&gt;\nThe {} at the start is needed because the format itself starts with a {; without it, the XAML parser would take {0:dd.MM.yyyy} for a markup extension.\nA template can also be stored as a resource with an x:Key and used in several places, for example to show a single object with a ContentControl:\n&lt;ContentControl Content=\"{Binding SelectedPerson}\"\n                ContentTemplate=\"{StaticResource PersonTemplate}\"/&gt;\n\n\n\n\n\n\nTipLab 8.2: A data template\n\n\n\n🎯 Goal. Each list entry shows first name, last name and birth date.\n\nAdd the ItemTemplate from the section above to the ListBox.\nOn your own: add the birth date as a third TextBlock, formatted as dd.MM.yyyy.\n\n✅ Check. The list shows John Doe 01.01.1975, Jane Roe 01.03.1980 and Lisa Doe 01.01.2015.",
+    "crumbs": [
+      "Data Binding and MVVM",
+      "<span class='chapter-number'>8</span>  <span class='chapter-title'>Lists and Data Templates</span>"
+    ]
+  },
+  {
+    "objectID": "content/01-DesktopUI/material/02_databinding-mvvm/09_master-detail/README.html",
+    "href": "content/01-DesktopUI/material/02_databinding-mvvm/09_master-detail/README.html",
+    "title": "9  Master/Detail",
+    "section": "",
+    "text": "9.1 Master/detail\nDatabindingDemo shows a list. This chapter adds a form that edits the selected person, and highlights people by their data, without a single line of refresh code.\nA list and a form that edits the selected entry is called master/detail. It needs one more view model property for the selected item, bound to the list’s SelectedItem:\nThe form binds through that property with a path: {Binding SelectedPerson.FirstName}. Because Person announces its changes, editing the name in the form updates the list entry at the same time.\nAs long as nothing is selected, the form should be hidden. A converter turns the selected person into a bool; Avalonia has a ready-made one for this check:",
+    "crumbs": [
+      "Data Binding and MVVM",
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Master/Detail</span>"
+    ]
+  },
+  {
+    "objectID": "content/01-DesktopUI/material/02_databinding-mvvm/09_master-detail/README.html#masterdetail",
+    "href": "content/01-DesktopUI/material/02_databinding-mvvm/09_master-detail/README.html#masterdetail",
+    "title": "9  Master/Detail",
+    "section": "",
+    "text": "[ObservableProperty]\nprivate Person? _selectedPerson;\n&lt;ListBox ItemsSource=\"{Binding People}\" SelectedItem=\"{Binding SelectedPerson}\"/&gt;\n\n\n&lt;StackPanel IsVisible=\"{Binding SelectedPerson, Converter={x:Static ObjectConverters.IsNotNull}}\"&gt;\n\n\n\n\n\n\nTipLab 9.1: Master/detail\n\n\n\n🎯 Goal. Selecting a person opens a form to edit the name.\n\nAdd the SelectedPerson property from above to the view model, and bind the list’s SelectedItem to it.\nBelow the ListBox, add the detail form:\n&lt;StackPanel Grid.Row=\"1\" Margin=\"0,16,0,0\" Spacing=\"4\"\n            IsVisible=\"{Binding SelectedPerson, Converter={x:Static ObjectConverters.IsNotNull}}\"&gt;\n    &lt;TextBlock Text=\"First name\"/&gt;\n    &lt;TextBox Text=\"{Binding SelectedPerson.FirstName}\"/&gt;\n&lt;/StackPanel&gt;\nOn your own: add a label and a text box for the last name.\n\n✅ Check. The form is hidden until you select a person. Changing the first name in the form changes the list entry with every keystroke.",
+    "crumbs": [
+      "Data Binding and MVVM",
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Master/Detail</span>"
+    ]
+  },
+  {
+    "objectID": "content/01-DesktopUI/material/02_databinding-mvvm/09_master-detail/README.html#styling-items-by-their-data",
+    "href": "content/01-DesktopUI/material/02_databinding-mvvm/09_master-detail/README.html#styling-items-by-their-data",
+    "title": "9  Master/Detail",
+    "section": "9.2 Styling items by their data",
+    "text": "9.2 Styling items by their data\nThe chapter Styles switched a style class with a check box. The same works with a property of the data, inside a data template. The ! in front of a path negates a bool:\n&lt;StackPanel Orientation=\"Horizontal\" Spacing=\"5\" Classes.underage=\"{Binding !IsFullOfAge}\"&gt;\n&lt;Style Selector=\"StackPanel.underage\"&gt;\n    &lt;Setter Property=\"Background\" Value=\"LightCoral\"/&gt;\n&lt;/Style&gt;\nNow everything fits together. A command that changes a person’s birth date sets the property BirthDate. The generated setter announces BirthDate and, because of [NotifyPropertyChangedFor], IsFullOfAge. The formatted birth date and the highlighted row update on their own, without knowing about each other and without any refresh code.\n\n\n\n\n\n\nTipLab 9.2: Data-driven highlighting\n\n\n\n🎯 Goal. People under 18 are highlighted, and a button makes the selected person one year older.\n\nAdd Classes.underage to the template’s StackPanel and the StackPanel.underage style to &lt;Window.Styles&gt;, as shown above.\nOn your own: add a command MakeOneYearOlder that moves the selected person’s birth date one year back (BirthDate.AddYears(-1)). It may only run while a person is selected. Add a button Make one year older at the end of the detail form.\n\n✅ Check. Lisa’s row is red. Select her and click Make one year older a few times: her birth date moves back, and when she turns 18 the red disappears.",
+    "crumbs": [
+      "Data Binding and MVVM",
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Master/Detail</span>"
+    ]
+  },
+  {
+    "objectID": "content/01-DesktopUI/material/02_databinding-mvvm/09_master-detail/README.html#try-it-yourself",
+    "href": "content/01-DesktopUI/material/02_databinding-mvvm/09_master-detail/README.html#try-it-yourself",
+    "title": "9  Master/Detail",
+    "section": "9.3 Try it yourself",
+    "text": "9.3 Try it yourself\n\nAdd an Add person button that adds a new, empty person to People and selects it, and a Remove button for the selected person.\nReplace the detail form with a ContentControl and a keyed DataTemplate, as shown in the chapter Lists and Data Templates. What happens to the form when nothing is selected?",
+    "crumbs": [
+      "Data Binding and MVVM",
+      "<span class='chapter-number'>9</span>  <span class='chapter-title'>Master/Detail</span>"
+    ]
+  },
+  {
+    "objectID": "content/01-DesktopUI/material/03_multithreading/10_cpu-vs-io-bound/README.html",
+    "href": "content/01-DesktopUI/material/03_multithreading/10_cpu-vs-io-bound/README.html",
+    "title": "10  CPU-bound vs. I/O-bound",
+    "section": "",
+    "text": "10.1 What is my code waiting for?\nA desktop application may use every core of the machine, and a calculation that runs for seconds is worth spreading across all of them. This part is the theory for that: it has no labs, and the π-calculator exercise puts it into practice. Its chapters follow three questions, in the order you should ask them:\nThe last chapter, The UI Thread, shows the extra rule a UI application adds.\nBefore reaching for a thread, work out what the code is actually waiting for. This single question decides which tool is correct — and picking the wrong one usually makes things worse, not just no better.\nThe single most important thing to understand before any of the rest: async/await does not create threads. It is a mechanism for giving a thread back while you wait for something that isn’t the CPU. The sections below show what that means in each of the two cases.",
+    "crumbs": [
+      "Multithreading",
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>CPU-bound vs. I/O-bound</span>"
+    ]
+  },
+  {
+    "objectID": "content/01-DesktopUI/material/03_multithreading/10_cpu-vs-io-bound/README.html#what-is-my-code-waiting-for",
+    "href": "content/01-DesktopUI/material/03_multithreading/10_cpu-vs-io-bound/README.html#what-is-my-code-waiting-for",
+    "title": "10  CPU-bound vs. I/O-bound",
+    "section": "",
+    "text": "CPU-bound\nI/O-bound\n\n\n\n\nThe code is waiting for\na processor core\na device (disk, network, database)\n\n\nWhile waiting, the CPU is\nbusy at 100%\nidle\n\n\nTypical examples\nMonte Carlo simulation, image filters, encryption, sorting a huge list, parsing\nHTTP requests, file reads, SQL queries, waiting for user input\n\n\nGets faster with more threads\nyes, up to your core count\nno\n\n\nThe right tool\nTask.Run / threads / SIMD\nasync/await\n\n\nWhat you gain\nthroughput — the work finishes sooner\nscalability — you can serve far more work at once",
+    "crumbs": [
+      "Multithreading",
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>CPU-bound vs. I/O-bound</span>"
+    ]
+  },
+  {
+    "objectID": "content/01-DesktopUI/material/03_multithreading/10_cpu-vs-io-bound/README.html#the-task-parallel-library",
+    "href": "content/01-DesktopUI/material/03_multithreading/10_cpu-vs-io-bound/README.html#the-task-parallel-library",
+    "title": "10  CPU-bound vs. I/O-bound",
+    "section": "10.2 The Task Parallel Library",
+    "text": "10.2 The Task Parallel Library\nTPL stands for Task Parallel Library — the System.Threading.Tasks namespace, added in .NET 4 and the standard way to do concurrency in .NET ever since. async/await, Task.Run, Task.WhenAll, Parallel.For and PLINQ are all part of it.\nThe shift it introduced is one of vocabulary, and it is worth stating plainly:\n\nWith threads you describe workers — “create a worker, start it, wait for it to finish.” With the TPL you describe work — “here is a job; run it and give me the result.” Which thread runs that job, and when, becomes the library’s problem rather than yours.\n\nThe TPL runs work on the thread pool: a set of reusable worker threads that it hands work items to. The chapter Threads and Tasks compares the two models in detail.",
+    "crumbs": [
+      "Multithreading",
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>CPU-bound vs. I/O-bound</span>"
+    ]
+  },
+  {
+    "objectID": "content/01-DesktopUI/material/03_multithreading/10_cpu-vs-io-bound/README.html#io-bound-work-waiting-without-a-thread",
+    "href": "content/01-DesktopUI/material/03_multithreading/10_cpu-vs-io-bound/README.html#io-bound-work-waiting-without-a-thread",
+    "title": "10  CPU-bound vs. I/O-bound",
+    "section": "10.3 I/O-bound work: waiting without a thread",
+    "text": "10.3 I/O-bound work: waiting without a thread\nSo what actually happens when you await an I/O call? Follow one line through, step by step:\nvar text = await File.ReadAllTextAsync(path);\nConsole.WriteLine(text.Length);          // the \"continuation\"\n\nYour method asks the operating system to start the read and returns immediately — it does not wait. The caller gets back an unfinished Task.\nThe thread that was running your method is now free. It goes back to the thread pool and does something else.\nThe disk works. No thread is involved at all during this time — the operation is in the hands of the hardware and the OS.\nWhen the data is there, the OS notifies .NET, which schedules the rest of your method — the code after the await — as a new work item.\nA thread picks that work item up and runs Console.WriteLine(text.Length). It may well be a different thread than the one from step 1.\n\nDrawn on a time axis, with a four-thread pool underneath:\ntime ------------------------------------------------------------------------------&gt;\n\nsteps 1-2                    step 3                       steps 4-5\n+-----------------------+    +-----------------------+    +-----------------------+\n|    THREAD OCCUPIED    | -&gt; |    NO THREAD HELD     | -&gt; |    THREAD OCCUPIED    |\n+-----------------------+    +-----------------------+    +-----------------------+\nthread A runs your method    A is back in the pool,       a thread is taken from\nand starts the read          free for other work          the pool to run the rest\n                             (the disk is working)        of your method\n\nthe thread pool meanwhile:\n+-----+-----+-----+-----+    +-----+-----+-----+-----+    +-----+-----+-----+-----+\n|  A  |  B  |  C  |  D  |    |  A  |  B  |  C  |  D  |    |  A  |  B  |  C  |  D  |\n| ### |  .  |  .  |  .  |    |  .  |  .  |  .  |  .  |    |  .  | ### |  .  |  .  |\n+-----+-----+-----+-----+    +-----+-----+-----+-----+    +-----+-----+-----+-----+\nA occupied by your code      no thread is occupied        B - a DIFFERENT thread -\n                             on your behalf               runs the continuation\nThe middle phase is not drawn to scale: reading a file takes milliseconds and a network call tens of milliseconds, while the two occupied phases are a few microseconds each. In other words, the overwhelming majority of the elapsed time is spent in the middle box, where your code holds no thread at all. Had you used the blocking File.ReadAllText instead, thread A would have stayed occupied — and useless — across all three boxes.\n\nThe key point: a thread is held only while your code is actually executing, never while it is waiting for a device. That is what lets a web server handle tens of thousands of simultaneous requests on a handful of threads — nearly all of them are waiting, and waiting is free.",
+    "crumbs": [
+      "Multithreading",
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>CPU-bound vs. I/O-bound</span>"
+    ]
+  },
+  {
+    "objectID": "content/01-DesktopUI/material/03_multithreading/10_cpu-vs-io-bound/README.html#cpu-bound-work-moving-it-off-the-caller",
+    "href": "content/01-DesktopUI/material/03_multithreading/10_cpu-vs-io-bound/README.html#cpu-bound-work-moving-it-off-the-caller",
+    "title": "10  CPU-bound vs. I/O-bound",
+    "section": "10.4 CPU-bound work: moving it off the caller",
+    "text": "10.4 CPU-bound work: moving it off the caller\nNow the other case. This looks almost identical at the call site:\nvar result = await Task.Run(() =&gt; Calculate(1_000_000_000));\nbut the middle box of the diagram above simply does not exist. There is no device to wait for — a core has to execute those billion iterations — so a thread stays occupied for the entire duration. Nothing is given back.\nThat means Task.Run here does not make the calculation faster. What it does is move the work off the calling thread. That matters enormously when the caller is the UI thread: without it the window freezes for the whole calculation, because the thread that should be redrawing the window is busy doing arithmetic instead. The await keeps the UI responsive; it does not shorten the computation by a single millisecond.\nThe actual speed-up has to come from somewhere else — splitting the work across several cores, which is what the next chapters are about.\n\n\n\n\n\n\n\n\n\nI/O-bound await\nCPU-bound Task.Run\n\n\n\n\nThread held while working\nno\nyes, the whole time\n\n\nWhat await buys you\nscalability — thousands of waits, few threads\nresponsiveness — the caller stays free\n\n\nHow it gets faster\nit doesn’t need to; waiting is free\nmore cores, or SIMD",
+    "crumbs": [
+      "Multithreading",
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>CPU-bound vs. I/O-bound</span>"
+    ]
+  },
+  {
+    "objectID": "content/01-DesktopUI/material/03_multithreading/10_cpu-vs-io-bound/README.html#two-mistakes-worth-naming",
+    "href": "content/01-DesktopUI/material/03_multithreading/10_cpu-vs-io-bound/README.html#two-mistakes-worth-naming",
+    "title": "10  CPU-bound vs. I/O-bound",
+    "section": "10.5 Two mistakes worth naming",
+    "text": "10.5 Two mistakes worth naming\nFake async — wrapping blocking I/O in Task.Run:\n// BAD: burns a pool thread that just sits there waiting for the disk\nvar text = await Task.Run(() =&gt; File.ReadAllText(path));\n\n// GOOD: no thread is held while the disk works\nvar text = await File.ReadAllTextAsync(path);\nThe first version is not more scalable than the blocking call — it is less, because you now block a pool thread instead of your own, and the pool has better things to do. On a server this is a classic cause of thread-pool starvation.\nBlocking on async code — .Result or .Wait():\nvar data = FetchAsync().Result;   // BAD: blocks, and can deadlock outright\nThis throws away the entire benefit and, in a context with a synchronization context (older UI frameworks, ASP.NET), can deadlock: the continuation needs the thread you are blocking. Rule of thumb: async all the way up.",
+    "crumbs": [
+      "Multithreading",
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>CPU-bound vs. I/O-bound</span>"
+    ]
+  },
+  {
+    "objectID": "content/01-DesktopUI/material/03_multithreading/10_cpu-vs-io-bound/README.html#summary",
+    "href": "content/01-DesktopUI/material/03_multithreading/10_cpu-vs-io-bound/README.html#summary",
+    "title": "10  CPU-bound vs. I/O-bound",
+    "section": "10.6 Summary",
+    "text": "10.6 Summary\n\nasync/await makes code wait without blocking. Threads make code run in parallel. Only CPU-bound work benefits from more threads, and only I/O-bound work benefits from async.\n\nA simulation that does nothing but arithmetic — no disk, no network — is a textbook CPU-bound problem. That is precisely why multithreading pays off for it, and why async alone would achieve nothing.",
+    "crumbs": [
+      "Multithreading",
+      "<span class='chapter-number'>10</span>  <span class='chapter-title'>CPU-bound vs. I/O-bound</span>"
+    ]
+  },
+  {
+    "objectID": "content/01-DesktopUI/material/03_multithreading/11_threads-and-tasks/README.html",
+    "href": "content/01-DesktopUI/material/03_multithreading/11_threads-and-tasks/README.html",
+    "title": "11  Threads and Tasks",
+    "section": "",
+    "text": "11.1 The same job, written twice\nThere are two ways to run CPU-bound work in parallel: create threads yourself, or hand tasks to the TPL. This chapter writes the same job both ways, and then compares the two models.\nWhich delegate each one accepts decides how your worker method has to be shaped, so start there:\nBoth Thread delegates return void. That is not a detail — it is the reason the manual version below needs an array: a thread has nowhere to put a return value, so a result has to escape through a captured variable instead.\nThe worker method itself is the same ordinary method in both cases — it takes a parameter and returns a result:\nRun four of them and average the results — first manually:\nand then with the TPL:\nThree things disappeared in the second version, and they are the TPL’s whole value proposition:\nYou also get three things for free that the manual version would each need hand-writing:",
+    "crumbs": [
+      "Multithreading",
+      "<span class='chapter-number'>11</span>  <span class='chapter-title'>Threads and Tasks</span>"
+    ]
+  },
+  {
+    "objectID": "content/01-DesktopUI/material/03_multithreading/11_threads-and-tasks/README.html#the-same-job-written-twice",
+    "href": "content/01-DesktopUI/material/03_multithreading/11_threads-and-tasks/README.html#the-same-job-written-twice",
+    "title": "11  Threads and Tasks",
+    "section": "",
+    "text": "Started with\nDelegate it accepts\nCan hand a result back?\n\n\n\n\nnew Thread(...)\nThreadStart — void ()\nno\n\n\nnew Thread(...)\nParameterizedThreadStart — void (object?)\nno, and the argument is an untyped object? you must cast\n\n\nTask.Run(...)\nAction — void ()\nno — gives a plain Task\n\n\nTask.Run(...)\nFunc&lt;TResult&gt; — TResult ()\nyes — gives a Task&lt;TResult&gt;\n\n\n\n\n\ndouble Calculate(long amount) { /* ... some CPU-bound work ... */ }\n\n// MANUAL: ThreadStart is `void ()`. Calculate's return value cannot travel out through\n// the delegate, so each thread assigns it to its own slot of a shared array instead.\nconst long amount = 1_000_000;\nvar threads = new Thread[4];\nvar results = new double[4];                        // the only way out for the results\n\nfor (var i = 0; i &lt; 4; i++)\n{\n    var index = i;                                  // capture a COPY - all four lambdas\n                                                    // would otherwise share one `i`\n    threads[i] = new Thread(() =&gt; results[index] = Calculate(amount));\n    threads[i].Start();                             // one real OS thread each\n}\n\nforeach (var thread in threads) thread.Join();      // blocks here until all finish\nvar average = results.Average();\n\n// TPL: Task.Run accepts a Func&lt;double&gt;, so Calculate's return value flows straight out\n// as Task&lt;double&gt; - no array, no captured slot, nothing to index.\nconst long amount = 1_000_000;\nvar tasks = new Task&lt;double&gt;[4];\n\nfor (var i = 0; i &lt; 4; i++)\n{\n    tasks[i] = Task.Run(() =&gt; Calculate(amount));   // Func&lt;double&gt; -&gt; Task&lt;double&gt;\n}\n\ndouble[] results = await Task.WhenAll(tasks);       // hands back a double[] directly\nvar average = results.Average();\n\n\nNo results array and no index to capture — because Func&lt;TResult&gt; can return a value, each task carries its own result out, so there is no shared slot to write into and no loop-variable trap to fall into.\nNo Join loop, and no blocking — await releases the calling thread instead of parking it, exactly as with I/O-bound work in the chapter CPU-bound vs. I/O-bound.\nNo thread management — nothing is created or destroyed. Task.Run puts a work item on the thread pool, and a pool thread that already exists picks it up.\n\n\nCareful with captured variables: a lambda captures the variable, not its value. That is why index above is a fresh variable declared inside the loop — capture i directly and all four threads may end up seeing the same, final value.\n\n\n\nExceptions propagated to the caller — the Task captures the exception and rethrows it at the await, instead of an unhandled exception on a thread taking the whole process down with it.\nCooperative cancellation — a CancellationToken handed to the work, instead of a stop flag you have to invent and wire up yourself.\nComposition — WhenAll, WhenAny and continuations, instead of Joining threads one at a time and hoping you got the order right.",
+    "crumbs": [
+      "Multithreading",
+      "<span class='chapter-number'>11</span>  <span class='chapter-title'>Threads and Tasks</span>"
+    ]
+  },
+  {
+    "objectID": "content/01-DesktopUI/material/03_multithreading/11_threads-and-tasks/README.html#thread-the-explicit-model",
+    "href": "content/01-DesktopUI/material/03_multithreading/11_threads-and-tasks/README.html#thread-the-explicit-model",
+    "title": "11  Threads and Tasks",
+    "section": "11.2 Thread: the explicit model",
+    "text": "11.2 Thread: the explicit model\nEvery new Thread is a genuine operating-system thread with its own stack (1 MB by default on Windows). Creating one costs on the order of a hundred microseconds and some kernel bookkeeping — irrelevant if you create eight, ruinous if you create one per work item.\nThread gives you low-level control and very little else. It cannot return a value, so results have to be written into a captured variable or array. An unhandled exception inside a thread terminates the whole process. There is no built-in cancellation and no way to compose several threads other than Joining them one by one.",
+    "crumbs": [
+      "Multithreading",
+      "<span class='chapter-number'>11</span>  <span class='chapter-title'>Threads and Tasks</span>"
+    ]
+  },
+  {
+    "objectID": "content/01-DesktopUI/material/03_multithreading/11_threads-and-tasks/README.html#task-the-tpl-model",
+    "href": "content/01-DesktopUI/material/03_multithreading/11_threads-and-tasks/README.html#task-the-tpl-model",
+    "title": "11  Threads and Tasks",
+    "section": "11.3 Task: the TPL model",
+    "text": "11.3 Task: the TPL model\nA Task is a unit of work, not a thread. By default it is queued onto the thread pool, which maintains a set of reusable worker threads (roughly one per logical processor to start with) and hands them work from a queue. Nothing is created or destroyed per work item.\nOn top of that, Task provides everything Thread lacks: Task&lt;T&gt; carries a return value; exceptions are captured and rethrown at the await; CancellationToken gives cooperative cancellation; and WhenAll/WhenAny/continuations let you compose work.",
+    "crumbs": [
+      "Multithreading",
+      "<span class='chapter-number'>11</span>  <span class='chapter-title'>Threads and Tasks</span>"
+    ]
+  },
+  {
+    "objectID": "content/01-DesktopUI/material/03_multithreading/11_threads-and-tasks/README.html#side-by-side",
+    "href": "content/01-DesktopUI/material/03_multithreading/11_threads-and-tasks/README.html#side-by-side",
+    "title": "11  Threads and Tasks",
+    "section": "11.4 Side by side",
+    "text": "11.4 Side by side\n\n\n\n\n\n\n\n\n\nThread\nTask (TPL)\n\n\n\n\nWhat it is\nan OS thread\na unit of work, usually run on a pool thread\n\n\nCreation cost\nhigh (new stack, kernel object)\nlow (queued; threads are reused)\n\n\nReturns a value\nno\nyes — Task&lt;T&gt;\n\n\nWaiting\nJoin() (blocks)\nawait (does not block)\n\n\nUnhandled exception\nkills the process\ncaptured in the Task, rethrown on await\n\n\nCancellation\nbuild it yourself\nCancellationToken\n\n\nComposition\nmanual\nWhenAll, WhenAny, continuations\n\n\nForeground/background\nforeground by default — keeps the process alive\nalways background\n\n\nCount you should create\na few, deliberately\nas many as the work suggests\n\n\n\nDefault answer: use Task. Reach for Thread only when you need something the pool cannot give you — a specific priority, a custom stack size, a COM apartment state, or a genuinely long-lived dedicated loop.",
+    "crumbs": [
+      "Multithreading",
+      "<span class='chapter-number'>11</span>  <span class='chapter-title'>Threads and Tasks</span>"
+    ]
+  },
+  {
+    "objectID": "content/01-DesktopUI/material/03_multithreading/11_threads-and-tasks/README.html#the-thread-pool-grows-slowly",
+    "href": "content/01-DesktopUI/material/03_multithreading/11_threads-and-tasks/README.html#the-thread-pool-grows-slowly",
+    "title": "11  Threads and Tasks",
+    "section": "11.5 The thread pool grows slowly",
+    "text": "11.5 The thread pool grows slowly\nThe pool starts with about one worker thread per logical processor. If all of them are busy and more work is queued, it does not simply add more: it assumes the running items will finish shortly, and adds threads only one at a time, slowly — measured on an 8-core machine, roughly one per second. Queue 60 blocking work items and six seconds later 47 of them still have not started.\nThat policy has a direct consequence for the choice between Thread and Task:\n\n32 Threads → 32 real threads, all running at once (and fighting over 8 cores).\n32 Task.Runs → about 8 run; the other 24 sit in a queue.\n\nSo with tasks, “32 units” does not mean “32 things running at once”. If you benchmark thread counts using Task.Run, past your core count you are measuring the pool’s ramp-up policy rather than parallelism.\nWorse, long CPU-bound work on pool threads starves everything else that needs the pool. A measured example: a UI refresh loop driven by Task.Delay(50) should tick 20 times per second, but the timer callback that completes a Task.Delay itself needs a pool thread —\n\n\n\n\n\n\n\nCalculation started with\nUI frames in 4 seconds\n\n\n\n\nTask.Run (8 CPU-bound tasks on an 8-core machine)\n2\n\n\nTask.Factory.StartNew(..., TaskCreationOptions.LongRunning)\n58\n\n\n\nThe fix is to tell the TPL that this work is not a short job:\nTask.Factory.StartNew(() =&gt; LongCpuWork(), TaskCreationOptions.LongRunning);\nLongRunning gives the task a dedicated thread instead of a pool thread, keeping the pool free. You keep the whole Task API — return values, await, WhenAll — while behaving like a manual thread underneath. For CPU-bound work that runs for seconds, this is usually what you want.",
+    "crumbs": [
+      "Multithreading",
+      "<span class='chapter-number'>11</span>  <span class='chapter-title'>Threads and Tasks</span>"
+    ]
+  },
+  {
+    "objectID": "content/01-DesktopUI/material/03_multithreading/11_threads-and-tasks/README.html#one-level-up-parallel-and-plinq",
+    "href": "content/01-DesktopUI/material/03_multithreading/11_threads-and-tasks/README.html#one-level-up-parallel-and-plinq",
+    "title": "11  Threads and Tasks",
+    "section": "11.6 One level up: Parallel and PLINQ",
+    "text": "11.6 One level up: Parallel and PLINQ\nFor data-parallel loops you often don’t need to manage tasks at all:\nParallel.For(0, workers, i =&gt; results[i] = Calculate(amount));\n\nvar average = Enumerable.Range(0, workers).AsParallel().Select(_ =&gt; Calculate(amount)).Average();\nThese partition the work, pick a degree of parallelism, and join for you. Less control, much less code. They are still built on the thread pool, so the caveat above applies.",
+    "crumbs": [
+      "Multithreading",
+      "<span class='chapter-number'>11</span>  <span class='chapter-title'>Threads and Tasks</span>"
+    ]
+  },
+  {
+    "objectID": "content/01-DesktopUI/material/03_multithreading/12_race-conditions/README.html",
+    "href": "content/01-DesktopUI/material/03_multithreading/12_race-conditions/README.html",
+    "title": "12  Race Conditions",
+    "section": "",
+    "text": "12.1 What a race condition is\nRunning work in parallel is the easy part. As soon as two threads touch the same data, results can go wrong in ways that are hard to see and harder to reproduce. This chapter shows how, and the next one how to prevent it.\nA race needs shared mutable state: two or more threads reaching the same variable, and at least one of them writing. Remove any one of those three — sharing, mutation, or concurrency — and the race is gone.",
+    "crumbs": [
+      "Multithreading",
+      "<span class='chapter-number'>12</span>  <span class='chapter-title'>Race Conditions</span>"
+    ]
+  },
+  {
+    "objectID": "content/01-DesktopUI/material/03_multithreading/12_race-conditions/README.html#what-a-race-condition-is",
+    "href": "content/01-DesktopUI/material/03_multithreading/12_race-conditions/README.html#what-a-race-condition-is",
+    "title": "12  Race Conditions",
+    "section": "",
+    "text": "A race condition is a bug where the result depends on the relative timing of two or more threads. The same code, run twice on the same input, can produce different answers.",
+    "crumbs": [
+      "Multithreading",
+      "<span class='chapter-number'>12</span>  <span class='chapter-title'>Race Conditions</span>"
+    ]
+  },
+  {
+    "objectID": "content/01-DesktopUI/material/03_multithreading/12_race-conditions/README.html#anatomy-the-lost-update",
+    "href": "content/01-DesktopUI/material/03_multithreading/12_race-conditions/README.html#anatomy-the-lost-update",
+    "title": "12  Race Conditions",
+    "section": "12.2 Anatomy: the lost update",
+    "text": "12.2 Anatomy: the lost update\nThis innocent line is the classic example:\ncounter += batch;\nIt looks like one operation. At machine level it is three:\n\nread the current value of counter\nadd batch to it\nwrite the result back\n\nNothing prevents another thread from doing its own read between your read and your write:\n\n\n\nthread A\nthread B\ncounter\n\n\n\n\nread → 5000\n\n5000\n\n\n\nread → 5000\n5000\n\n\nadd 400 → 5400\n\n5000\n\n\n\nadd 300 → 5300\n5000\n\n\nwrite 5400\n\n5400\n\n\n\nwrite 5300\n5300 ← A’s 400 is lost\n\n\n\nBoth threads did their job, and one update vanished. This is a lost update.\nIt is not theoretical. Eight threads reporting their progress into one shared counter, 2,000,000 increments in total, ten consecutive runs of the identical program:\n\n\n\nrun\ncounted\nlost\n\n\n\n\n1\n1,889,250\n110,750\n\n\n2\n1,987,500\n12,500\n\n\n3\n1,976,450\n23,550\n\n\n10\n1,997,850\n2,150\n\n\n\nWrong in 10 out of 10 runs, and never by the same amount. A result that changes between runs of identical code is the signature of a race condition.\n\nRun it yourself: the console program CounterThreadSynchronization, handed out with the π-calculator exercise, does exactly this, and then repeats it with each of the fixes described in the chapter Protecting Critical Sections — so you can watch the losses appear, disappear, and compare what each mechanism costs.",
+    "crumbs": [
+      "Multithreading",
+      "<span class='chapter-number'>12</span>  <span class='chapter-title'>Race Conditions</span>"
+    ]
+  },
+  {
+    "objectID": "content/01-DesktopUI/material/03_multithreading/12_race-conditions/README.html#why-these-bugs-are-dangerous",
+    "href": "content/01-DesktopUI/material/03_multithreading/12_race-conditions/README.html#why-these-bugs-are-dangerous",
+    "title": "12  Race Conditions",
+    "section": "12.3 Why these bugs are dangerous",
+    "text": "12.3 Why these bugs are dangerous\nNotice what did not happen: nothing crashed, and no exception was thrown. In those same runs the threads’ actual computed results were all correct, because each thread kept its own partial result in its own storage and shared nothing. Only the shared counter was wrong.\nConcurrency bugs routinely look exactly like this — a plausible answer, no error, slightly wrong. You cannot wait for a crash to find them. You have to reason about which state is shared.",
+    "crumbs": [
+      "Multithreading",
+      "<span class='chapter-number'>12</span>  <span class='chapter-title'>Race Conditions</span>"
+    ]
+  },
+  {
+    "objectID": "content/01-DesktopUI/material/03_multithreading/12_race-conditions/README.html#other-kinds-of-races",
+    "href": "content/01-DesktopUI/material/03_multithreading/12_race-conditions/README.html#other-kinds-of-races",
+    "title": "12  Race Conditions",
+    "section": "12.4 Other kinds of races",
+    "text": "12.4 Other kinds of races\nCheck-then-act. The check and the action are separately correct but not atomic:\nif (!dictionary.ContainsKey(key))   // thread B can insert right here\n    dictionary.Add(key, value);     // -&gt; exception, or a lost value\nTorn reads. A read that catches a value mid-write. On a 32-bit runtime a long is written in two 32-bit halves, so a reader can observe half of the old value and half of the new — a number that was never assigned.\nStale reads and reordering. Compiler and CPU may cache a value in a register or reorder instructions. A thread can keep seeing an old value long after another thread changed it. This is what volatile addresses — and only this.",
+    "crumbs": [
+      "Multithreading",
+      "<span class='chapter-number'>12</span>  <span class='chapter-title'>Race Conditions</span>"
+    ]
+  },
+  {
+    "objectID": "content/01-DesktopUI/material/03_multithreading/13_critical-sections/README.html",
+    "href": "content/01-DesktopUI/material/03_multithreading/13_critical-sections/README.html",
+    "title": "13  Protecting Critical Sections",
+    "section": "",
+    "text": "13.1 Don’t share (always try this first)\nA critical section is a region of code that must not be executed by more than one thread at a time. The options below go from cheapest and most preferable to most specialised; the table at the end helps to choose.\nThe best fix is to remove the sharing. Give each worker its own storage and combine at the end:\nDifferent array elements are independent locations, so this is safe with no locking at all. Immutable data is likewise safe by construction. Most concurrency bugs are best fixed by not sharing, not by locking harder.",
+    "crumbs": [
+      "Multithreading",
+      "<span class='chapter-number'>13</span>  <span class='chapter-title'>Protecting Critical Sections</span>"
+    ]
+  },
+  {
+    "objectID": "content/01-DesktopUI/material/03_multithreading/13_critical-sections/README.html#dont-share-always-try-this-first",
+    "href": "content/01-DesktopUI/material/03_multithreading/13_critical-sections/README.html#dont-share-always-try-this-first",
+    "title": "13  Protecting Critical Sections",
+    "section": "",
+    "text": "var results = new double[workers];\n// each thread writes only results[myIndex] - distinct memory, no synchronization needed\n...\nvar average = results.Average();    // combine on one thread, after all Joins",
+    "crumbs": [
+      "Multithreading",
+      "<span class='chapter-number'>13</span>  <span class='chapter-title'>Protecting Critical Sections</span>"
+    ]
+  },
+  {
+    "objectID": "content/01-DesktopUI/material/03_multithreading/13_critical-sections/README.html#interlocked-atomic-operations-on-a-single-variable",
+    "href": "content/01-DesktopUI/material/03_multithreading/13_critical-sections/README.html#interlocked-atomic-operations-on-a-single-variable",
+    "title": "13  Protecting Critical Sections",
+    "section": "13.2 Interlocked: atomic operations on a single variable",
+    "text": "13.2 Interlocked: atomic operations on a single variable\nInterlocked.Add(ref _counter, batch);\nInterlocked.Increment(ref _counter);\nvar old = Interlocked.Exchange(ref _flag, 1);\nInterlocked.CompareExchange(ref _value, newValue, expected);\nThese perform read-modify-write as one indivisible CPU instruction. No thread can interleave, and no thread ever waits — this is lock-free, and the cheapest correct option.\nThe catch: it needs a ref to a field, and you cannot pass a property with ref. That is why a counter exposed as a property needs an explicit backing field:\nprivate long _processed;                    // the field Interlocked works on\npublic long Processed =&gt; _processed;        // read-only view for the outside world\n\npublic void Report(long batch) =&gt; Interlocked.Add(ref _processed, batch);\nUse it when you are guarding one variable. It cannot make two updates atomic together.",
+    "crumbs": [
+      "Multithreading",
+      "<span class='chapter-number'>13</span>  <span class='chapter-title'>Protecting Critical Sections</span>"
+    ]
+  },
+  {
+    "objectID": "content/01-DesktopUI/material/03_multithreading/13_critical-sections/README.html#lock-mutual-exclusion",
+    "href": "content/01-DesktopUI/material/03_multithreading/13_critical-sections/README.html#lock-mutual-exclusion",
+    "title": "13  Protecting Critical Sections",
+    "section": "13.3 lock: mutual exclusion",
+    "text": "13.3 lock: mutual exclusion\nprivate readonly object _sync = new();\n\nlock (_sync)\n{\n    _total += batch;        // several statements can be made atomic\n    _count++;               // as one unit\n}\nlock is syntactic sugar for Monitor.Enter/Exit in a try/finally. Use it when an invariant spans more than one variable — exactly what Interlocked cannot do.\nRules:\n\nLock on a private readonly object. Never lock(this) (outside code can lock your instance), never a string (interned — shared process-wide), never a Type.\nKeep it short. Every other thread that arrives has to wait; a long critical section serialises your program and undoes your parallelism.\nNo await inside a lock — it will not compile, and for good reason: a lock is owned by a thread, and the continuation after an await may run on a different one.\nAlways take multiple locks in the same order everywhere. Two threads taking A→B and B→A is a deadlock: each holds what the other needs, and neither ever proceeds.\n\n\nIn .NET 9+, prefer the dedicated System.Threading.Lock type over a plain object — it is faster and lock (myLock) gets compile-time checking. A plain object still works everywhere.",
+    "crumbs": [
+      "Multithreading",
+      "<span class='chapter-number'>13</span>  <span class='chapter-title'>Protecting Critical Sections</span>"
+    ]
+  },
+  {
+    "objectID": "content/01-DesktopUI/material/03_multithreading/13_critical-sections/README.html#concurrent-collections",
+    "href": "content/01-DesktopUI/material/03_multithreading/13_critical-sections/README.html#concurrent-collections",
+    "title": "13  Protecting Critical Sections",
+    "section": "13.4 Concurrent collections",
+    "text": "13.4 Concurrent collections\nvar queue = new ConcurrentQueue&lt;Dot&gt;();      // producers Enqueue, consumer TryDequeue\nvar map = new ConcurrentDictionary&lt;K, V&gt;();\nEach individual operation is thread-safe, so you do not need your own lock around them. But compound operations still are not atomic — if (!map.ContainsKey(k)) map.TryAdd(k, v) has the same check-then-act bug as in the chapter Race Conditions. Use the purpose-built atomic methods instead: GetOrAdd, AddOrUpdate, TryUpdate.",
+    "crumbs": [
+      "Multithreading",
+      "<span class='chapter-number'>13</span>  <span class='chapter-title'>Protecting Critical Sections</span>"
+    ]
+  },
+  {
+    "objectID": "content/01-DesktopUI/material/03_multithreading/13_critical-sections/README.html#semaphoreslim-when-you-need-to-await-inside",
+    "href": "content/01-DesktopUI/material/03_multithreading/13_critical-sections/README.html#semaphoreslim-when-you-need-to-await-inside",
+    "title": "13  Protecting Critical Sections",
+    "section": "13.5 SemaphoreSlim: when you need to await inside",
+    "text": "13.5 SemaphoreSlim: when you need to await inside\nprivate readonly SemaphoreSlim _gate = new(1, 1);\n\nawait _gate.WaitAsync();\ntry { await SomethingAsync(); }\nfinally { _gate.Release(); }\nThe async-friendly alternative to lock, and the tool for limiting concurrency to n rather than 1. Always Release in a finally.",
+    "crumbs": [
+      "Multithreading",
+      "<span class='chapter-number'>13</span>  <span class='chapter-title'>Protecting Critical Sections</span>"
+    ]
+  },
+  {
+    "objectID": "content/01-DesktopUI/material/03_multithreading/13_critical-sections/README.html#readerwriterlockslim-many-readers-rare-writers",
+    "href": "content/01-DesktopUI/material/03_multithreading/13_critical-sections/README.html#readerwriterlockslim-many-readers-rare-writers",
+    "title": "13  Protecting Critical Sections",
+    "section": "13.6 ReaderWriterLockSlim: many readers, rare writers",
+    "text": "13.6 ReaderWriterLockSlim: many readers, rare writers\nLets any number of readers in simultaneously but excludes them while a writer works. Worth it only when reads dominate heavily and the critical section is genuinely expensive; otherwise lock is simpler and often faster.",
+    "crumbs": [
+      "Multithreading",
+      "<span class='chapter-number'>13</span>  <span class='chapter-title'>Protecting Critical Sections</span>"
+    ]
+  },
+  {
+    "objectID": "content/01-DesktopUI/material/03_multithreading/13_critical-sections/README.html#what-volatile-does-and-does-not-do",
+    "href": "content/01-DesktopUI/material/03_multithreading/13_critical-sections/README.html#what-volatile-does-and-does-not-do",
+    "title": "13  Protecting Critical Sections",
+    "section": "13.7 What volatile does — and does not — do",
+    "text": "13.7 What volatile does — and does not — do\nvolatile is the most commonly misapplied keyword in this area.\nprivate volatile bool _stopRequested;   // GOOD: a flag one thread sets, another polls\nprivate volatile long _counter;         // USELESS: counter += x is still not atomic\nvolatile guarantees visibility and ordering — you read a fresh value rather than a cached one, and the compiler will not reorder around it. It says nothing about atomicity. All three steps of += can still interleave, and updates are still lost. (It also cannot be applied to long or double, so the second line does not even compile.) For a counter you need Interlocked; for a stop flag volatile is exactly right.",
+    "crumbs": [
+      "Multithreading",
+      "<span class='chapter-number'>13</span>  <span class='chapter-title'>Protecting Critical Sections</span>"
+    ]
+  },
+  {
+    "objectID": "content/01-DesktopUI/material/03_multithreading/13_critical-sections/README.html#choosing",
+    "href": "content/01-DesktopUI/material/03_multithreading/13_critical-sections/README.html#choosing",
+    "title": "13  Protecting Critical Sections",
+    "section": "13.8 Choosing",
+    "text": "13.8 Choosing\n\n\n\n\n\n\n\nSituation\nUse\n\n\n\n\nEach worker can have its own copy\nno synchronization — combine at the end\n\n\nOne counter or flag, simple update\nInterlocked\n\n\nA flag one thread sets, another reads\nvolatile (or Volatile.Read/Write)\n\n\nInvariant across several fields\nlock\n\n\nShared collection\nConcurrentQueue / ConcurrentDictionary\n\n\nNeed to await in the critical section\nSemaphoreSlim\n\n\nReads vastly outnumber writes\nReaderWriterLockSlim",
+    "crumbs": [
+      "Multithreading",
+      "<span class='chapter-number'>13</span>  <span class='chapter-title'>Protecting Critical Sections</span>"
+    ]
+  },
+  {
+    "objectID": "content/01-DesktopUI/material/03_multithreading/14_ui-thread/README.html",
+    "href": "content/01-DesktopUI/material/03_multithreading/14_ui-thread/README.html",
+    "title": "14  The UI Thread",
+    "section": "",
+    "text": "14.1 Only the UI thread touches the UI\nGUI frameworks add a rule the compiler cannot enforce: only the UI thread may touch UI objects. This is not a lock you take — it is a hard constraint. Background work that wants to update the screen must hand the data over. In Avalonia, the Dispatcher does that:",
+    "crumbs": [
+      "Multithreading",
+      "<span class='chapter-number'>14</span>  <span class='chapter-title'>The UI Thread</span>"
+    ]
+  },
+  {
+    "objectID": "content/01-DesktopUI/material/03_multithreading/14_ui-thread/README.html#only-the-ui-thread-touches-the-ui",
+    "href": "content/01-DesktopUI/material/03_multithreading/14_ui-thread/README.html#only-the-ui-thread-touches-the-ui",
+    "title": "14  The UI Thread",
+    "section": "",
+    "text": "Dispatcher.UIThread.Post(() =&gt; ProgressValue = processed);",
+    "crumbs": [
+      "Multithreading",
+      "<span class='chapter-number'>14</span>  <span class='chapter-title'>The UI Thread</span>"
+    ]
+  },
+  {
+    "objectID": "content/01-DesktopUI/material/03_multithreading/14_ui-thread/README.html#dont-flood-the-ui-thread",
+    "href": "content/01-DesktopUI/material/03_multithreading/14_ui-thread/README.html#dont-flood-the-ui-thread",
+    "title": "14  The UI Thread",
+    "section": "14.2 Don’t flood the UI thread",
+    "text": "14.2 Don’t flood the UI thread\nTwo things to watch. Marshalling per item floods the UI thread — a worker reporting tens of thousands of progress updates will swamp it — and the blocking variants (Invoke rather than Post) additionally stall the worker on the UI thread, which distorts any timing you try to measure. The pattern that scales is to let workers write to a thread-safe collection or an Interlocked counter, and have the UI read it on a timer at a fixed frame rate.",
+    "crumbs": [
+      "Multithreading",
+      "<span class='chapter-number'>14</span>  <span class='chapter-title'>The UI Thread</span>"
+    ]
+  },
+  {
+    "objectID": "content/01-DesktopUI/material/03_multithreading/14_ui-thread/README.html#further-reading",
+    "href": "content/01-DesktopUI/material/03_multithreading/14_ui-thread/README.html#further-reading",
+    "title": "14  The UI Thread",
+    "section": "14.3 Further reading",
+    "text": "14.3 Further reading\nFor the whole part, Multithreading:\n\nAsynchronous programming scenarios — CPU-bound vs. I/O-bound guidance\nTask Parallel Library\nManaged threading best practices\nInterlocked · lock statement · Thread-safe collections\nCancellation in managed threads",
+    "crumbs": [
+      "Multithreading",
+      "<span class='chapter-number'>14</span>  <span class='chapter-title'>The UI Thread</span>"
     ]
   }
 ]
