@@ -215,11 +215,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#two-way-binding" id="toc-two-way-binding" class="nav-link" data-scroll-target="#two-way-binding"><span class="header-section-number">4.4</span> Two-way binding</a></li>
   <li><a href="#commands" id="toc-commands" class="nav-link" data-scroll-target="#commands"><span class="header-section-number">4.5</span> Commands</a></li>
   <li><a href="#what-stays-in-the-code-behind" id="toc-what-stays-in-the-code-behind" class="nav-link" data-scroll-target="#what-stays-in-the-code-behind"><span class="header-section-number">4.6</span> What stays in the code-behind</a></li>
-  <li><a href="#lists" id="toc-lists" class="nav-link" data-scroll-target="#lists"><span class="header-section-number">4.7</span> Lists</a></li>
-  <li><a href="#data-templates" id="toc-data-templates" class="nav-link" data-scroll-target="#data-templates"><span class="header-section-number">4.8</span> Data templates</a></li>
-  <li><a href="#masterdetail" id="toc-masterdetail" class="nav-link" data-scroll-target="#masterdetail"><span class="header-section-number">4.9</span> Master/detail</a></li>
-  <li><a href="#styling-items-by-their-data" id="toc-styling-items-by-their-data" class="nav-link" data-scroll-target="#styling-items-by-their-data"><span class="header-section-number">4.10</span> Styling items by their data</a></li>
-  <li><a href="#try-it-yourself" id="toc-try-it-yourself" class="nav-link" data-scroll-target="#try-it-yourself"><span class="header-section-number">4.11</span> Try it yourself</a></li>
+  <li><a href="#mvvm-compared-with-mvc" id="toc-mvvm-compared-with-mvc" class="nav-link" data-scroll-target="#mvvm-compared-with-mvc"><span class="header-section-number">4.7</span> MVVM compared with MVC</a></li>
+  <li><a href="#lists" id="toc-lists" class="nav-link" data-scroll-target="#lists"><span class="header-section-number">4.8</span> Lists</a></li>
+  <li><a href="#data-templates" id="toc-data-templates" class="nav-link" data-scroll-target="#data-templates"><span class="header-section-number">4.9</span> Data templates</a></li>
+  <li><a href="#masterdetail" id="toc-masterdetail" class="nav-link" data-scroll-target="#masterdetail"><span class="header-section-number">4.10</span> Master/detail</a></li>
+  <li><a href="#styling-items-by-their-data" id="toc-styling-items-by-their-data" class="nav-link" data-scroll-target="#styling-items-by-their-data"><span class="header-section-number">4.11</span> Styling items by their data</a></li>
+  <li><a href="#try-it-yourself" id="toc-try-it-yourself" class="nav-link" data-scroll-target="#try-it-yourself"><span class="header-section-number">4.12</span> Try it yourself</a></li>
   </ul>
 </nav>
     </div>
@@ -521,8 +522,67 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </section>
-<section id="lists" class="level2" data-number="4.7">
-<h2 data-number="4.7" class="anchored" data-anchor-id="lists"><span class="header-section-number">4.7</span> Lists</h2>
+<section id="mvvm-compared-with-mvc" class="level2" data-number="4.7">
+<h2 data-number="4.7" class="anchored" data-anchor-id="mvvm-compared-with-mvc"><span class="header-section-number">4.7</span> MVVM compared with MVC</h2>
+<p>From web development you know <strong>MVC</strong> (Model-View-Controller), the pattern behind ASP.NET Core MVC, Spring MVC or Ruby on Rails. Both patterns separate the data (model) from its presentation (view). They differ in what sits between the two, and in how the view is kept up to date.</p>
+<p><img src="pics/mvc-vs-mvvm.svg" class="img-fluid" style="width:100.0%" alt="MVC: the user's request goes to the controller, which updates the model, selects the view and passes it the data. MVVM: the user works with the view, which is connected to the view model by data binding and commands in one direction and change notifications in the other; the view model uses the model and knows nothing about the view."></p>
+<p><strong>MVC.</strong> Every input, in the web a request, goes to a <strong>controller</strong>. It updates or queries the model, <strong>selects a view</strong> and passes it the data to show. The view renders it, in the web as a new HTML page. The controller knows the view; the view is output only.</p>
+<p><strong>MVVM.</strong> The input goes to the <strong>view</strong>: the controls themselves. They pass it on to the view model through data binding and commands. The view model holds the state and <strong>knows nothing about the view</strong>: it only announces that something has changed, and the bindings update the controls. Instead of rendering a new page per request, the view stays open and follows the view model continuously.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th>MVC</th>
+<th>MVVM</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Receives the input</td>
+<td>Controller</td>
+<td>View; bindings and commands forward it</td>
+</tr>
+<tr class="even">
+<td>Who knows the view</td>
+<td>The controller selects and fills it</td>
+<td>Nobody; the view binds to the view model</td>
+</tr>
+<tr class="odd">
+<td>Updating the display</td>
+<td>The controller renders a view, in the web a new page per request</td>
+<td>Bindings react to change notifications, continuously</td>
+</tr>
+<tr class="even">
+<td>State</td>
+<td>Mostly per request, the server stays stateless</td>
+<td>Long-lived, in the view model</td>
+</tr>
+<tr class="odd">
+<td>Glue code between view and logic</td>
+<td>Written in the controller</td>
+<td>Provided by the data binding framework</td>
+</tr>
+<tr class="even">
+<td>Testing without a UI</td>
+<td>Controllers, with request and response objects</td>
+<td>The view model is a plain class: direct unit tests</td>
+</tr>
+<tr class="odd">
+<td>Typical for</td>
+<td>Server-side web applications</td>
+<td>Desktop and mobile UIs: Avalonia, WPF, .NET MAUI</td>
+</tr>
+</tbody>
+</table>
+<p>Front-end frameworks such as Angular and Vue are closer to MVVM than to MVC: a component class holds the state, and its template binds to it.</p>
+</section>
+<section id="lists" class="level2" data-number="4.8">
+<h2 data-number="4.8" class="anchored" data-anchor-id="lists"><span class="header-section-number">4.8</span> Lists</h2>
 <p>To show a list, bind the <code>ItemsSource</code> of a <code>ListBox</code> to a collection. When items are added or removed later, the list must be told, just like a single property. That’s what <code>ObservableCollection&lt;T&gt;</code> does: it announces every change of the collection. Changes <em>inside</em> an item, like a new name, are announced by the item itself, so the item class is an <code>ObservableObject</code>, too.</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb22"><pre class="sourceCode csharp code-with-copy"><code class="sourceCode cs"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="kw">public</span> <span class="kw">partial</span> <span class="kw">class</span> Person <span class="op">:</span> ObservableObject</span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="op">{</span></span>
@@ -573,8 +633,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </section>
-<section id="data-templates" class="level2" data-number="4.8">
-<h2 data-number="4.8" class="anchored" data-anchor-id="data-templates"><span class="header-section-number">4.8</span> Data templates</h2>
+<section id="data-templates" class="level2" data-number="4.9">
+<h2 data-number="4.9" class="anchored" data-anchor-id="data-templates"><span class="header-section-number">4.9</span> Data templates</h2>
 <p>A <strong>data template</strong> describes how to show an object of a certain type. For the items of a list, it is the <code>ItemTemplate</code>:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb26"><pre class="sourceCode xml code-with-copy"><code class="sourceCode xml"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">ListBox</span> <span class="ot">ItemsSource=</span><span class="st">"{Binding People}"</span>&gt;</span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">ListBox.ItemTemplate</span>&gt;</span>
@@ -612,8 +672,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </section>
-<section id="masterdetail" class="level2" data-number="4.9">
-<h2 data-number="4.9" class="anchored" data-anchor-id="masterdetail"><span class="header-section-number">4.9</span> Master/detail</h2>
+<section id="masterdetail" class="level2" data-number="4.10">
+<h2 data-number="4.10" class="anchored" data-anchor-id="masterdetail"><span class="header-section-number">4.10</span> Master/detail</h2>
 <p>A list and a form that edits the selected entry is called <strong>master/detail</strong>. It needs one more view model property for the selected item, bound to the list’s <code>SelectedItem</code>:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb29"><pre class="sourceCode csharp code-with-copy"><code class="sourceCode cs"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="op">[</span>ObservableProperty<span class="op">]</span></span>
 <span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="kw">private</span> Person<span class="op">?</span> _selectedPerson<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -646,8 +706,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </section>
-<section id="styling-items-by-their-data" class="level2" data-number="4.10">
-<h2 data-number="4.10" class="anchored" data-anchor-id="styling-items-by-their-data"><span class="header-section-number">4.10</span> Styling items by their data</h2>
+<section id="styling-items-by-their-data" class="level2" data-number="4.11">
+<h2 data-number="4.11" class="anchored" data-anchor-id="styling-items-by-their-data"><span class="header-section-number">4.11</span> Styling items by their data</h2>
 <p>The chapter <em>Styles</em> switched a style class with a check box. The same works with a property of the data, inside a data template. The <code>!</code> in front of a path negates a <code>bool</code>:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb33"><pre class="sourceCode xml code-with-copy"><code class="sourceCode xml"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">StackPanel</span> <span class="ot">Orientation=</span><span class="st">"Horizontal"</span> <span class="ot">Spacing=</span><span class="st">"5"</span> <span class="ot">Classes.underage=</span><span class="st">"{Binding !IsFullOfAge}"</span>&gt;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb34"><pre class="sourceCode xml code-with-copy"><code class="sourceCode xml"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">Style</span> <span class="ot">Selector=</span><span class="st">"StackPanel.underage"</span>&gt;</span>
@@ -674,8 +734,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </section>
-<section id="try-it-yourself" class="level2" data-number="4.11">
-<h2 data-number="4.11" class="anchored" data-anchor-id="try-it-yourself"><span class="header-section-number">4.11</span> Try it yourself</h2>
+<section id="try-it-yourself" class="level2" data-number="4.12">
+<h2 data-number="4.12" class="anchored" data-anchor-id="try-it-yourself"><span class="header-section-number">4.12</span> Try it yourself</h2>
 <ol type="1">
 <li>HelloMvvm: add a <em>Shout</em> check box that shows the greeting in capital letters.</li>
 <li>HelloMvvm: add a <em>-5</em> button using the same <code>IncrementByCommand</code>.</li>
